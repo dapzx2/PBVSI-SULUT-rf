@@ -25,7 +25,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-      <StickyHeader currentPage="beranda" />
+      
 
       <main className="pt-16">
         {/* Hero Section */}
@@ -34,7 +34,6 @@ export default function HomePage() {
           <div className="container mx-auto relative z-10">
             <motion.div
               className="text-center max-w-4xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
@@ -73,7 +72,6 @@ export default function HomePage() {
           <div className="container mx-auto">
             <motion.div
               className="max-w-6xl mx-auto"
-              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}

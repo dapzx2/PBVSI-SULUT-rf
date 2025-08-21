@@ -1,15 +1,18 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { getClubs } from "@/lib/clubs";
+import { NextResponse } from 'next/server';
+import { getClubs } from '@/lib/clubs';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { clubs, error } = await getClubs()
+    const { clubs, error } = await getClubs();
+
     if (error) {
-      throw new Error(error);
+      console.error('Error fetching clubs in API route:', error);
+      return NextResponse.json({ error: 'Failed to fetch clubs' }, { status: 500 });
     }
-    return NextResponse.json({ success: true, clubs })
-  } catch (error: any) {
-    console.error("API Error (GET clubs):", error)
-    return NextResponse.json({ success: false, error: error.message || "Terjadi kesalahan sistem" }, { status: 500 })
+
+    return NextResponse.json(clubs);
+  } catch (error) {
+    console.error('Unexpected error in API route:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

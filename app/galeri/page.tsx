@@ -23,21 +23,23 @@ export default function GaleriPage() {
   const [error, setError] = useState<string | null>(null)
 
   const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const { galleryItems: fetchedItems, error: fetchError } = await getGalleryItems()
-      if (fetchError) {
-        throw new Error(fetchError)
+      const response = await fetch('/api/gallery');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch gallery items');
       }
-      setAllGalleryItems(fetchedItems || [])
+      const fetchedItems: GalleryItem[] = await response.json();
+      setAllGalleryItems(fetchedItems || []);
     } catch (err: any) {
-      console.error("Error fetching gallery data:", err)
-      setError(err.message || "Terjadi kesalahan saat memuat data galeri.")
+      console.error("Error fetching gallery data:", err);
+      setError(err.message || "Terjadi kesalahan saat memuat data galeri.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     fetchData()

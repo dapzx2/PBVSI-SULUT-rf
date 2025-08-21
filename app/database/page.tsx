@@ -29,27 +29,35 @@ export default function DatabasePage() {
   const [error, setError] = useState<string | null>(null)
 
   const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const { players: fetchedPlayers, error: playersError } = await getPlayers()
-      if (playersError) {
-        throw new Error(playersError)
-      }
-      setAllPlayers(fetchedPlayers || [])
+      const [playersResponse, clubsResponse] = await Promise.all([
+        fetch('/api/players'),
+        fetch('/api/clubs')
+      ]);
 
-      const { clubs: fetchedClubs, error: clubsError } = await getClubs()
-      if (clubsError) {
-        throw new Error(clubsError)
+      if (!playersResponse.ok) {
+        const errorData = await playersResponse.json();
+        throw new Error(errorData.error || 'Failed to fetch players');
       }
-      setAllClubs(fetchedClubs || [])
+      const fetchedPlayers: Player[] = await playersResponse.json();
+      setAllPlayers(fetchedPlayers || []);
+
+      if (!clubsResponse.ok) {
+        const errorData = await clubsResponse.json();
+        throw new Error(errorData.error || 'Failed to fetch clubs');
+      }
+      const fetchedClubs: Club[] = await clubsResponse.json();
+      setAllClubs(fetchedClubs || []);
+
     } catch (err: any) {
-      console.error("Error fetching database data:", err)
-      setError(err.message || "Terjadi kesalahan saat memuat data database.")
+      console.error("Error fetching database data:", err);
+      setError(err.message || "Terjadi kesalahan saat memuat data database.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     fetchData()

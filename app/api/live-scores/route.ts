@@ -1,24 +1,18 @@
-import { NextResponse } from "next/server"
-import { getLiveScores } from "@/lib/live-scores"
+import { NextResponse } from 'next/server';
+import { getLiveMatches } from '@/lib/live-scores';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
-  const filterRegion = searchParams.get("region") as "sulut" | "international" | "national" | undefined
-
+export async function GET() {
   try {
-    const { matches, error } = await getLiveScores();
+    const { matches, error } = await getLiveMatches();
+
     if (error) {
-      throw new Error(error);
+      console.error('Error fetching live matches in API route:', error);
+      return NextResponse.json({ error: 'Failed to fetch live matches' }, { status: 500 });
     }
 
-    // Note: Filtering by region is not implemented in the MySQL version of getLiveScores.
-    // If region filtering is required, it needs to be implemented in lib/live-scores.ts
-    // or handled here after fetching all matches.
-    const filteredMatches = filterRegion ? matches?.filter(match => match.league?.includes(filterRegion)) : matches;
-
-    return NextResponse.json({ matches: filteredMatches })
-  } catch (error: any) {
-    console.error("API Error (GET live scores):", error.message)
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    return NextResponse.json(matches);
+  } catch (error) {
+    console.error('Unexpected error in API route:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

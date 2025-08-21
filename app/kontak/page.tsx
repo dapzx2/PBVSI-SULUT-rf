@@ -229,40 +229,11 @@ export default function ContactPage() {
               })}
             </div>
 
-            {/* Additional Information */}
-            <Card className="bg-orange-50 border-orange-200">
-              <CardContent className="p-6">
-                <h3 className="font-semibold text-orange-900 mb-3">Informasi Tambahan</h3>
-                <ul className="space-y-2 text-sm text-orange-800">
-                  <li>• Untuk pendaftaran atlet, silakan hubungi langsung via telepon</li>
-                  <li>• Informasi turnamen dapat dilihat di halaman berita</li>
-                  <li>• Kerjasama dan sponsorship dapat dibahas melalui email</li>
-                  <li>• Media dan pers dapat menghubungi bagian humas</li>
-                </ul>
-              </CardContent>
-            </Card>
+            
           </div>
         </div>
 
-        {/* Map Section */}
-        <div className="mt-16">
-          <Card className="overflow-hidden">
-            <CardHeader>
-              <CardTitle className="text-2xl text-gray-900">Lokasi Kantor</CardTitle>
-              <CardDescription>Kunjungi kantor pusat PBVSI Sulawesi Utara</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="bg-gray-200 h-64 flex items-center justify-center">
-                <div className="text-center text-gray-600">
-                  <MapPin className="w-12 h-12 mx-auto mb-2" />
-                  <p className="font-medium">Peta Lokasi</p>
-                  <p className="text-sm">Jl. Olahraga No. 123, Manado</p>
-                  <p className="text-sm">Sulawesi Utara 95111</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        
       </div>
     </div>
   )

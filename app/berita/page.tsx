@@ -19,7 +19,7 @@ import { Separator } from "@/components/ui/separator"
 import { getArticles } from "@/lib/articles"
 import type { Article } from "@/lib/types"
 
-export const revalidate = 60 // Revalidate data every 60 seconds
+
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -42,21 +42,23 @@ export default function BeritaPage() {
   const [showFilters, setShowFilters] = useState(false)
 
   const fetchArticles = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const { articles: fetchedArticles, error: fetchError } = await getArticles()
-      if (fetchError) {
-        throw new Error(fetchError)
+      const response = await fetch('/api/articles');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch articles');
       }
-      setArticles(fetchedArticles || [])
+      const fetchedArticles: Article[] = await response.json();
+      setArticles(fetchedArticles || []);
     } catch (err: any) {
-      console.error("Error fetching articles:", err)
-      setError(err.message || "Terjadi kesalahan saat memuat berita.")
+      console.error("Error fetching articles:", err);
+      setError(err.message || "Terjadi kesalahan saat memuat berita.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     fetchArticles()
@@ -166,7 +168,6 @@ export default function BeritaPage() {
 
         {/* Page Header - Responsive */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-br from-white to-gray-50 border-b shadow-sm pt-16"
@@ -276,7 +277,6 @@ export default function BeritaPage() {
 
             {/* Results Summary - Responsive */}
             <motion.div
-              initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
               className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
@@ -338,7 +338,6 @@ export default function BeritaPage() {
               {/* Featured News - Responsive */}
               {featuredNews && (
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                   className="mb-12"
@@ -414,7 +413,7 @@ export default function BeritaPage() {
 
               {/* Regular News Grid - Responsive */}
               {regularNews.length > 0 && (
-                <motion.div variants={containerVariants} initial="hidden" animate="visible">
+                <motion.div variants={containerVariants} animate="visible">
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Publikasi Terbaru</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {regularNews.map((article, index) => (

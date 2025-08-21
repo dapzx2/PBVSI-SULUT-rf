@@ -1,22 +1,25 @@
-import { type NextRequest, NextResponse } from "next/server"
-import { type NextRequest, NextResponse } from "next/server"
-import { getMatches } from "@/lib/matches";
+import { NextResponse } from 'next/server';
+import { getLiveMatches } from '@/lib/live-scores';
+import { getMatches } from '@/lib/matches'; // Assuming getMatches fetches all matches
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get("status") || undefined
+    const { matches: liveMatches, error: liveError } = await getLiveMatches();
+    const { matches: allMatches, error: allError } = await getMatches();
 
-    const { matches, error } = await getMatches()
-    if (error) {
-      throw new Error(error);
+    if (liveError || allError) {
+      console.error('Error fetching matches in API route:', liveError || allError);
+      return NextResponse.json({ error: 'Failed to fetch matches' }, { status: 500 });
     }
-    // Filter by status if provided
-    const filteredMatches = status ? matches?.filter(match => match.status === status) : matches;
 
-    return NextResponse.json({ success: true, matches: filteredMatches })
-  } catch (error: any) {
-    console.error("API Error (GET matches):", error)
-    return NextResponse.json({ success: false, error: error.message || "Terjadi kesalahan sistem" }, { status: 500 })
+    // Combine live and all matches, ensuring no duplicates and prioritizing live status
+    const combinedMatches = [...(liveMatches || []), ...(allMatches || [])]
+      .filter((match, index, self) => index === self.findIndex((m) => m.id === match.id))
+      .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime());
+
+    return NextResponse.json(combinedMatches);
+  } catch (error) {
+    console.error('Unexpected error in API route:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

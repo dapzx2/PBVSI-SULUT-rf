@@ -1,12 +1,14 @@
+"use client"
+
 import Image from "next/image"
 import Link from "next/link"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { StickyHeader } from "@/components/sticky-header"
 import { useState, useEffect, useCallback } from "react"
-import { getClubs } from "@/lib/clubs"
 import type { Club } from "@/lib/types"
-import { Loader2, RefreshCw, WifiOff } from "lucide-react"
+import { Loader2, RefreshCw, WifiOff, Building2 } from "lucide-react"
 
 export default function KlubPage() {
   const [clubs, setClubs] = useState<Club[]>([])
@@ -14,21 +16,23 @@ export default function KlubPage() {
   const [error, setError] = useState<string | null>(null)
 
   const fetchClubs = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const { clubs: fetchedClubs, error: fetchError } = await getClubs()
-      if (fetchError) {
-        throw new Error(fetchError)
+      const response = await fetch('/api/clubs');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch clubs');
       }
-      setClubs(fetchedClubs || [])
+      const fetchedClubs: Club[] = await response.json();
+      setClubs(fetchedClubs || []);
     } catch (err: any) {
-      console.error("Error fetching clubs:", err)
-      setError(err.message || "Terjadi kesalahan saat memuat daftar klub.")
+      console.error("Error fetching clubs:", err);
+      setError(err.message || "Terjadi kesalahan saat memuat daftar klub.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     fetchClubs()

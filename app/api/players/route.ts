@@ -1,30 +1,18 @@
-import { NextResponse } from "next/server"
-import { NextResponse } from "next/server"
-import { getPlayers, getPlayersByClubId } from "@/lib/players";
+import { NextResponse } from 'next/server';
+import { getPlayers } from '@/lib/players';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const clubId = searchParams.get("club_id")
+    const { players, error } = await getPlayers();
 
-    let players;
-    if (clubId) {
-      const { players: clubPlayers, error } = await getPlayersByClubId(clubId);
-      if (error) {
-        throw new Error(error);
-      }
-      players = clubPlayers;
-    } else {
-      const { players: allPlayers, error } = await getPlayers();
-      if (error) {
-        throw new Error(error);
-      }
-      players = allPlayers;
+    if (error) {
+      console.error('Error fetching players in API route:', error);
+      return NextResponse.json({ error: 'Failed to fetch players' }, { status: 500 });
     }
 
-    return NextResponse.json({ players })
-  } catch (error: any) {
-    console.error("Error fetching players:", error)
-    return NextResponse.json({ error: "Failed to fetch players", details: error.message }, { status: 500 })
+    return NextResponse.json(players);
+  } catch (error) {
+    console.error('Unexpected error in API route:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

@@ -1,20 +1,18 @@
-import { NextResponse } from "next/server"
-import { NextResponse } from "next/server"
-import { getGalleryItems } from "@/lib/gallery";
+import { NextResponse } from 'next/server';
+import { getGalleryItems } from '@/lib/gallery';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url)
-    const category = searchParams.get("category") || undefined
+    const { galleryItems, error } = await getGalleryItems();
 
-    const { galleryItems, error } = await getGalleryItems(category)
     if (error) {
-      throw new Error(error);
+      console.error('Error fetching gallery items in API route:', error);
+      return NextResponse.json({ error: 'Failed to fetch gallery items' }, { status: 500 });
     }
 
-    return NextResponse.json({ galleryItems })
-  } catch (error: any) {
-    console.error("Error fetching gallery items:", error)
-    return NextResponse.json({ message: "Failed to fetch gallery items", details: error.message }, { status: 500 })
+    return NextResponse.json(galleryItems);
+  } catch (error) {
+    console.error('Unexpected error in API route:', error);
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

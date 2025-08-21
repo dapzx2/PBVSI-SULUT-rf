@@ -28,22 +28,16 @@ export default function LiveScoresPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   const fetchMatchesData = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     try {
-      const { matches: liveMatches, error: liveError } = await getLiveMatches()
-      const { matches: allMatches, error: allError } = await getMatches()
-
-      if (liveError || allError) {
-        throw new Error(liveError || allError || "Failed to fetch matches");
+      const response = await fetch('/api/matches');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch matches');
       }
-
-      // Combine live and all matches, ensuring no duplicates and prioritizing live status
-      const combinedMatches = [...(liveMatches || []), ...(allMatches || [])]
-        .filter((match, index, self) => index === self.findIndex((m) => m.id === match.id))
-        .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime());
-
-      setScores(combinedMatches);
+      const fetchedMatches: Match[] = await response.json();
+      setScores(fetchedMatches);
       setLastUpdate(new Date());
     } catch (err: any) {
       console.error("Error fetching matches:", err);
@@ -208,7 +202,7 @@ export default function LiveScoresPage() {
               </Button>
             </div>
 
-            <div className="text-sm text-gray-500">Terakhir diperbarui: {lastUpdate.toLocaleTimeString("id-ID")}</div>
+            <div className="text-sm text-gray-500">Terakhir diperbarui: {lastUpdate ? lastUpdate.toLocaleTimeString("id-ID") : "..."}</div>
           </div>
 
           {/* Tabs for Current Scores / Schedule */}
