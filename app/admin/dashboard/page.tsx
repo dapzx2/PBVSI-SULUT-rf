@@ -496,7 +496,7 @@ export default function AdminDashboard() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="h-20 flex flex-col items-center justify-2 space-y-2 bg-transparent"
+                    className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
                     onClick={() => router.push("/admin/matches/add")}
                   >
                     <CalendarPlus className="h-6 w-6" />
@@ -681,9 +681,9 @@ export default function AdminDashboard() {
                     <p className="text-2xl font-bold text-green-600">85%</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
     </div>
