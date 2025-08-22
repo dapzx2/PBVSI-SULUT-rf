@@ -10,6 +10,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import type { Article } from "@/lib/types"
 
+
 export default function HomePage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)

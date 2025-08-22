@@ -25,7 +25,7 @@ const pimpinanPusat = [
   {
     name: "Komjen Pol (Purn) Imam Sudjarwo",
     position: "Ketua Umum PBVSI Pusat",
-    image: "/images/imam-sudjarwo.jpeg",
+    image: "/images/imam-sudjarwo.jpg",
     description:
       "Memimpin PBVSI menuju organisasi yang profesional, mandiri, dan berprestasi di tingkat nasional maupun internasional dengan mengutamakan pembinaan berkelanjutan dan pengembangan bakat muda Indonesia.",
     masaBakti: "2023-2027",

@@ -119,9 +119,9 @@ export default function BeritaPage() {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
           <StickyHeader currentPage="berita" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Memuat Berita...</h1>
-            <p className="text-gray-600">Harap tunggu sebentar.</p>
-            <Loader2 className="h-10 w-10 animate-spin text-orange-500 mx-auto mt-8" />
+            
+            
+            
           </div>
         </div>
       </PageTransition>
@@ -296,7 +296,7 @@ export default function BeritaPage() {
                     <p className="text-xs text-gray-500">
                       {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: id })}
                     </p>
-                    <Link href={`/berita/${article.slug}`} className="text-orange-600 hover:text-orange-700 text-sm font-medium mt-2 inline-block">
+                    <Link href={`/berita/${article.slug}`} className="bg-orange-600 hover:text-orange-700 text-sm font-medium mt-2 inline-block">
                       Baca Selengkapnya →
                     </Link>
                   </CardContent>
@@ -311,7 +311,7 @@ export default function BeritaPage() {
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Publikasi</h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-orange-600">{articles.length}</div>
+                  <div className="text-2xl font-bold bg-orange-600">{articles.length}</div>
                   <div className="text-sm text-gray-600">Total Artikel</div>
                 </div>
                 <div className="text-center">
