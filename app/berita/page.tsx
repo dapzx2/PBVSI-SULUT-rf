@@ -69,6 +69,12 @@ export default function BeritaPage() {
     return [...uniqueCategories]
   }, [articles])
 
+  // Get unique publication years
+  const years = useMemo(() => {
+    const uniqueYears = new Set(articles.map(article => new Date(article.published_at).getFullYear()).filter(Boolean));
+    return [...uniqueYears].sort((a, b) => a - b);
+  }, [articles]);
+
   // Filter and search logic with chronological sorting
   const filteredNews = useMemo(() => {
     const filtered = articles.filter((article) => {

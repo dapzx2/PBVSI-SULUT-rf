@@ -74,10 +74,11 @@ export default function AdminArticlesPage() {
     setIsSubmitting(true)
     try {
       let finalImageUrl = data.image_url || null;
+      const { imageFile, ...restOfData } = data; // Destructure imageFile out
 
-      if (data.imageFile) {
+      if (imageFile) {
         const formData = new FormData();
-        formData.append('file', data.imageFile);
+        formData.append('file', imageFile);
 
         const uploadResponse = await fetch("/api/upload", {
           method: "POST",
@@ -93,7 +94,7 @@ export default function AdminArticlesPage() {
       }
 
       const articlePayload = {
-        ...data,
+        ...restOfData, // Spread the rest of the data without imageFile
         image_url: finalImageUrl,
       };
 

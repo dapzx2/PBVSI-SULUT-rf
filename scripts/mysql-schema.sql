@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `matches` (
 CREATE TABLE IF NOT EXISTS `articles` (
     `id` VARCHAR(36) PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
+    `slug` VARCHAR(255) UNIQUE NOT NULL,
     `content` TEXT NOT NULL,
     `image_url` VARCHAR(255),
     `author` VARCHAR(100),
@@ -110,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `match_events` (
     `id` VARCHAR(36) PRIMARY KEY,
     `match_id` VARCHAR(36),
     `event_type` VARCHAR(50) NOT NULL,
-    `description` TEXT,
+    `description` TEXT, 
     `team_id` VARCHAR(36),
     `player_id` VARCHAR(36),
     `set_number` INT,

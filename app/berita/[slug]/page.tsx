@@ -10,7 +10,6 @@ import { PageTransition } from "@/components/page-transition"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
-import { getArticleBySlug } from "@/lib/articles"
 import type { Article } from "@/lib/types"
 
 export default function ArticleDetailPage() {
@@ -26,11 +25,13 @@ export default function ArticleDetailPage() {
     setLoading(true)
     setError(null)
     try {
-      const { article: fetchedArticle, error: fetchError } = await getArticleBySlug(slug)
-      if (fetchError) {
-        throw new Error(fetchError);
+      const response = await fetch(`/api/articles/${slug}`)
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || `Failed to fetch article with slug ${slug}`)
       }
-      setArticle(fetchedArticle)
+      setArticle(data)
     } catch (err: any) {
       console.error(`Error fetching article with slug ${slug}:`, err)
       if (err instanceof TypeError && err.message === "Failed to fetch") {
@@ -114,7 +115,7 @@ export default function ArticleDetailPage() {
           <div className="container mx-auto px-4 text-center relative z-10">
             <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">{article.title}</h1>
             <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-              {new Date(article.published_date).toLocaleDateString("id-ID", {
+              {new Date(article.published_at).toLocaleDateString("id-ID", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",

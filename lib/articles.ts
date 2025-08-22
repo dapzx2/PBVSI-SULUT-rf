@@ -1,6 +1,7 @@
 import pool from './mysql';
 import { v4 as uuidv4 } from 'uuid';
 import type { Article } from './types';
+import { generateSlug } from './utils';
 
 export async function getArticles(): Promise<{ articles: Article[] | null; error: string | null }> {
   try {
@@ -24,9 +25,15 @@ export async function getArticleById(id: string): Promise<{ article: Article | n
   }
 }
 
-export async function createArticle(articleData: Omit<Article, 'id' | 'created_at' | 'updated_at'>): Promise<{ article: Article | null; error: string | null }> {
+export async function createArticle(articleData: Omit<Article, 'id' | 'created_at' | 'updated_at' | 'slug'>): Promise<{ article: Article | null; error: string | null }> {
   const newArticleId = uuidv4();
-  const newArticle = { id: newArticleId, ...articleData };
+  const slug = generateSlug(articleData.title);
+  const newArticle = { ...articleData, id: newArticleId, slug };
+
+  if (Array.isArray(newArticle.tags)) {
+    newArticle.tags = JSON.stringify(newArticle.tags) as any; // Cast to any because JSON.stringify returns string
+  }
+
   try {
     await pool.query('INSERT INTO articles SET ?', newArticle);
     return { article: newArticle as Article, error: null };
@@ -35,9 +42,19 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'created_a
   }
 }
 
-export async function updateArticle(id: string, articleData: Partial<Omit<Article, 'id' | 'created_at' | 'updated_at'>>): Promise<{ article: Article | null; error: string | null }> {
+export async function updateArticle(id: string, articleData: Partial<Omit<Article, 'id' | 'created_at' | 'updated_at' | 'slug'>>): Promise<{ article: Article | null; error: string | null }> {
+  const dataToUpdate = { ...articleData };
+
+  if (dataToUpdate.title) { // If title is updated, generate new slug
+    dataToUpdate.slug = generateSlug(dataToUpdate.title);
+  }
+
+  if (Array.isArray(dataToUpdate.tags)) {
+    dataToUpdate.tags = JSON.stringify(dataToUpdate.tags) as any; // Cast to any
+  }
+
   try {
-    await pool.query('UPDATE articles SET ? WHERE id = ?', [articleData, id]);
+    await pool.query('UPDATE articles SET ? WHERE id = ?', [dataToUpdate, id]);
     const { article } = await getArticleById(id);
     return { article, error: null };
   } catch (error: any) {
