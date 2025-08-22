@@ -61,7 +61,7 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email",
-      content: "info@pbvsisulut.org",
+      content: "info@pbvsisulut.com",
       description: "Kirim email untuk pertanyaan umum",
     },
     {
@@ -73,14 +73,14 @@ export default function ContactPage() {
     {
       icon: MapPin,
       title: "Alamat",
-      content: "Jl. Olahraga No. 123, Manado, Sulawesi Utara 95111",
+      content: "Jl. Piere Tendean, Manado, Sulawesi Utara 95111",
       description: "Kantor pusat PBVSI Sulut",
     },
     {
       icon: Clock,
       title: "Jam Operasional",
       content: "Senin - Jumat: 08:00 - 17:00",
-      description: "Sabtu: 08:00 - 12:00",
+      description: "Sabtu & Minggu: Tutup",
     },
   ]
 

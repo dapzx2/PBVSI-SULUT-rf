@@ -5,10 +5,30 @@ import { StickyHeader } from "@/components/sticky-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Users, Trophy, ArrowRight, Award, Target, Heart } from "lucide-react"
+import { Users, Trophy, ArrowRight, Award, Target, Heart, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+import type { Article } from "@/lib/types"
 
 export default function HomePage() {
+  const [articles, setArticles] = useState<Article[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch("/api/articles?limit=3")
+        const data = await response.json()
+        setArticles(data)
+      } catch (error) {
+        console.error("Error fetching articles:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchArticles()
+  }, [])
+
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -188,107 +208,64 @@ export default function HomePage() {
               </p>
             </motion.div>
 
-            <motion.div
-              className="grid md:grid-cols-3 gap-8 mb-12"
-              variants={staggerContainer}
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true }}
-            >
-              <motion.div variants={fadeInUp}>
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                  <div className="aspect-video bg-gradient-to-br from-orange-100 to-red-100 rounded-t-lg flex items-center justify-center">
-                    <img
-                      src="/images/jordan-susanto-tournament.jpg"
-                      alt="Turnamen Bola Voli"
-                      className="w-full h-full object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <Badge className="mb-3 bg-orange-100 text-orange-800 hover:bg-orange-200">Prestasi</Badge>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                      Putra Sulut Jordan Susanto Masuk Timnas Voli Indonesia
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      Jordan Susanto, atlet muda bola voli berbakat asal Sulawesi Utara mendapat dukungan dari
-                      Pemerintah Provinsi Sulut usai dirinya menjadi bagian dari Tim Nasional Voli Putra Indonesia...
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">1 hari yang lalu</span>
-                      <Link
-                        href="/berita/gubernur-yulius-selvanus-bangga-putra-sulut"
-                        className="text-orange-600 hover:text-orange-700 font-medium"
-                      >
-                        Baca selengkapnya →
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
+            {loading ? (
+              <div className="flex justify-center items-center h-40">
+                <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
+              </div>
+            ) : articles.length > 0 ? (
+              <motion.div
+                className="grid md:grid-cols-3 gap-8 mb-12"
+                variants={staggerContainer}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true }}
+              >
+                {articles.map((article) => (
+                  <motion.div variants={fadeInUp} key={article.id}>
+                    <Card className="h-full hover:shadow-lg transition-shadow duration-300">
+                      <div className="aspect-video bg-gradient-to-br from-orange-100 to-red-100 rounded-t-lg flex items-center justify-center">
+                        <img
+                          src={article.featured_image || "/placeholder.svg"}
+                          alt={article.title}
+                          className="w-full h-full object-cover rounded-t-lg"
+                        />
+                      </div>
+                      <CardContent className="p-6">
+                        <Badge className="mb-3 bg-orange-100 text-orange-800 hover:bg-orange-200">
+                          {article.category}
+                        </Badge>
+                        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+                          {article.title}
+                        </h3>
+                        <p className="text-gray-600 mb-4 line-clamp-3">
+                          {article.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-500">
+                            {new Date(article.published_at).toLocaleDateString("id-ID", {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })}
+                          </span>
+                          <Link
+                            href={`/berita/${article.slug}`}
+                            className="text-orange-600 hover:text-orange-700 font-medium"
+                          >
+                            Baca selengkapnya →
+                          </Link>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
               </motion.div>
-
-              <motion.div variants={fadeInUp}>
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                  <div className="aspect-video bg-gradient-to-br from-blue-100 to-purple-100 rounded-t-lg flex items-center justify-center">
-                    <img
-                      src="/images/smansa-manado-tournament.jpg"
-                      alt="Kompetisi Sekolah"
-                      className="w-full h-full object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <Badge className="mb-3 bg-blue-100 text-blue-800 hover:bg-blue-200">Turnamen</Badge>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                      Smansa Manado Pertahankan Kawin Gelar
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      SMA Negeri 1 Manado kembali ukir prestasi di bidang olahraga bola voli. Dalam beberapa
-                      pertandingan tingkat pelajar se-Sulut, Smansa Manado berhasil mempertahankan status kawin gelar
-                      champion...
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">3 bulan yang lalu</span>
-                      <Link
-                        href="/berita/spektakuler-pertandingan-bola-volly-tingkat-pelajar"
-                        className="text-orange-600 hover:text-orange-700 font-medium"
-                      >
-                        Baca selengkapnya →
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-
-              <motion.div variants={fadeInUp}>
-                <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                  <div className="aspect-video bg-gradient-to-br from-green-100 to-teal-100 rounded-t-lg flex items-center justify-center">
-                    <img
-                      src="/images/volleyball-court-training.webp"
-                      alt="Pelatihan Pelatih"
-                      className="w-full h-full object-cover rounded-t-lg"
-                    />
-                  </div>
-                  <CardContent className="p-6">
-                    <Badge className="mb-3 bg-green-100 text-green-800 hover:bg-green-200">Pembinaan</Badge>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
-                      Metode Pencarian Bakat Pemain Voli Pelajar
-                    </h3>
-                    <p className="text-gray-600 mb-4 line-clamp-3">
-                      Pelaksanaan turnamen olahraga bola voli di Sulawesi Utara digalakkan untuk mendorong lahirnya
-                      atlet-atlet berkualitas, terutama dalam keterampilan dan teknik bermain voli...
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500">2 tahun yang lalu</span>
-                      <Link
-                        href="/berita/menilik-metode-pencarian-bakat-pemain-voli"
-                        className="text-orange-600 hover:text-orange-700 font-medium"
-                      >
-                        Baca selengkapnya →
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
+            ) : (
+              <div className="text-center py-16">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Belum ada data dalam database</h3>
+                <p className="text-gray-600">Tidak ada artikel berita yang ditemukan saat ini.</p>
+              </div>
+            )}
 
             <motion.div
               className="text-center"

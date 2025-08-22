@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
-import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin } from "lucide-react"
+import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Clock } from "lucide-react"
 
 export default function Footer() {
   const [adminClickCount, setAdminClickCount] = useState(0)
@@ -123,6 +123,10 @@ export default function Footer() {
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-orange-400 flex-shrink-0" />
                 <p className="text-gray-300 text-sm">info@pbvsisulut.com</p>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Clock className="w-4 h-4 text-orange-400 flex-shrink-0" />
+                <p className="text-gray-300 text-sm">Senin - Jumat: 08:00 - 17:00</p>
               </div>
             </div>
 

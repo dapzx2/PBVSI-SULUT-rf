@@ -164,9 +164,11 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ## 📞 Contact
 
 **PBVSI Sulawesi Utara**
+- Alamat: Jl. Piere Tendean, Manado, Sulawesi Utara 95111
+- Telepon: +62 431 123456
 - Email: info@pbvsisulut.com
+- Jam Operasional: Senin - Jumat, 08:00 - 17:00
 - Website: [pbvsi-sulut.vercel.app](https://pbvsi-sulut.vercel.app)
-- Location: Manado, Sulawesi Utara
 
 ## 🙏 Acknowledgments
 

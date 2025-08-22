@@ -14,6 +14,7 @@ export async function getMatches(): Promise<{ matches: Match[] | null; error: st
       FROM matches m
       LEFT JOIN clubs ht ON m.home_team_id = ht.id
       LEFT JOIN clubs at ON m.away_team_id = at.id
+      WHERE ht.city IN ('Manado', 'Bitung', 'Tomohon', 'Kotamobagu')
       ORDER BY m.match_date DESC`
     );
     return { matches: rows as Match[], error: null };

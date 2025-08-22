@@ -94,9 +94,9 @@ VALUES (
 INSERT INTO site_settings (key, value, description) VALUES
     ('site_name', 'PBVSI Sulawesi Utara', 'Nama website'),
     ('site_description', 'Website resmi PBVSI Sulawesi Utara', 'Deskripsi website'),
-    ('contact_email', 'info@pbvsisulut.example', 'Email kontak utama'),
-    ('contact_phone', '(0431) 555-0123', 'Nomor telepon kontak'),
-    ('office_address', 'Jl. Olahraga Raya No. 123, Kota Manado, Sulawesi Utara 95000', 'Alamat kantor'),
+    ('contact_email', 'info@pbvsisulut.com', 'Email kontak utama'),
+    ('contact_phone', '+62 431 123456', 'Nomor telepon kontak'),
+    ('office_address', 'Jl. Piere Tendean, Manado, Sulawesi Utara 95111', 'Alamat kantor'),
     ('facebook_url', '#', 'URL Facebook'),
     ('instagram_url', '#', 'URL Instagram'),
     ('twitter_url', '#', 'URL Twitter'),

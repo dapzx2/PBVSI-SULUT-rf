@@ -1,17 +1,24 @@
 "use client"
 
+import { useState, useEffect, useCallback } from "react"
+import { Card, CardContent } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Badge } from "@/components/ui/badge"
+import { Search, Filter, Building2, Loader2, RefreshCw, WifiOff } from 'lucide-react'
+import { StickyHeader } from "@/components/sticky-header"
+import { PageTransition } from "@/components/page-transition"
+import { Separator } from "@/components/ui/separator"
+import { getClubs } from "@/lib/clubs"
+import type { Club } from "@/lib/types"
 import Image from "next/image"
 import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { StickyHeader } from "@/components/sticky-header"
-import { useState, useEffect, useCallback } from "react"
-import type { Club } from "@/lib/types"
-import { Loader2, RefreshCw, WifiOff, Building2 } from "lucide-react"
-
 export default function KlubPage() {
-  const [clubs, setClubs] = useState<Club[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCity, setSelectedCity] = useState<string>("all")
+  const [allClubs, setAllClubs] = useState<Club[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -25,7 +32,7 @@ export default function KlubPage() {
         throw new Error(errorData.error || 'Failed to fetch clubs');
       }
       const fetchedClubs: Club[] = await response.json();
-      setClubs(fetchedClubs || []);
+      setAllClubs(fetchedClubs || []);
     } catch (err: any) {
       console.error("Error fetching clubs:", err);
       setError(err.message || "Terjadi kesalahan saat memuat daftar klub.");
@@ -38,135 +45,174 @@ export default function KlubPage() {
     fetchClubs()
   }, [fetchClubs])
 
+  // Filter logic for clubs
+  const filteredClubs = allClubs.filter((club) => {
+    const matchesSearch = club.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesCity = selectedCity === "all" || club.city === selectedCity
+    
+    return matchesSearch && matchesCity
+  })
+
+  // Get unique values for filters
+  const cities = [...new Set(allClubs.map(club => club.city))].filter(Boolean)
+
+  const resetFilters = () => {
+    setSearchTerm("")
+    setSelectedCity("all")
+  }
+
   if (loading) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <StickyHeader currentPage="Klub" />
-        <main className="flex-1 pt-16">
-          <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-orange-50 to-white">
-            <div className="container px-4 md:px-6">
-              <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                <div className="space-y-2">
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl text-gray-800">
-                    Memuat Klub...
-                  </h1>
-                  <p className="max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                    Harap tunggu sebentar.
-                  </p>
-                  <Loader2 className="h-10 w-10 animate-spin text-orange-500 mx-auto mt-8" />
-                </div>
-              </div>
-            </div>
-          </section>
-        </main>
-      </div>
+      <PageTransition>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+          <StickyHeader currentPage="Klub" />
+          <div className="container mx-auto px-4 py-16 pt-32 text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Memuat Daftar Klub...</h1>
+            <p className="text-gray-600">Harap tunggu sebentar.</p>
+            <Loader2 className="h-10 w-10 animate-spin text-orange-500 mx-auto mt-8" />
+          </div>
+        </div>
+      </PageTransition>
     )
   }
 
   if (error) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <StickyHeader currentPage="Klub" />
-        <main className="flex-1 pt-16">
-          <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-orange-50 to-white">
-            <div className="container px-4 md:px-6">
-              <div className="flex flex-col items-center justify-center space-y-4 text-center">
-                <div className="space-y-2">
-                  <WifiOff className="h-16 w-16 mx-auto text-red-500 mb-4" />
-                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl text-red-600">
-                    Terjadi Kesalahan
-                  </h1>
-                  <p className="max-w-[700px] text-gray-600 md:text-xl dark:text-gray-400 mb-8">
-                    {error}
-                  </p>
-                  <Button onClick={fetchClubs}>
-                    <RefreshCw className="h-4 w-4 mr-2" />
-                    Coba Lagi
-                  </Button>
-                </div>
-              </div>
+      <PageTransition>
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+          <StickyHeader currentPage="Klub" />
+          <div className="container mx-auto px-4 py-16 pt-32 text-center">
+            <div className="text-6xl mb-4">
+              <WifiOff className="h-16 w-16 mx-auto text-red-500" />
             </div>
-          </section>
-        </main>
-      </div>
+            <h1 className="text-4xl font-bold text-red-600 mb-4">Terjadi Kesalahan</h1>
+            <p className="text-gray-600 mb-8">{error}</p>
+            <Button onClick={fetchClubs}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Coba Lagi
+            </Button>
+          </div>
+        </div>
+      </PageTransition>
     )
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <StickyHeader currentPage="Klub" />
-      <main className="flex-1 pt-16">
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-r from-orange-50 to-white">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl text-gray-800">
-                  Daftar Klub Bola Voli
-                </h1>
-                <p className="max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Jelajahi profil lengkap klub-klub bola voli terkemuka, termasuk roster pemain dan staf pelatih.
-                </p>
-              </div>
-            </div>
+    <PageTransition>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+        <StickyHeader currentPage="Klub" />
+        
+        <div className="container mx-auto px-4 py-8 pt-24">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl font-bold text-gray-900 mb-4">Daftar Klub PBVSI Sulut</h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Jelajahi profil lengkap klub-klub bola voli terkemuka di Sulawesi Utara.
+            </p>
           </div>
-        </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
-          <div className="container px-4 md:px-6">
-            <h2 className="text-2xl font-bold text-center mb-8 text-gray-800">Pilih Klub Anda</h2>
-            {clubs.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="max-w-md mx-auto">
-                  <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <Building2 className="w-12 h-12 text-gray-400" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Database Klub Kosong</h3>
-                  <p className="text-gray-600 mb-6">
-                    Belum ada data klub di dalam database. Silakan periksa kembali nanti atau hubungi administrator.
-                  </p>
-                  <div className="text-sm text-gray-500">
-                    <p>🏢 Data klub akan segera tersedia</p>
-                  </div>
+          {/* Search and Filter Section */}
+          <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Search */}
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    placeholder="Cari nama klub..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                  />
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                {clubs.map((club) => (
-                  <Card
-                    key={club.slug}
-                    className="flex flex-col items-center text-center p-6 border-2 border-gray-100 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1"
-                  >
-                    <Link href={`/klub/${club.slug}`} className="flex flex-col items-center text-center w-full">
-                      <div className="relative w-32 h-32 mb-4">
-                        <Image
-                          src={club.logo_url || "/placeholder-logo.png"}
-                          alt={`${club.name} Logo`}
-                          fill
-                          style={{ objectFit: "contain" }}
-                          className="rounded-full border-2 border-orange-200 p-2"
-                        />
-                      </div>
-                      <CardHeader className="p-0 pb-2">
-                        <CardTitle className="text-xl font-semibold text-gray-800">{club.name}</CardTitle>
-                        <CardDescription className="text-sm text-gray-600 line-clamp-2">
-                          {club.description}
-                        </CardDescription>
-                      </CardHeader>
-                    </Link>
-                    <CardContent className="p-0 mt-4">
-                      <Button asChild className="bg-orange-500 hover:bg-orange-600 text-white">
-                        <Link href={`/klub/${club.slug}`}>Lihat Profil</Link>
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+
+              {/* City Filter for clubs */}
+              <div className="w-full lg:w-48">
+                <Select value={selectedCity} onValueChange={setSelectedCity}>
+                  <SelectTrigger>
+                    <Filter className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder="Kota" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua Kota</SelectItem>
+                    {cities.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Active Filters */}
+            {(searchTerm || selectedCity !== "all") && (
+              <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t">
+                <span className="text-sm text-gray-600">Filter aktif:</span>
+                {searchTerm && (
+                  <Badge variant="secondary" className="cursor-pointer" onClick={() => setSearchTerm("")}>
+                    Pencarian: "{searchTerm}" ×
+                  </Badge>
+                )}
+                {selectedCity !== "all" && (
+                  <Badge variant="secondary" className="cursor-pointer" onClick={() => setSelectedCity("all")}>
+                    Kota: {selectedCity} ×
+                  </Badge>
+                )}
+                <Button variant="ghost" size="sm" onClick={resetFilters} className="h-6 px-2 text-xs">
+                  Hapus Semua
+                </Button>
               </div>
             )}
           </div>
-        </section>
-      </main>
-      {/* Assuming you have a Footer component */}
-      {/* <Footer /> */}
-    </div>
+
+          {/* Clubs Grid */}
+          {filteredClubs.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="max-w-md mx-auto">
+                <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Building2 className="w-12 h-12 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Database Klub Kosong</h3>
+                <p className="text-gray-600 mb-6">
+                  Belum ada data klub di dalam database. Silakan periksa kembali nanti atau hubungi administrator.
+                </p>
+                <div className="text-sm text-gray-500">
+                  <p>🏢 Data klub akan segera tersedia</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredClubs.map((club) => (
+                <Card key={club.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  {club.logo_url && (
+                    <Image
+                      src={club.logo_url || "/placeholder.svg?height=200&width=300&query=club logo"}
+                      alt={club.name}
+                      width={300}
+                      height={200}
+                      className="w-full h-48 object-contain p-4"
+                    />
+                  )}
+                  <CardContent className="p-4">
+                    <h2 className="text-lg font-semibold line-clamp-1">{club.name}</h2>
+                    <p className="text-sm text-gray-600 mt-1">Kota: {club.city}</p>
+                    <p className="text-sm text-gray-600">Berdiri: {club.established_year}</p>
+                    <Link href={`/klub/${club.slug}`} passHref>
+                      <Button variant="outline" className="w-full mt-4 bg-transparent">
+                        Lihat Detail
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
+        
+      </div>
+    </PageTransition>
   )
 }

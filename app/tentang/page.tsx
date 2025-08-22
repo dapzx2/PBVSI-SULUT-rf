@@ -212,7 +212,7 @@ export default function TentangPage() {
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
                   <h4 className="font-semibold text-gray-900 mb-2">Alamat</h4>
-                  <p className="text-gray-600 text-sm">Manado, Sulawesi Utara</p>
+                  <p className="text-gray-600 text-sm">Jl. Piere Tendean, Manado, Sulawesi Utara 95111</p>
                 </CardContent>
               </Card>
 
@@ -222,7 +222,7 @@ export default function TentangPage() {
                     <Phone className="w-6 h-6 text-white" />
                   </div>
                   <h4 className="font-semibold text-gray-900 mb-2">Telepon</h4>
-                  <p className="text-gray-600 text-sm">+62 xxx xxxx xxxx</p>
+                  <p className="text-gray-600 text-sm">+62 431 123456</p>
                 </CardContent>
               </Card>
 
@@ -232,7 +232,7 @@ export default function TentangPage() {
                     <Mail className="w-6 h-6 text-white" />
                   </div>
                   <h4 className="font-semibold text-gray-900 mb-2">Email</h4>
-                  <p className="text-gray-600 text-sm">info@pbvsisulut.org</p>
+                  <p className="text-gray-600 text-sm">info@pbvsisulut.com</p>
                 </CardContent>
               </Card>
 

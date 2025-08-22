@@ -386,10 +386,7 @@ export default function DatabasePage() {
           )}
         </div>
 
-        <Separator className="my-12" />
-        <div className="text-center text-gray-500 pb-8">
-          <p>&copy; {new Date().getFullYear()} PBVSI Sulawesi Utara. All rights reserved.</p>
-        </div>
+        
       </div>
     </PageTransition>
   )

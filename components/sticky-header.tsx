@@ -28,7 +28,6 @@ export function StickyHeader({ currentPage }: StickyHeaderProps) {
       name: "Tentang",
       href: "/tentang",
       dropdown: [
-        { name: "Overview", href: "/tentang" },
         { name: "Sejarah PBVSI", href: "/sejarah" },
         { name: "Struktur Organisasi", href: "/struktur-organisasi" },
       ],
@@ -140,14 +139,17 @@ export function StickyHeader({ currentPage }: StickyHeaderProps) {
                   onMouseLeave={handleMouseLeave}
                 >
                   <Button
+                    asChild
                     variant="ghost"
                     className={cn(
                       "text-sm font-medium transition-colors h-auto px-4 py-3 rounded-lg",
                       getActiveClass(item.href, true),
                     )}
                   >
-                    {item.name}{" "}
-                    <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+                    <Link href={item.href}>
+                      {item.name}{" "}
+                      <ChevronDown className="ml-1 h-4 w-4 transition-transform duration-200 group-hover:rotate-180" />
+                    </Link>
                   </Button>
 
                   {/* Invisible bridge to prevent gap issues */}
