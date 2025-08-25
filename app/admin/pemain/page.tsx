@@ -1,30 +1,39 @@
 "use client"
-
 import { useState, useEffect, useCallback } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useToast } from "@/components/ui/use-toast"
-import type { Player, AdminUser } from "@/lib/types"
-import { PlusCircle, Edit, Trash2, Loader2, AlertCircle, Shield, User, LogOut } from "lucide-react"
-import { PlayerForm } from "@/components/admin/player-form"
+import { Input } from "@/components/ui/input"
+import {
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription
+} from "@/components/ui/dialog"
+import { PlayerForm } from "@/components/admin/player-form"
+import { Loader2, Plus, Edit, Trash2, Search, Users } from "lucide-react"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import type { Player } from "@/lib/types"
 
 export default function AdminPlayersPage() {
   const [players, setPlayers] = useState<Player[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const { toast } = useToast()
-
-  // Mock user for demonstration purposes (replace with actual auth context)
-  const [user, setUser] = useState<AdminUser | null>(null)
-  const [currentRole, setCurrentRole] = useState<"super_admin" | "admin">("super_admin")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false)
+  const [editingPlayer, setEditingPlayer] = useState<Player | null>(null)
+  const router = useRouter()
 
   const fetchPlayers = useCallback(async () => {
     setLoading(true)
@@ -32,217 +41,167 @@ export default function AdminPlayersPage() {
     try {
       const response = await fetch("/api/admin/players")
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Gagal memuat data pemain.")
+        throw new Error("Failed to fetch players")
       }
       const data = await response.json()
       setPlayers(data.players)
     } catch (err: any) {
       setError(err.message)
-      toast({
-        title: "Kesalahan",
-        description: err.message,
-        variant: "destructive",
-      })
     } finally {
       setLoading(false)
     }
-  }, [toast])
+  }, [])
 
   useEffect(() => {
-    // Simulate user data based on currentRole state
-    setUser({
-      id: "demo-user-id",
-      email: currentRole === "super_admin" ? "superadmin@demo.com" : "admin@demo.com",
-      username: currentRole === "super_admin" ? "Demo Super Admin" : "Demo Admin",
-      password_hash: "", // Not used here
-      role: currentRole,
-      created_at: new Date().toISOString(),
-    })
     fetchPlayers()
-  }, [currentRole, fetchPlayers]) // Re-fetch players when role changes or fetchPlayers changes
+  }, [fetchPlayers])
 
-  const handleAddPlayer = () => {
-    setSelectedPlayer(null)
-    setIsFormOpen(true)
+  const handleEdit = (player: Player) => {
+    setEditingPlayer(player)
+    setIsAddPlayerModalOpen(true)
   }
 
-  const handleEditPlayer = (player: Player) => {
-    setSelectedPlayer(player)
-    setIsFormOpen(true)
-  }
-
-  const handleDeletePlayer = async (playerId: string) => {
-    if (!user || user.role !== "super_admin") {
-      toast({
-        title: "Akses Ditolak",
-        description: "Hanya Super Admin yang dapat menghapus pemain.",
-        variant: "destructive",
-      })
-      return
-    }
-
+  const handleDelete = async (playerId: string) => {
     if (!confirm("Apakah Anda yakin ingin menghapus pemain ini?")) {
       return
     }
-
-    setIsDeleting(true)
     try {
       const response = await fetch(`/api/admin/players?id=${playerId}`, {
         method: "DELETE",
       })
-
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Gagal menghapus pemain.")
+        throw new Error("Failed to delete player")
       }
-
-      toast({
-        title: "Sukses",
-        description: "Pemain berhasil dihapus.",
-      })
-      fetchPlayers() // Refresh list
+      fetchPlayers() // Refresh the list
     } catch (err: any) {
-      toast({
-        title: "Kesalahan",
-        description: err.message,
-        variant: "destructive",
-      })
-    } finally {
-      setIsDeleting(false)
+      setError(err.message)
     }
   }
 
+  const handleFormSuccess = () => {
+    setIsAddPlayerModalOpen(false)
+    setEditingPlayer(null)
+    fetchPlayers()
+  }
+
   const handleFormClose = () => {
-    setIsFormOpen(false)
-    setSelectedPlayer(null)
+    setIsAddPlayerModalOpen(false)
+    setEditingPlayer(null)
   }
 
-  const handleLogout = async () => {
-    console.log("🚪 Simulating logout (no actual logout in no-auth mode)")
-    alert("Simulasi logout. Untuk mengaktifkan kembali autentikasi, kembalikan kode asli.")
-    window.location.href = "/admin/login" // Redirect to login page
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Card className="w-full max-w-md">
-          <CardContent className="flex flex-col items-center justify-center p-8">
-            <Loader2 className="h-8 w-8 animate-spin text-orange-600 mb-4" />
-            <p className="text-gray-600">Memuat dashboard...</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
+  const filteredPlayers = players.filter((player) =>
+    player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    player.position.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="min-h-screen bg-gray-50">
-      
-
-      {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">Manajemen Pemain</h2>
-          <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+          <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
+            <Users className="h-8 w-8" />
+            Manajemen Pemain
+          </h2>
+          <Dialog open={isAddPlayerModalOpen} onOpenChange={setIsAddPlayerModalOpen}>
             <DialogTrigger asChild>
-              <Button onClick={handleAddPlayer}>
-                <PlusCircle className="mr-2 h-4 w-4" />
-                Tambah Pemain
+              <Button onClick={() => setEditingPlayer(null)}>
+                <Plus className="mr-2 h-4 w-4" /> Tambah Pemain Baru
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[600px]">
               <DialogHeader>
-                <DialogTitle>{selectedPlayer ? "Edit Pemain" : "Tambah Pemain Baru"}</DialogTitle>
+                <DialogTitle>{editingPlayer ? "Edit Pemain" : "Tambah Pemain Baru"}</DialogTitle>
+                <DialogDescription>
+                  {editingPlayer ? "Edit detail pemain di sini." : "Tambahkan pemain baru ke database."}
+                </DialogDescription>
               </DialogHeader>
-              <PlayerForm initialData={selectedPlayer} onSuccess={fetchPlayers} onClose={handleFormClose} />
+              <ScrollArea className="h-[400px] pr-4">
+                <PlayerForm
+                  initialData={editingPlayer}
+                  onSuccess={handleFormSuccess}
+                  onClose={handleFormClose}
+                />
+              </ScrollArea>
             </DialogContent>
           </Dialog>
         </div>
 
         {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4" />
+          <Alert variant="destructive" className="mb-6">
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
-        {loading ? (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center p-8">
-              <Loader2 className="h-8 w-8 animate-spin text-orange-600 mb-4" />
-              <p className="text-gray-600">Memuat data pemain...</p>
-            </CardContent>
-          </Card>
-        ) : (
-          <Card>
-            <CardHeader>
-              <CardTitle>Daftar Pemain</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {players.length === 0 ? (
-                <p className="text-center text-muted-foreground">Tidak ada data pemain.</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Nama</TableHead>
-                        <TableHead>Posisi</TableHead>
-                        <TableHead>Klub</TableHead>
-                        <TableHead>Tinggi (cm)</TableHead>
-                        <TableHead>Berat (kg)</TableHead>
-                        <TableHead>Aksi</TableHead>
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              Daftar Pemain
+              <div className="relative w-full max-w-sm">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Cari pemain..."
+                  className="pl-9"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="flex justify-center items-center h-48">
+                <Loader2 className="h-8 w-8 animate-spin text-orange-600" />
+                <p className="ml-2 text-gray-600">Memuat data pemain...</p>
+              </div>
+            ) : filteredPlayers.length === 0 ? (
+              <p className="text-center text-gray-500">Tidak ada pemain ditemukan.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Nama Pemain</TableHead>
+                      <TableHead>Posisi</TableHead>
+                      <TableHead>Klub</TableHead>
+                      <TableHead>Tinggi (cm)</TableHead>
+                      <TableHead>Berat (kg)</TableHead>
+                      <TableHead className="text-right">Aksi</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredPlayers.map((player) => (
+                      <TableRow key={player.id}>
+                        <TableCell className="font-medium">{player.name}</TableCell>
+                        <TableCell>{player.position}</TableCell>
+                        <TableCell>{player.club?.name || "N/A"}</TableCell>
+                        <TableCell>{player.height}</TableCell>
+                        <TableCell>{player.weight}</TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="mr-2"
+                            onClick={() => handleEdit(player)}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => handleDelete(player.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </TableCell>
                       </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {players.map((player) => (
-                        <TableRow key={player.id}>
-                          <TableCell className="font-medium">{player.name}</TableCell>
-                          <TableCell>{player.position}</TableCell>
-                          <TableCell>{player.club?.name || "N/A"}</TableCell>
-                          <TableCell>{player.height}</TableCell>
-                          <TableCell>{player.weight}</TableCell>
-                          <TableCell className="flex gap-2">
-                            <Dialog open={isFormOpen && selectedPlayer?.id === player.id} onOpenChange={setIsFormOpen}>
-                              <DialogTrigger asChild>
-                                <Button variant="outline" size="sm" onClick={() => handleEditPlayer(player)}>
-                                  <Edit className="h-4 w-4" />
-                                  <span className="sr-only">Ubah</span>
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent className="sm:max-w-[600px]">
-                                <DialogHeader>
-                                  <DialogTitle>Edit Pemain</DialogTitle>
-                                </DialogHeader>
-                                <PlayerForm
-                                  initialData={selectedPlayer}
-                                  onSuccess={fetchPlayers}
-                                  onClose={handleFormClose}
-                                />
-                              </DialogContent>
-                            </Dialog>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDeletePlayer(player.id)}
-                              disabled={isDeleting || user.role !== "super_admin"}
-                            >
-                              {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                              <Trash2 className="h-4 w-4" />
-                              <span className="sr-only">Hapus</span>
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        )}
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </main>
     </div>
   )
