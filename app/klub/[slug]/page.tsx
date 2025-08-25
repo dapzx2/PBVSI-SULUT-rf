@@ -82,41 +82,41 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
         <StickyHeader currentPage="klub" />
 
         {/* Club Header Section */}
-        <div className="relative bg-gradient-to-br from-white to-gray-50 border-b shadow-sm pt-16 pb-8 md:pb-12">
+        <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 border-b border-orange-200 shadow-md pt-24 pb-12 md:pt-32 md:pb-16">
           <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-8">
-              <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0 rounded-full overflow-hidden border-4 border-white shadow-lg bg-gray-100 flex items-center justify-center">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
+              <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-6 border-white shadow-xl bg-gray-100 flex items-center justify-center p-2">
                 <Image
                   src={club.logo_url || "/placeholder.svg?height=192&width=192&query=club logo"}
                   alt={`${club.name} logo`}
-                  width={192}
-                  height={192}
-                  className="object-contain p-2"
+                  width={224}
+                  height={224}
+                  className="object-contain"
                 />
               </div>
-              <div className="text-center md:text-left">
-                <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-2">{club.name}</h1>
-                <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-6 gap-y-2 text-gray-600 text-lg mb-4">
-                  <span className="flex items-center">
-                    <MapPin className="w-5 h-5 mr-2 text-orange-500" />
+              <div className="text-center md:text-left flex-1">
+                <h1 className="text-4xl md:text-6xl font-extrabold text-orange-900 mb-3 leading-tight">{club.name}</h1>
+                <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-8 gap-y-3 text-orange-800 text-lg mb-5">
+                  <span className="flex items-center font-medium">
+                    <MapPin className="w-5 h-5 mr-2 text-orange-600" />
                     {club.city}
                   </span>
-                  <span className="flex items-center">
-                    <Calendar className="w-5 h-5 mr-2 text-orange-500" />
+                  <span className="flex items-center font-medium">
+                    <Calendar className="w-5 h-5 mr-2 text-orange-600" />
                     Berdiri: {club.established_year}
                   </span>
                   {club.coach && (
-                    <span className="flex items-center">
-                      <User className="w-5 h-5 mr-2 text-orange-500" />
+                    <span className="flex items-center font-medium">
+                      <User className="w-5 h-5 mr-2 text-orange-600" />
                       Pelatih: {club.coach}
                     </span>
                   )}
                 </div>
                 {club.achievements && (
-                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 mt-4">
-                    <Trophy className="w-5 h-5 text-yellow-500" />
+                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mt-6">
+                    <Trophy className="w-6 h-6 text-yellow-600" />
                     {club.achievements.split(',').map((achievement, index) => (
-                      <Badge key={index} variant="secondary" className="text-base px-3 py-1">
+                      <Badge key={index} variant="secondary" className="bg-orange-200 text-orange-800 text-base px-4 py-1.5 rounded-full font-semibold shadow-sm">
                         {achievement.trim()}
                       </Badge>
                     ))}
@@ -143,7 +143,7 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
         <div className="container mx-auto px-4 py-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Pemain {club.name}</h2>
           {players.length === 0 ? (
-            <div className="text-center text-gray-600 text-lg mt-10">
+            <div className="text-center text-gray-600 text-lg mt-10 p-8 bg-white rounded-lg shadow-sm">
               <p>Belum ada data pemain untuk klub ini.</p>
             </div>
           ) : (
@@ -151,24 +151,26 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
               {players.map((player) => (
                 <Card
                   key={player.id}
-                  className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                  className="overflow-hidden shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1 flex flex-col"
                 >
                   {player.photo_url && (
-                    <Image
-                      src={player.photo_url || "/placeholder.svg?height=200&width=300&query=player photo"}
-                      alt={player.name}
-                      width={300}
-                      height={200}
-                      className="object-cover"
-                    />
+                    <div className="relative w-full h-48 bg-gray-100 flex items-center justify-center">
+                      <Image
+                        src={player.photo_url || "/placeholder.svg?height=200&width=300&query=player photo"}
+                        alt={player.name}
+                        width={300}
+                        height={200}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
                   )}
-                  <CardContent className="p-4">
-                    <h3 className="text-lg font-semibold line-clamp-1">{player.name}</h3>
-                    <p className="text-sm text-gray-600 mt-1">Posisi: {player.position}</p>
-                    <p className="text-sm text-gray-600">Tinggi: {player.height} cm</p>
-                    <p className="text-sm text-gray-600">Berat: {player.weight} kg</p>
-                    <Link href={`/pemain/${player.id}`} passHref>
-                      <Button variant="outline" className="w-full mt-4 bg-transparent">
+                  <CardContent className="p-4 flex-grow flex flex-col">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{player.name}</h3>
+                    <p className="text-sm text-gray-700 mb-1">Posisi: <span className="font-semibold">{player.position}</span></p>
+                    <p className="text-sm text-gray-700 mb-1">Tinggi: <span className="font-semibold">{player.height} cm</span></p>
+                    <p className="text-sm text-gray-700 mb-3">Berat: <span className="font-semibold">{player.weight} kg</span></p>
+                    <Link href={`/pemain/${player.id}`} passHref className="mt-auto">
+                      <Button variant="outline" className="w-full bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100">
                         Lihat Detail
                       </Button>
                     </Link>
