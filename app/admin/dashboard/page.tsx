@@ -188,19 +188,7 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Welcome Section */}
-        <div className="mb-8">
-          <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900">Selamat datang, {user.username}!</h2>
-              <p className="text-gray-600 mt-1">Kelola sistem PBVSI Sulawesi Utara dengan mudah dan efisien</p>
-            </div>
-            <div className="flex items-center space-x-2 text-sm text-gray-500">
-              <Clock className="h-4 w-4" />
-              <span>Terakhir login: Hari ini, 09:30</span>
-            </div>
-          </div>
-        </div>
+        
 
         {error && (
           <Alert variant="destructive" className="mb-6">
