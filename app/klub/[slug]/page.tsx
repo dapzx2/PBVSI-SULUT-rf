@@ -179,10 +179,7 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
           )}
         </div>
 
-        <Separator className="my-12" />
-        <div className="text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} PBVSI. All rights reserved.</p>
-        </div>
+        
       </div>
     </PageTransition>
   )
