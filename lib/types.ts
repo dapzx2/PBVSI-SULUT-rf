@@ -7,7 +7,7 @@ export interface Player {
   height: number // in cm
   weight: number // in kg
   photo_url: string | null
-  achievements: string[] | null // JSON array of strings
+  achievements: string | null // JSON array of strings
   created_at: string
   updated_at: string
   club?: Club // Joined club data
@@ -17,8 +17,13 @@ export interface Club {
   id: string
   name: string
   city: string
+  country: string | null
   established_year: number
+  coach_name: string | null
+  home_arena: string | null
   logo_url: string | null
+  description: string | null
+  achievements: string | null
   created_at: string
   updated_at: string
 }

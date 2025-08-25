@@ -41,3 +41,54 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 }
+
+export async function PUT(request: Request) {
+  try {
+    const authResult = await verifyAuth(request)
+    if (authResult.status !== 200) {
+      return NextResponse.json({ error: authResult.error }, { status: authResult.status })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing gallery item ID" }, { status: 400 })
+    }
+
+    const itemData = await request.json()
+    const { galleryItem, error } = await updateGalleryItem(id, itemData)
+    if (error) {
+      throw new Error(error);
+    }
+    return NextResponse.json(galleryItem)
+  } catch (error: any) {
+    console.error("API Error (PUT gallery item):", error.message)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: Request) {
+  try {
+    const authResult = await verifyAuth(request)
+    if (authResult.status !== 200) {
+      return NextResponse.json({ error: authResult.error }, { status: authResult.status })
+    }
+
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get("id")
+
+    if (!id) {
+      return NextResponse.json({ error: "Missing gallery item ID" }, { status: 400 })
+    }
+
+    const { success, error } = await deleteGalleryItem(id)
+    if (error) {
+      throw new Error(error);
+    }
+    return NextResponse.json({ success })
+  } catch (error: any) {
+    console.error("API Error (DELETE gallery item):", error.message)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+}

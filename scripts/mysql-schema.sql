@@ -8,7 +8,12 @@ CREATE TABLE IF NOT EXISTS `clubs` (
     `country` VARCHAR(100),
     `logo_url` VARCHAR(255),
     `established_year` INT,
-    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
+    `coach_name` VARCHAR(255),
+    `home_arena` VARCHAR(255),
+    `description` TEXT,
+    `achievements` TEXT,
+    `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Create players table, referencing clubs

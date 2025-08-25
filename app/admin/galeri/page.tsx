@@ -69,7 +69,7 @@ export default function AdminGalleryPage() {
       fetchGalleryItems() // Refresh list
     } catch (err: any) {
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: err.message,
         variant: "destructive",
       })
