@@ -1,6 +1,7 @@
 import pool from './mysql';
 import { v4 as uuidv4 } from 'uuid';
 import type { Club } from './types';
+import { generateSlug } from './utils';
 
 export async function getClubs(): Promise<{ clubs: Club[] | null; error: string | null }> {
   try {
@@ -24,9 +25,10 @@ export async function getClubBySlug(slug: string): Promise<{ club: Club | null; 
   }
 }
 
-export async function createClub(clubData: Omit<Club, 'id' | 'created_at' | 'updated_at'>): Promise<{ club: Club | null; error: string | null }> {
+export async function createClub(clubData: Omit<Club, 'id' | 'created_at' | 'updated_at' | 'slug'>): Promise<{ club: Club | null; error: string | null }> {
   const newClubId = uuidv4();
-  const newClub = { id: newClubId, ...clubData };
+  const slug = generateSlug(clubData.name);
+  const newClub = { id: newClubId, slug, ...clubData };
   try {
     await pool.query('INSERT INTO clubs SET ?', newClub);
     return { club: newClub as Club, error: null };
@@ -36,8 +38,12 @@ export async function createClub(clubData: Omit<Club, 'id' | 'created_at' | 'upd
 }
 
 export async function updateClub(id: string, clubData: Partial<Omit<Club, 'id' | 'created_at' | 'updated_at'>>): Promise<{ club: Club | null; error: string | null }> {
+  const updatedClubData: Partial<Club> = { ...clubData };
+  if (clubData.name) {
+    updatedClubData.slug = generateSlug(clubData.name);
+  }
   try {
-    await pool.query('UPDATE clubs SET ? WHERE id = ?', [clubData, id]);
+    await pool.query('UPDATE clubs SET ? WHERE id = ?', [updatedClubData, id]);
     const [rows] = await pool.query('SELECT * FROM clubs WHERE id = ?', [id]);
     const clubs = rows as Club[];
     if (clubs.length === 0) {
