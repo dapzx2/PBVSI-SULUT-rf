@@ -139,62 +139,7 @@ export default function AdminPlayersPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <img src="/images/pbvsi-logo.png" alt="PBVSI Logo" className="w-8 h-8" />
-              <div>
-                <h1 className="text-xl font-semibold text-gray-900">Dasbor Admin</h1>
-                <p className="text-sm text-gray-500">PBVSI Sulawesi Utara</p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Role Toggle for Demo */}
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={currentRole === "super_admin" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentRole("super_admin")}
-                >
-                  Tampilan Super Admin
-                </Button>
-                <Button
-                  variant={currentRole === "admin" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentRole("admin")}
-                >
-                  Tampilan Admin Biasa
-                </Button>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                {user.role === "super_admin" ? (
-                  <Shield className="h-4 w-4 text-orange-600" />
-                ) : (
-                  <User className="h-4 w-4 text-blue-600" />
-                )}
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">{user.username}</p>
-                  <p className="text-xs text-gray-500">{user.email}</p>
-                </div>
-                <Badge variant={user.role === "super_admin" ? "default" : "secondary"}>
-                  {user.role === "super_admin" ? "Super Admin" : "Admin"}
-                </Badge>
-              </div>
-
-              <Separator orientation="vertical" className="h-6" />
-
-              <Button onClick={handleLogout} variant="outline" size="sm">
-                <LogOut className="h-4 w-4 mr-2" />
-                Keluar
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
