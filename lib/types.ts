@@ -16,8 +16,8 @@ export interface Player {
 export interface Club {
   id: string
   name: string
+  slug: string
   city: string
-  country: string | null
   established_year: number
   coach_name: string | null
   home_arena: string | null

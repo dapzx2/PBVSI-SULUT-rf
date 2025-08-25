@@ -11,6 +11,19 @@ export async function getClubs(): Promise<{ clubs: Club[] | null; error: string 
   }
 }
 
+export async function getClubBySlug(slug: string): Promise<{ club: Club | null; error: string | null }> {
+  try {
+    const [rows] = await pool.query('SELECT * FROM clubs WHERE slug = ?', [slug]);
+    const clubs = rows as Club[];
+    if (clubs.length === 0) {
+      return { club: null, error: 'Club not found' };
+    }
+    return { club: clubs[0], error: null };
+  } catch (error: any) {
+    return { club: null, error: error.message };
+  }
+}
+
 export async function createClub(clubData: Omit<Club, 'id' | 'created_at' | 'updated_at'>): Promise<{ club: Club | null; error: string | null }> {
   const newClubId = uuidv4();
   const newClub = { id: newClubId, ...clubData };
@@ -48,4 +61,3 @@ export async function deleteClub(id: string): Promise<{ success: boolean; error:
     return { success: false, error: error.message };
   }
 }
-

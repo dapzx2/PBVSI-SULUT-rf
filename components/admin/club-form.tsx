@@ -15,7 +15,6 @@ import { Loader2 } from "lucide-react"
 const clubFormSchema = z.object({
   name: z.string().min(2, { message: "Nama klub harus minimal 2 karakter." }),
   city: z.string().min(2, { message: "Kota harus minimal 2 karakter." }),
-  country: z.string().min(2, { message: "Negara harus minimal 2 karakter." }).optional(), // Added country
   established_year: z.coerce.number().min(1900, { message: "Tahun berdiri tidak valid." }).max(new Date().getFullYear(), { message: "Tahun berdiri tidak boleh di masa depan." }),
   coach_name: z.string().min(2, { message: "Nama pelatih harus minimal 2 karakter." }),
   logo_url: z.string().url({ message: "URL logo tidak valid." }).nullable().optional().or(z.literal("")),
@@ -39,7 +38,6 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
     defaultValues: {
       name: initialData?.name || "",
       city: initialData?.city || "",
-      country: initialData?.country || "", // Added country
       established_year: initialData?.established_year || 0,
       coach_name: initialData?.coach_name || "",
       logo_url: initialData?.logo_url || "",
@@ -53,7 +51,6 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
       form.reset({
         name: initialData.name || "",
         city: initialData.city || "",
-        country: initialData.country || "", // Added country
         established_year: initialData.established_year || 0,
         coach_name: initialData.coach_name || "",
         logo_url: initialData.logo_url || "",
@@ -167,19 +164,7 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="country"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Negara</FormLabel>
-              <FormControl>
-                <Input placeholder="Negara asal klub" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        
         <FormField
           control={form.control}
           name="established_year"
@@ -187,7 +172,7 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
             <FormItem>
               <FormLabel>Tahun Berdiri</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Contoh: 2005" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                <Input type="number" placeholder="Contoh: 2005" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

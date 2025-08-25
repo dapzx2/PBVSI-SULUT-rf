@@ -1,6 +1,3 @@
-"use client"
-
-import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { Loader2, RefreshCw, WifiOff, MapPin, Calendar, Trophy, User } from 'lucide-react'
 import { Button } from "@/components/ui/button"
@@ -14,60 +11,33 @@ import type { Club, Player } from "@/lib/types"
 import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 
-export default function ClubDetailPage({ params }: { params: { slug: string } }) {
+export default async function ClubDetailPage({ params }: { params: { slug: string } }) {
   const { slug } = params
-  const [club, setClub] = useState<Club | null>(null)
-  const [players, setPlayers] = useState<Player[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const { club: fetchedClub, error: clubError } = await getClubBySlug(slug)
-      if (clubError) {
-        throw new Error(clubError)
-      }
-      if (!fetchedClub) {
-        setError("Klub tidak ditemukan.")
-        setLoading(false)
-        return
-      }
-      setClub(fetchedClub)
+  let club: Club | null = null
+  let players: Player[] = []
+  let error: string | null = null
+
+  try {
+    const { club: fetchedClub, error: clubError } = await getClubBySlug(slug)
+    if (clubError) {
+      throw new Error(clubError)
+    }
+    if (!fetchedClub) {
+      error = "Klub tidak ditemukan."
+    } else {
+      club = fetchedClub
 
       const { players: fetchedPlayers, error: playersError } = await getPlayers()
       if (playersError) {
         throw new Error(playersError)
       }
       // Filter players belonging to this club
-      const clubPlayers = fetchedPlayers?.filter((player) => player.club_id === fetchedClub.id) || []
-      setPlayers(clubPlayers)
-    } catch (err: any) {
-      console.error("Error fetching club data:", err)
-      setError(err.message || "Terjadi kesalahan saat memuat detail klub.")
-    } finally {
-      setLoading(false)
+      players = fetchedPlayers?.filter((player) => player.club_id === fetchedClub.id) || []
     }
-  }, [slug])
-
-  useEffect(() => {
-    fetchData()
-  }, [fetchData])
-
-  if (loading) {
-    return (
-      <PageTransition>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="klub" />
-          <div className="container mx-auto px-4 py-16 pt-32 text-center">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Memuat Detail Klub...</h1>
-            <p className="text-gray-600">Harap tunggu sebentar.</p>
-            <Loader2 className="h-10 w-10 animate-spin text-orange-500 mx-auto mt-8" />
-          </div>
-        </div>
-      </PageTransition>
-    )
+  } catch (err: any) {
+    console.error("Error fetching club data:", err)
+    error = err.message || "Terjadi kesalahan saat memuat detail klub."
   }
 
   if (error) {
@@ -81,10 +51,7 @@ export default function ClubDetailPage({ params }: { params: { slug: string } })
             </div>
             <h1 className="text-4xl font-bold text-red-600 mb-4">Terjadi Kesalahan</h1>
             <p className="text-gray-600 mb-8">{error}</p>
-            <Button onClick={fetchData}>
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Coba Lagi
-            </Button>
+            {/* No direct retry button for server components, user can refresh page */}
           </div>
         </div>
       </PageTransition>
@@ -148,9 +115,9 @@ export default function ClubDetailPage({ params }: { params: { slug: string } })
                 {club.achievements && (
                   <div className="flex flex-wrap justify-center md:justify-start items-center gap-2 mt-4">
                     <Trophy className="w-5 h-5 text-yellow-500" />
-                    {club.achievements.map((achievement, index) => (
+                    {club.achievements.split(',').map((achievement, index) => (
                       <Badge key={index} variant="secondary" className="text-base px-3 py-1">
-                        {achievement}
+                        {achievement.trim()}
                       </Badge>
                     ))}
                   </div>
