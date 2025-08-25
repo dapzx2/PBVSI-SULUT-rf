@@ -82,7 +82,7 @@ export function GalleryForm({ initialData, onSuccess, onClose }: GalleryFormProp
       onClose()
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: error.message,
         variant: "destructive",
       })
@@ -175,7 +175,7 @@ export function GalleryForm({ initialData, onSuccess, onClose }: GalleryFormProp
           name="tags"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tags (JSON Array)</FormLabel>
+              <FormLabel>Tag (Array JSON)</FormLabel>
               <FormControl>
                 <Input placeholder='["voli", "turnamen", "sulut"]' {...field} />
               </FormControl>

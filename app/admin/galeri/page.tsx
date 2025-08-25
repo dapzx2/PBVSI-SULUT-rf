@@ -32,7 +32,7 @@ export default function AdminGalleryPage() {
     } catch (err: any) {
       setError(err.message || "Gagal memuat item galeri.")
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: "Gagal memuat item galeri.",
         variant: "destructive",
       })
@@ -112,7 +112,7 @@ export default function AdminGalleryPage() {
         </div>
       ) : error ? (
         <div className="text-center text-red-500 py-8">
-          <p>Error: {error}</p>
+          <p>Kesalahan: {error}</p>
           <Button onClick={fetchGalleryItems} className="mt-4">
             Coba Lagi
           </Button>
@@ -161,7 +161,7 @@ export default function AdminGalleryPage() {
                       <TableCell className="text-right">
                         <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
                           <Edit className="h-4 w-4" />
-                          <span className="sr-only">Edit</span>
+                          <span className="sr-only">Ubah</span>
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)}>
                           <Trash2 className="h-4 w-4" />

@@ -213,7 +213,7 @@ export default function HomePage() {
               <div className="flex justify-center items-center h-40">
                 <Loader2 className="h-10 w-10 animate-spin text-orange-500" />
               </div>
-            ) : articles.length > 0 ? (
+            ) : articles && articles.length > 0 ? (
               <motion.div
                 className="grid md:grid-cols-3 gap-8 mb-12"
                 variants={staggerContainer}
@@ -226,7 +226,7 @@ export default function HomePage() {
                     <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                       <div className="aspect-video bg-gradient-to-br from-orange-100 to-red-100 rounded-t-lg flex items-center justify-center">
                         <img
-                          src={article.featured_image || "/placeholder.svg"}
+                          src={article.image_url || "/placeholder.svg"}
                           alt={article.title}
                           className="w-full h-full object-cover rounded-t-lg"
                         />
@@ -238,9 +238,6 @@ export default function HomePage() {
                         <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
                           {article.title}
                         </h3>
-                        <p className="text-gray-600 mb-4 line-clamp-3">
-                          {article.excerpt}
-                        </p>
                         <div className="flex items-center justify-between">
                           <span className="text-sm text-gray-500">
                             {new Date(article.published_at).toLocaleDateString("id-ID", {

@@ -211,6 +211,7 @@ export default function AdminArticlesPage() {
                           className="mr-2"
                         >
                           <Edit className="h-4 w-4" />
+                          <span className="sr-only">Ubah</span>
                         </Button>
                         <Button
                           variant="ghost"
@@ -233,7 +234,7 @@ export default function AdminArticlesPage() {
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{currentArticle ? "Edit Artikel" : "Tambah Artikel Baru"}</DialogTitle>
+            <DialogTitle>{currentArticle ? "Ubah Artikel" : "Tambah Artikel Baru"}</DialogTitle>
             <DialogDescription>
               {currentArticle ? "Edit detail artikel." : "Isi detail untuk artikel baru."}
             </DialogDescription>

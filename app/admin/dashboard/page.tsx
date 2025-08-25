@@ -184,72 +184,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <img src="/images/pbvsi-logo.png" alt="PBVSI Logo" className="w-8 h-8" />
-              <div>
-                <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
-                <p className="text-sm text-gray-500">PBVSI Sulawesi Utara</p>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              {/* Notifications */}
-              <Button variant="outline" size="sm" className="relative bg-transparent">
-                <Bell className="h-4 w-4" />
-                {/* {stats.pendingApprovals > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {stats.pendingApprovals}
-                  </span>
-                )} */}
-              </Button>
-
-              {/* Role Toggle for Demo */}
-              <div className="flex items-center gap-2">
-                <Button
-                  variant={currentRole === "super_admin" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentRole("super_admin")}
-                >
-                  Super Admin
-                </Button>
-                <Button
-                  variant={currentRole === "admin" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setCurrentRole("admin")}
-                >
-                  Admin
-                </Button>
-              </div>
-
-              <div className="flex items-center space-x-2">
-                {user.role === "super_admin" ? (
-                  <Shield className="h-4 w-4 text-orange-600" />
-                ) : (
-                  <User className="h-4 w-4 text-blue-600" />
-                )}
-                <div className="text-right">
-                  <p className="text-sm font-medium text-gray-900">{user.username}</p>
-                  <p className="text-xs text-gray-500">{user.email}</p>
-                </div>
-                <Badge variant={user.role === "super_admin" ? "default" : "secondary"}>
-                  {user.role === "super_admin" ? "Super Admin" : "Admin"}
-                </Badge>
-              </div>
-
-              <Separator orientation="vertical" className="h-6" />
-
-              <Button onClick={handleLogout} variant="outline" size="sm">
-                <LogOut className="h-4 w-4 mr-2" />
-                Logout
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -305,7 +240,7 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => router.push("/admin/players")}
+            onClick={() => router.push("/admin/pemain")}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Pemain</CardTitle>
@@ -324,7 +259,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/players/add")
+                    router.push("/admin/pemain/add")
                   }}
                 >
                   <UserPlus className="h-3 w-3 mr-1" />
@@ -335,7 +270,7 @@ export default function AdminDashboard() {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/players")
+                    router.push("/admin/pemain")
                   }}
                 >
                   <Eye className="h-3 w-3 mr-1" />
@@ -347,7 +282,7 @@ export default function AdminDashboard() {
 
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => router.push("/admin/clubs")}
+            onClick={() => router.push("/admin/klub")}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Klub</CardTitle>
@@ -366,7 +301,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/clubs/add")
+                    router.push("/admin/klub/add")
                   }}
                 >
                   <Plus className="h-3 w-3 mr-1" />
@@ -377,7 +312,7 @@ export default function AdminDashboard() {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/clubs")
+                    router.push("/admin/klub")
                   }}
                 >
                   <Eye className="h-3 w-3 mr-1" />
@@ -389,7 +324,7 @@ export default function AdminDashboard() {
 
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => router.push("/admin/matches")}
+            onClick={() => router.push("/admin/pertandingan")}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Pertandingan</CardTitle>
@@ -408,7 +343,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/matches/add")
+                    router.push("/admin/pertandingan/add")
                   }}
                 >
                   <CalendarPlus className="h-3 w-3 mr-1" />
@@ -419,7 +354,7 @@ export default function AdminDashboard() {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/matches")
+                    router.push("/admin/pertandingan")
                   }}
                 >
                   <Edit className="h-3 w-3 mr-1" />
@@ -431,7 +366,7 @@ export default function AdminDashboard() {
 
           <Card
             className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => router.push("/admin/articles")}
+            onClick={() => router.push("/admin/publikasi")}
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Artikel</CardTitle>
@@ -450,7 +385,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/articles/add")
+                    router.push("/admin/publikasi/add")
                   }}
                 >
                   <FileTextIcon className="h-3 w-3 mr-1" />
@@ -461,7 +396,7 @@ export default function AdminDashboard() {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/articles")
+                    router.push("/admin/publikasi")
                   }}
                 >
                   <Eye className="h-3 w-3 mr-1" />
@@ -489,7 +424,7 @@ export default function AdminDashboard() {
                   <Button
                     variant="outline"
                     className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/players/add")}
+                    onClick={() => router.push("/admin/pemain/add")}
                   >
                     <UserPlus className="h-6 w-6" />
                     <span className="text-sm">Tambah Pemain</span>
@@ -497,7 +432,7 @@ export default function AdminDashboard() {
                   <Button
                     variant="outline"
                     className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/matches/add")}
+                    onClick={() => router.push("/admin/pertandingan/add")}
                   >
                     <CalendarPlus className="h-6 w-6" />
                     <span className="text-sm">Jadwal Match</span>
@@ -505,7 +440,7 @@ export default function AdminDashboard() {
                   <Button
                     variant="outline"
                     className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/articles/add")}
+                    onClick={() => router.push("/admin/publikasi/add")}
                   >
                     <FileTextIcon className="h-6 w-6" />
                     <span className="text-sm">Tulis Berita</span>
@@ -513,7 +448,7 @@ export default function AdminDashboard() {
                   <Button
                     variant="outline"
                     className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/gallery")}
+                    onClick={() => router.push("/admin/galeri")}
                   >
                     <Upload className="h-6 w-6" />
                     <span className="text-sm">Upload Foto</span>
@@ -530,7 +465,7 @@ export default function AdminDashboard() {
                     <Button
                       variant="outline"
                       className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                      onClick={() => router.push("/admin/settings")}
+                      onClick={() => router.push("/admin/pengaturan")}
                     >
                       <Settings className="h-6 w-6" />
                       <span className="text-sm">Pengaturan</span>
@@ -622,7 +557,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   size="sm"
                   className="w-full bg-transparent"
-                  onClick={() => router.push("/admin/activity-logs")}
+                  onClick={() => router.push("/admin/log-aktivitas")}
                 >
                   Lihat Semua Aktivitas
                 </Button>

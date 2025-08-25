@@ -1,6 +1,6 @@
 import pool from './mysql';
 import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 
 export interface AdminUser {
   id: string;

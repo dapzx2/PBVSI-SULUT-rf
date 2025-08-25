@@ -65,7 +65,7 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
       setClubs(data.clubs)
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: error.message,
         variant: "destructive",
       })
@@ -117,7 +117,7 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
       onClose()
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: error.message,
         variant: "destructive",
       })
@@ -149,7 +149,7 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
             <FormItem>
               <FormLabel>Posisi</FormLabel>
               <FormControl>
-                <Input placeholder="Posisi (e.g., Setter, Spiker)" {...field} />
+                <Input placeholder="Posisi (contoh: Setter, Spiker)" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -247,7 +247,7 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
           name="achievements"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Prestasi (JSON Array)</FormLabel>
+              <FormLabel>Prestasi (Array JSON)</FormLabel>
               <FormControl>
                 <Input placeholder='["Juara Liga 2023", "MVP 2022"]' {...field} />
               </FormControl>

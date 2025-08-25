@@ -40,7 +40,7 @@ export default function AdminPlayersPage() {
     } catch (err: any) {
       setError(err.message)
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: err.message,
         variant: "destructive",
       })
@@ -104,7 +104,7 @@ export default function AdminPlayersPage() {
       fetchPlayers() // Refresh list
     } catch (err: any) {
       toast({
-        title: "Error",
+        title: "Kesalahan",
         description: err.message,
         variant: "destructive",
       })
@@ -146,7 +146,7 @@ export default function AdminPlayersPage() {
             <div className="flex items-center space-x-4">
               <img src="/images/pbvsi-logo.png" alt="PBVSI Logo" className="w-8 h-8" />
               <div>
-                <h1 className="text-xl font-semibold text-gray-900">Admin Dashboard</h1>
+                <h1 className="text-xl font-semibold text-gray-900">Dasbor Admin</h1>
                 <p className="text-sm text-gray-500">PBVSI Sulawesi Utara</p>
               </div>
             </div>
@@ -159,14 +159,14 @@ export default function AdminPlayersPage() {
                   size="sm"
                   onClick={() => setCurrentRole("super_admin")}
                 >
-                  Super Admin View
+                  Tampilan Super Admin
                 </Button>
                 <Button
                   variant={currentRole === "admin" ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCurrentRole("admin")}
                 >
-                  Regular Admin View
+                  Tampilan Admin Biasa
                 </Button>
               </div>
 
@@ -189,7 +189,7 @@ export default function AdminPlayersPage() {
 
               <Button onClick={handleLogout} variant="outline" size="sm">
                 <LogOut className="h-4 w-4 mr-2" />
-                Logout
+                Keluar
               </Button>
             </div>
           </div>
@@ -264,7 +264,7 @@ export default function AdminPlayersPage() {
                               <DialogTrigger asChild>
                                 <Button variant="outline" size="sm" onClick={() => handleEditPlayer(player)}>
                                   <Edit className="h-4 w-4" />
-                                  <span className="sr-only">Edit</span>
+                                  <span className="sr-only">Ubah</span>
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="sm:max-w-[600px]">
@@ -286,7 +286,7 @@ export default function AdminPlayersPage() {
                             >
                               {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                               <Trash2 className="h-4 w-4" />
-                              <span className="sr-only">Delete</span>
+                              <span className="sr-only">Hapus</span>
                             </Button>
                           </TableCell>
                         </TableRow>

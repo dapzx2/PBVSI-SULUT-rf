@@ -200,7 +200,7 @@ export default function ClubDetailPage({ params }: { params: { slug: string } })
                     <p className="text-sm text-gray-600 mt-1">Posisi: {player.position}</p>
                     <p className="text-sm text-gray-600">Tinggi: {player.height} cm</p>
                     <p className="text-sm text-gray-600">Berat: {player.weight} kg</p>
-                    <Link href={`/player/${player.id}`} passHref>
+                    <Link href={`/pemain/${player.id}`} passHref>
                       <Button variant="outline" className="w-full mt-4 bg-transparent">
                         Lihat Detail
                       </Button>

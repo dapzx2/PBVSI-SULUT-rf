@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "framer-motion"
 import type React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
@@ -96,12 +97,18 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 p-4">
-      <Card className="w-full max-w-md">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full max-w-md"
+      >
+        <Card>
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <img src="/images/pbvsi-logo.png" alt="PBVSI Logo" className="w-16 h-16" />
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">Admin Login</CardTitle>
+          <CardTitle className="text-2xl font-bold text-gray-900">Login Admin</CardTitle>
           <CardDescription>PBVSI Sulawesi Utara</CardDescription>
         </CardHeader>
 
@@ -128,7 +135,7 @@ export default function AdminLogin() {
               disabled={loading}
             >
               <User className="w-4 h-4" />
-              Regular Admin
+              Admin Biasa
             </Button>
           </div>
 
@@ -164,14 +171,14 @@ export default function AdminLogin() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Kata Sandi</Label>
               <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Masukkan password"
+                  placeholder="Masukkan kata sandi Anda"
                   required
                   disabled={loading}
                 />
@@ -195,19 +202,20 @@ export default function AdminLogin() {
                   Memproses...
                 </>
               ) : (
-                "Login"
+                "Masuk"
               )}
             </Button>
           </form>
 
           {/* Demo Credentials Info */}
           <div className="text-xs text-gray-500 text-center mt-4 space-y-1">
-            <p className="font-medium">Demo Credentials:</p>
+            <p className="font-medium">Kredensial Demo:</p>
             <p>Super Admin: admin@pbvsisulut.com / admin123</p>
             <p>Regular Admin: user@pbvsisulut.com / admin123</p>
           </div>
         </CardContent>
       </Card>
+      </motion.div>
     </div>
   )
 }

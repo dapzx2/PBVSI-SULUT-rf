@@ -121,7 +121,7 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
         <div className="mb-6">
-          <Link href="/live-scores" passHref>
+          <Link href="/live-score" passHref>
             <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Kembali ke Live Skor

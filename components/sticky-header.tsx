@@ -34,7 +34,7 @@ export function StickyHeader({ currentPage }: StickyHeaderProps) {
     },
     { name: "Publikasi", href: "/berita" },
     { name: "Galeri", href: "/galeri" },
-    { name: "Live Skor", href: "/live-scores" },
+    { name: "Live Skor", href: "/live-score" },
     {
       name: "Informasi Publik",
       href: "/informasi-publik",

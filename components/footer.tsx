@@ -92,7 +92,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/live-scores" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link href="/live-score" className="text-gray-300 hover:text-white transition-colors text-sm">
                   Live Scores
                 </Link>
               </li>

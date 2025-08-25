@@ -19,11 +19,11 @@ export async function POST(request: NextRequest) {
     if (userError || !user) {
       console.log("❌ Invalid credentials for:", email)
       await logActivity(
-        "", // No user ID yet
+        null, // No user ID yet
         "Login Failed",
         "Authentication",
         undefined,
-        { email, reason: userError || "User not found" },
+        { email, reason: "User not found" },
         request.ip || "Unknown",
         request.headers.get("user-agent") || "Unknown"
       );

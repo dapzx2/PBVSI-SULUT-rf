@@ -29,12 +29,12 @@ export default function KlubPage() {
       const response = await fetch('/api/clubs');
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch clubs');
+        throw new Error(errorData.error || 'Gagal memuat klub');
       }
       const fetchedClubs: Club[] = await response.json();
       setAllClubs(fetchedClubs || []);
     } catch (err: any) {
-      console.error("Error fetching clubs:", err);
+      console.error("Kesalahan mengambil klub:", err);
       setError(err.message || "Terjadi kesalahan saat memuat daftar klub.");
     } finally {
       setLoading(false);

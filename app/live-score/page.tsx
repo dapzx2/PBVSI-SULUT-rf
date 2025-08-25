@@ -35,13 +35,13 @@ export default function LiveScoresPage() {
       const response = await fetch('/api/matches')
       if (!response.ok) {
         const errorData = await response.json()
-        throw new Error(errorData.error || 'Failed to fetch matches')
+        throw new Error(errorData.error || 'Gagal memuat pertandingan')
       }
       const fetchedMatches: Match[] = await response.json()
       setScores(fetchedMatches)
       setLastUpdate(new Date())
     } catch (err: any) {
-      console.error("Error fetching matches:", err)
+      console.error("Kesalahan mengambil pertandingan:", err)
       setError(err.message || "Terjadi kesalahan saat memuat pertandingan.")
     } finally {
       setIsLoading(false)

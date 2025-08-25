@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { getGalleryItems, createGalleryItem } from "@/lib/gallery"
+import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from "@/lib/gallery"
 import { verifyAuth } from "@/lib/auth"
 
 export async function GET(request: Request) {

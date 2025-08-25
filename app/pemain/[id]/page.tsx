@@ -143,7 +143,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
       }
       setPlayer(fetchedPlayer)
     } catch (err: any) {
-      console.error("Error fetching player:", err)
+      console.error("Kesalahan mengambil pemain:", err)
       setError(err.message || "Terjadi kesalahan saat memuat data pemain.")
     } finally {
       setLoading(false)

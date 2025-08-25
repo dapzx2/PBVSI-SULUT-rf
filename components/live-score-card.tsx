@@ -71,7 +71,7 @@ export function LiveScoreCard({ match, delay = 0 }: LiveScoreCardProps) {
   const awaySetsWon = match.score_away_points ? (match.score_away_points as number[]).filter((score, index) => score > (match.score_home_points as number[])[index]).length : 0;
 
   return (
-    <Link href={`/live-scores/${match.id}`} className="block">
+    <Link href={`/live-score/${match.id}`} className="block">
       {" "}
       {/* Wrap with Link */}
       <Card className="overflow-hidden hover:shadow-md transition-shadow duration-300">

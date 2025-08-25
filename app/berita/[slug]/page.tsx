@@ -29,7 +29,7 @@ export default function ArticleDetailPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || `Failed to fetch article with slug ${slug}`)
+        throw new Error(data.error || `Gagal memuat artikel dengan slug ${slug}`)
       }
       setArticle(data)
     } catch (err: any) {
@@ -44,7 +44,7 @@ export default function ArticleDetailPage() {
       } else {
         setError(err.message || `Gagal memuat artikel ${slug}. Silakan coba lagi.`)
         toast({
-          title: "Error",
+          title: "Kesalahan",
           description: err.message || `Gagal memuat artikel ${slug}.`,
           variant: "destructive",
         })

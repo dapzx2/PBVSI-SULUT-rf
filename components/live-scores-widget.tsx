@@ -14,7 +14,7 @@ export function LiveScoresWidget() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-            Live Scores
+            Skor Langsung
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -35,10 +35,10 @@ export function LiveScoresWidget() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Live Scores</CardTitle>
+          <CardTitle>Skor Langsung</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-red-500 text-sm">Error: {error}</p>
+          <p className="text-red-500 text-sm">Kesalahan: {error}</p>
         </CardContent>
       </Card>
     )
@@ -48,7 +48,7 @@ export function LiveScoresWidget() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Live Scores</CardTitle>
+          <CardTitle>Skor Langsung</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-gray-500 text-sm">Tidak ada pertandingan live saat ini</p>

@@ -85,7 +85,7 @@ export async function deleteSession(sessionId: string): Promise<void> {
 }
 
 export async function logActivity(
-  adminUserId: string,
+  adminUserId: string | null,
   action: string,
   resourceType?: string,
   resourceId?: string,

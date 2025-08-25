@@ -301,7 +301,7 @@ export default function DatabasePage() {
                         <p className="text-sm text-gray-600">Klub: {player.club?.name || "N/A"}</p>
                         <p className="text-sm text-gray-600">Tinggi: {player.height_cm} cm</p>
                         <p className="text-sm text-gray-600">Berat: {player.weight_kg} kg</p>
-                        <Link href={`/player/${player.id}`} passHref>
+                        <Link href={`/pemain/${player.id}`} passHref>
                           <Button variant="outline" className="w-full mt-4 bg-transparent">
                             Lihat Detail
                           </Button>

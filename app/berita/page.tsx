@@ -47,12 +47,12 @@ export default function BeritaPage() {
       const response = await fetch('/api/articles');
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to fetch articles');
+        throw new Error(errorData.error || 'Gagal memuat artikel');
       }
       const fetchedArticles: Article[] = await response.json();
       setArticles(fetchedArticles || []);
     } catch (err: any) {
-      console.error("Error fetching articles:", err);
+      console.error("Kesalahan mengambil artikel:", err);
       setError(err.message || "Terjadi kesalahan saat memuat berita.");
     } finally {
       setLoading(false);
@@ -281,10 +281,9 @@ export default function BeritaPage() {
                   <Link href={`/berita/${article.slug}`}>
                     <div className="relative aspect-video">
                       <Image
-                        src={article.featured_image || "/placeholder.svg?height=300&width=300&query=article image"}
+                        src={article.image_url || "/placeholder.svg?height=300&width=300&query=article image"}
                         alt={article.title}
-                        width={300}
-                        height={200}
+                        fill
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       {article.category && (
