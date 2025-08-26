@@ -18,7 +18,7 @@ const adminNavItems = [
   { name: 'Klub', href: '/admin/klub' },
   { name: 'Pemain', href: '/admin/pemain' },
   { name: 'Galeri', href: '/admin/galeri' },
-  { name: 'Log Aktivitas', href: '/admin/log-aktivitas' },
+  { name: 'Live Score', href: '/admin/live-score' },
   { name: 'Pengaturan', href: '/admin/pengaturan' },
 ]
 
@@ -71,8 +71,10 @@ export function AdminNavbar() {
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild className="lg:hidden">
             <Button variant="ghost" size="icon" className="h-10 w-10">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Toggle navigation menu</span>
+              <span>
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle navigation menu</span>
+              </span>
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-full max-w-sm p-0">

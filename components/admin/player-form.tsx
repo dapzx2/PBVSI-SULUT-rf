@@ -1,265 +1,188 @@
-"use client"
+'use client';
 
-import { useState, useEffect, useCallback } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/components/ui/use-toast"
-import type { Player, Club } from "@/lib/types" // Changed from supabase to types
-import { Loader2 } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
+import { Player } from '@/lib/types';
+import Image from 'next/image';
 
-const playerFormSchema = z.object({
-  name: z.string().min(2, { message: "Nama harus minimal 2 karakter." }),
-  position: z.string().min(2, { message: "Posisi harus minimal 2 karakter." }),
-  club_id: z.string().nullable().optional(),
-  birth_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Format tanggal lahir YYYY-MM-DD." }),
-  height: z.coerce
-    .number()
-    .min(100, { message: "Tinggi minimal 100 cm." })
-    .max(250, { message: "Tinggi maksimal 250 cm." }),
-  weight: z.coerce
-    .number()
-    .min(30, { message: "Berat minimal 30 kg." })
-    .max(150, { message: "Berat maksimal 150 kg." }),
-  photo_url: z.string().url({ message: "URL foto tidak valid." }).nullable().optional().or(z.literal("")),
-  achievements: z.string().optional(), // Assuming achievements are stored as a JSON string or similar
-})
+interface Club {
+  id: string;
+  name: string;
+}
 
 interface PlayerFormProps {
-  initialData?: Player | null
-  onSuccess: () => void
-  onClose: () => void
+  initialData: Player | null;
+  onSuccess: () => void;
+  onClose: () => void;
 }
 
 export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps) {
-  const { toast } = useToast()
-  const [clubs, setClubs] = useState<Club[]>([])
-  const [loadingClubs, setLoadingClubs] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const form = useForm<z.infer<typeof playerFormSchema>>({
-    resolver: zodResolver(playerFormSchema),
-    defaultValues: {
-      name: initialData?.name || "",
-      position: initialData?.position || "",
-      club_id: initialData?.club_id || null,
-      birth_date: initialData?.birth_date || "",
-      height: initialData?.height || 0,
-      weight: initialData?.weight || 0,
-      photo_url: initialData?.photo_url || "",
-      achievements: initialData?.achievements ? JSON.stringify(initialData.achievements) : "",
-    },
-  })
-
-  const fetchClubs = useCallback(async () => {
-    try {
-      const response = await fetch("/api/clubs") // Assuming a public API endpoint for clubs
-      if (!response.ok) {
-        throw new Error("Gagal memuat daftar klub.")
-      }
-      const data = await response.json()
-      setClubs(data.clubs)
-    } catch (error: any) {
-      toast({
-        title: "Kesalahan",
-        description: error.message,
-        variant: "destructive",
-      })
-    } finally {
-      setLoadingClubs(false)
-    }
-  }, [toast])
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: initialData?.name || '',
+    position: initialData?.position || '',
+    club_id: initialData?.club_id || null,
+    image_url: initialData?.image_url || null,
+  });
+  const [clubs, setClubs] = useState<Club[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.image_url || null
+  );
 
   useEffect(() => {
-    fetchClubs()
-  }, [fetchClubs])
+    async function fetchClubs() {
+      try {
+        const response = await fetch('/api/admin/clubs');
+        if (!response.ok) throw new Error('Gagal memuat klub');
+        const data = await response.json();
+        setClubs(data.filter((club: Club) => club.id));
+      } catch (error) {
+        toast({ variant: 'destructive', description: error.message });
+      }
+    }
+    fetchClubs();
+  }, [toast]);
 
-  async function onSubmit(values: z.infer<typeof playerFormSchema>) {
-    setIsSubmitting(true)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleClubChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, club_id: value === 'null' ? null : value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    let finalImageUrl = formData.image_url;
+
     try {
-      const payload = {
-        ...values,
-        height: Number(values.height),
-        weight: Number(values.weight),
-        achievements: values.achievements ? JSON.parse(values.achievements) : null,
-        club_id: values.club_id === "none" ? null : values.club_id, // Handle "none" for club_id
+      if (imageFile) {
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', imageFile);
+
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
+
+        if (!uploadResponse.ok) {
+          const errorData = await uploadResponse.json();
+          throw new Error(errorData.error || 'Gagal mengunggah gambar');
+        }
+
+        const uploadResult = await uploadResponse.json();
+        finalImageUrl = uploadResult.url;
       }
 
-      let response
-      if (initialData) {
-        response = await fetch(`/api/admin/players?id=${initialData.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-      } else {
-        response = await fetch("/api/admin/players", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-      }
+      const apiEndpoint = initialData
+        ? `/api/admin/players/${initialData.id}`
+        : '/api/admin/players';
+      const method = initialData ? 'PUT' : 'POST';
+
+      const body = {
+        ...formData,
+        image_url: finalImageUrl,
+      };
+
+      const response = await fetch(apiEndpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Gagal menyimpan data pemain.")
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Operasi gagal');
       }
 
-      toast({
-        title: "Sukses",
-        description: `Pemain berhasil ${initialData ? "diperbarui" : "ditambahkan"}.`,
-      })
-      onSuccess()
-      onClose()
-    } catch (error: any) {
-      toast({
-        title: "Kesalahan",
-        description: error.message,
-        variant: "destructive",
-      })
+      toast({ description: `Pemain berhasil ${initialData ? 'diperbarui' : 'dibuat'}.` });
+      onSuccess();
+    } catch (error) {
+      toast({ variant: 'destructive', description: error.message });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Nama</FormLabel>
-              <FormControl>
-                <Input placeholder="Nama Pemain" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="position"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Posisi</FormLabel>
-              <FormControl>
-                <Input placeholder="Posisi (contoh: Setter, Spiker)" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="club_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Klub</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value || "none"}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih Klub" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {loadingClubs ? (
-                    <SelectItem value="loading" disabled>
-                      Memuat klub...
-                    </SelectItem>
-                  ) : (
-                    <>
-                      <SelectItem value="none">Tidak Ada Klub</SelectItem>
-                      {clubs.map((club) => (
-                        <SelectItem key={club.id} value={club.id}>
-                          {club.name}
-                        </SelectItem>
-                      ))}
-                    </>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="birth_date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tanggal Lahir</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            control={form.control}
-            name="height"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Tinggi (cm)</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} value={String(field.value)} /> {/* Explicitly cast to string */}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="weight"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Berat (kg)</FormLabel>
-                <FormControl>
-                  <Input type="number" {...field} value={String(field.value)} /> {/* Explicitly cast to string */}
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-        <FormField
-          control={form.control}
-          name="photo_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>URL Foto</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/photo.jpg" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="achievements"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Prestasi (Array JSON)</FormLabel>
-              <FormControl>
-                <Input placeholder='["Juara Liga 2023", "MVP 2022"]' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {initialData ? "Simpan Perubahan" : "Tambah Pemain"}
+    <form onSubmit={handleSubmit} className="space-y-4">
+       <div className="space-y-2">
+        <Label htmlFor="image">Foto Pemain</Label>
+        {imagePreview && (
+          <div className="mt-2">
+            <Image
+              src={imagePreview}
+              alt="Preview Foto Pemain"
+              width={128}
+              height={128}
+              className="rounded-md object-cover"
+            />
+          </div>
+        )}
+        <Input id="image" type="file" onChange={handleImageChange} accept="image/*" />
+        <p className="text-sm text-muted-foreground">
+          Pilih gambar baru untuk mengganti foto saat ini.
+        </p>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="name">Nama Pemain</Label>
+        <Input id="name" value={formData.name} onChange={handleChange} required />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="position">Posisi</Label>
+        <Input id="position" value={formData.position} onChange={handleChange} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="club_id">Klub</Label>
+        <Select onValueChange={handleClubChange} value={formData.club_id ?? 'null'}>
+          <SelectTrigger>
+            <SelectValue placeholder="Pilih Klub" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="null">Tanpa Klub</SelectItem>
+            {clubs.map((club) => (
+              <SelectItem key={club.id} value={club.id}>
+                {club.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="flex justify-end space-x-2 pt-4">
+        <Button type="button" variant="outline" onClick={onClose}>
+          Batal
         </Button>
-      </form>
-    </Form>
-  )
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+        </Button>
+      </div>
+    </form>
+  );
 }

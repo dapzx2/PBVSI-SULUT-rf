@@ -545,7 +545,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   size="sm"
                   className="w-full bg-transparent"
-                  onClick={() => router.push("/admin/log-aktivitas")}
+                  onClick={() => router.push("/admin/live-score")}
                 >
                   Lihat Semua Aktivitas
                 </Button>

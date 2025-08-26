@@ -1,193 +1,141 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { useToast } from "@/components/ui/use-toast"
-import type { GalleryItem } from "@/lib/types"
-import { Loader2 } from "lucide-react"
-
-const galleryFormSchema = z.object({
-  title: z.string().min(2, { message: "Judul harus minimal 2 karakter." }),
-  description: z.string().nullable().optional(),
-  image_url: z.string().url({ message: "URL gambar tidak valid." }).or(z.literal("")),
-  category: z.string().min(1, { message: "Kategori harus dipilih." }),
-  event_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Format tanggal acara YYYY-MM-DD." }),
-  tags: z.string().optional(), // Assuming tags are stored as a comma-separated string or JSON string
-})
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+import Image from 'next/image';
+import { GalleryItem } from '@/lib/types'; // Assuming you'll define GalleryItem in types.ts
 
 interface GalleryFormProps {
-  initialData?: GalleryItem | null
-  onSuccess: () => void
-  onClose: () => void
+  initialData: GalleryItem | null;
+  onSuccess: () => void;
+  onClose: () => void;
 }
 
 export function GalleryForm({ initialData, onSuccess, onClose }: GalleryFormProps) {
-  const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    title: initialData?.title || '',
+    description: initialData?.description || '',
+    image_url: initialData?.image_url || null,
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialData?.image_url || null
+  );
 
-  const form = useForm<z.infer<typeof galleryFormSchema>>({
-    resolver: zodResolver(galleryFormSchema),
-    defaultValues: {
-      title: initialData?.title || "",
-      description: initialData?.description || "",
-      image_url: initialData?.image_url || "",
-      category: initialData?.category || "",
-      event_date: initialData?.event_date || "",
-      tags: initialData?.tags ? JSON.stringify(initialData.tags) : "",
-    },
-  })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
 
-  async function onSubmit(values: z.infer<typeof galleryFormSchema>) {
-    setIsSubmitting(true)
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    let finalImageUrl = formData.image_url;
+
     try {
-      const payload = {
-        ...values,
-        description: values.description === "" ? null : values.description,
-        image_url: values.image_url === "" ? null : values.image_url,
-        tags: values.tags ? JSON.parse(values.tags) : null,
+      if (imageFile) {
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', imageFile);
+
+        const uploadResponse = await fetch('/api/upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
+
+        if (!uploadResponse.ok) {
+          const errorData = await uploadResponse.json();
+          throw new Error(errorData.error || 'Gagal mengunggah gambar');
+        }
+
+        const uploadResult = await uploadResponse.json();
+        finalImageUrl = uploadResult.url;
       }
 
-      let response
-      if (initialData) {
-        response = await fetch(`/api/admin/gallery/${initialData.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-      } else {
-        response = await fetch("/api/admin/gallery", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        })
-      }
+      const apiEndpoint = initialData
+        ? `/api/admin/gallery/${initialData.id}`
+        : '/api/admin/gallery';
+      const method = initialData ? 'PUT' : 'POST';
+
+      const body = {
+        ...formData,
+        image_url: finalImageUrl,
+      };
+
+      const response = await fetch(apiEndpoint, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(errorData.error || "Gagal menyimpan item galeri.")
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Operasi gagal');
       }
 
-      toast({
-        title: "Sukses",
-        description: `Item galeri berhasil ${initialData ? "diperbarui" : "ditambahkan"}.`,
-      })
-      onSuccess()
-      onClose()
+      toast({ description: `Item galeri berhasil ${initialData ? 'diperbarui' : 'dibuat'}.` });
+      onSuccess();
     } catch (error: any) {
-      toast({
-        title: "Kesalahan",
-        description: error.message,
-        variant: "destructive",
-      })
+      toast({ variant: 'destructive', description: error.message });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Judul</FormLabel>
-              <FormControl>
-                <Input placeholder="Judul Foto/Acara" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Deskripsi</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Deskripsi singkat tentang foto/acara" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="image_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>URL Gambar</FormLabel>
-              <FormControl>
-                <Input placeholder="https://example.com/image.jpg" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Kategori</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Pilih Kategori" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="Berita">Berita</SelectItem>
-                  <SelectItem value="Pemain Putri">Pemain Putri</SelectItem>
-                  <SelectItem value="Pemain Putra">Pemain Putra</SelectItem>
-                  <SelectItem value="Pengurus">Pengurus</SelectItem>
-                  <SelectItem value="Umum">Umum</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="event_date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tanggal Acara</FormLabel>
-              <FormControl>
-                <Input type="date" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="tags"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tag (Array JSON)</FormLabel>
-              <FormControl>
-                <Input placeholder='["voli", "turnamen", "sulut"]' {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {initialData ? "Simpan Perubahan" : "Tambah Item Galeri"}
+    <form onSubmit={handleSubmit} className="space-y-4">
+       <div className="space-y-2">
+        <Label htmlFor="image">Gambar Galeri</Label>
+        {imagePreview && (
+          <div className="mt-2">
+            <Image
+              src={imagePreview}
+              alt="Preview Gambar Galeri"
+              width={256}
+              height={144}
+              className="rounded-md object-cover"
+            />
+          </div>
+        )}
+        <Input id="image" type="file" onChange={handleImageChange} accept="image/*" />
+        <p className="text-sm text-muted-foreground">
+          Pilih gambar baru untuk item galeri.
+        </p>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="title">Judul</Label>
+        <Input id="title" value={formData.title} onChange={handleChange} required />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="description">Deskripsi</Label>
+        <Textarea id="description" value={formData.description} onChange={handleChange} />
+      </div>
+      <div className="flex justify-end space-x-2 pt-4">
+        <Button type="button" variant="outline" onClick={onClose}>
+          Batal
         </Button>
-      </form>
-    </Form>
-  )
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Menyimpan...' : 'Simpan'}
+        </Button>
+      </div>
+    </form>
+  );
 }

@@ -1,81 +1,102 @@
+
 import pool from './mysql';
-import { v4 as uuidv4 } from 'uuid';
-import type { Player } from './types';
+import { RowDataPacket } from 'mysql2';
+
+export interface Player extends RowDataPacket {
+  id: string;
+  name: string;
+  position: string | null;
+  image_url: string | null;
+  club_id: string | null;
+  club_name: string | null; // Kita akan join untuk mendapatkan nama klub
+}
 
 export async function getPlayers(): Promise<{ players: Player[] | null; error: string | null }> {
   try {
-    const [rows] = await pool.query(
-      'SELECT p.*, c.name as club_name FROM players p LEFT JOIN clubs c ON p.club_id = c.id ORDER BY p.name ASC'
-    );
+    const sql = `
+      SELECT 
+        p.id, 
+        p.name, 
+        p.position, 
+        p.image_url, 
+        p.club_id,
+        c.name as club_name
+      FROM players p
+      LEFT JOIN clubs c ON p.club_id = c.id
+      ORDER BY p.name ASC
+    `;
+    const [rows] = await pool.query(sql);
     return { players: rows as Player[], error: null };
   } catch (error: any) {
     return { players: null, error: error.message };
   }
 }
 
-export async function getPlayerById(id: string): Promise<{ player: Player | null; error: string | null }> {
-  try {
-    const [rows] = await pool.query(
-      'SELECT p.*, c.name as club_name FROM players p LEFT JOIN clubs c ON p.club_id = c.id WHERE p.id = ?',
-      [id]
-    );
-    const players = rows as Player[];
-    if (players.length === 0) {
-      return { player: null, error: 'Player not found' };
-    }
-    return { player: players[0], error: null };
-  } catch (error: any) {
-    return { player: null, error: error.message };
-  }
+export async function getPlayerById(id: string): Promise<Player | null> {
+  const sql = `
+    SELECT 
+      p.id, 
+      p.name, 
+      p.position, 
+      p.image_url,
+      p.club_id,
+      c.name as club_name
+    FROM players p
+    LEFT JOIN clubs c ON p.club_id = c.id
+    WHERE p.id = ?
+  `;
+  const [rows] = await pool.query(sql, [id]);
+  return (rows as Player[])[0] || null;
 }
 
-export async function createPlayer(
-  playerData: Omit<Player, 'id' | 'created_at' | 'updated_at' | 'club'>
-): Promise<{ player: Player | null; error: string | null }> {
-  const newPlayerId = uuidv4();
-  const newPlayer = { id: newPlayerId, ...playerData };
-  try {
-    await pool.query('INSERT INTO players SET ?', newPlayer);
-    return { player: newPlayer as Player, error: null };
-  } catch (error: any) {
-    return { player: null, error: error.message };
-  }
+export async function createPlayer(player: Omit<Player, 'id' | 'club_name'>): Promise<{ id: string }> {
+  const { name, position, club_id, image_url } = player;
+  const id = crypto.randomUUID();
+  const sql = `
+    INSERT INTO players (id, name, position, club_id, image_url)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  await pool.execute(sql, [id, name, position, club_id, image_url]);
+  return { id };
 }
 
-export async function updatePlayer(
-  id: string,
-  playerData: Partial<Omit<Player, 'id' | 'created_at' | 'updated_at' | 'club'>>
-): Promise<{ player: Player | null; error: string | null }> {
-  try {
-    await pool.query('UPDATE players SET ? WHERE id = ?', [playerData, id]);
-    const { player } = await getPlayerById(id);
-    return { player, error: null };
-  } catch (error: any) {
-    return { player: null, error: error.message };
+export async function updatePlayer(id: string, player: Partial<Omit<Player, 'id' | 'club_name'>>): Promise<void> {
+  // Build the update query dynamically
+  const fields = [];
+  const values = [];
+  if (player.name !== undefined) {
+    fields.push('name = ?');
+    values.push(player.name);
   }
+  if (player.position !== undefined) {
+    fields.push('position = ?');
+    values.push(player.position);
+  }
+  if (player.club_id !== undefined) {
+    fields.push('club_id = ?');
+    values.push(player.club_id);
+  }
+  if (player.image_url !== undefined) {
+    fields.push('image_url = ?');
+    values.push(player.image_url);
+  }
+
+  if (fields.length === 0) {
+    // Nothing to update
+    return;
+  }
+
+  const sql = `
+    UPDATE players
+    SET ${fields.join(', ')}
+    WHERE id = ?
+  `;
+  values.push(id);
+
+  await pool.execute(sql, values);
 }
 
-export async function deletePlayer(id: string): Promise<{ success: boolean; error: string | null }> {
-  try {
-    const [result] = await pool.query('DELETE FROM players WHERE id = ?', [id]);
-    const deleteResult = result as any;
-    if (deleteResult.affectedRows === 0) {
-      return { success: false, error: 'Player not found' };
-    }
-    return { success: true, error: null };
-  } catch (error: any) {
-    return { success: false, error: error.message };
-  }
-}
-
-export async function getPlayersByClubId(clubId: string): Promise<{ players: Player[] | null; error: string | null }> {
-  try {
-    const [rows] = await pool.query(
-      'SELECT p.*, c.name as club_name FROM players p LEFT JOIN clubs c ON p.club_id = c.id WHERE p.club_id = ? ORDER BY p.name ASC',
-      [clubId]
-    );
-    return { players: rows as Player[], error: null };
-  } catch (error: any) {
-    return { players: null, error: error.message };
-  }
+export async function deletePlayer(id: string): Promise<void> {
+  const sql = `DELETE FROM players WHERE id = ?`;
+  await pool.execute(sql, [id]);
 }

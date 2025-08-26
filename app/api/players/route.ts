@@ -10,7 +10,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Failed to fetch players' }, { status: 500 });
     }
 
-    return NextResponse.json(players);
+    // Convert to plain JavaScript objects
+    const plainPlayers = JSON.parse(JSON.stringify(players));
+
+    return NextResponse.json(plainPlayers);
   } catch (error) {
     console.error('Unexpected error in API route:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });

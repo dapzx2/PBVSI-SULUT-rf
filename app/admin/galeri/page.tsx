@@ -4,8 +4,8 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { useToast } from "@/components/ui/use-toast"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog"
+import { toast } from "sonner"
 import { Loader2, PlusCircle, Edit, Trash2, ImageIcon } from "lucide-react"
 import { GalleryForm } from "@/components/admin/gallery-form"
 import type { GalleryItem } from "@/lib/types"
@@ -17,7 +17,9 @@ export default function AdminGalleryPage() {
   const [error, setError] = useState<string | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null)
-  const { toast } = useToast()
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deletingItem, setDeletingItem] = useState<GalleryItem | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const fetchGalleryItems = async () => {
     setLoading(true)
@@ -31,11 +33,7 @@ export default function AdminGalleryPage() {
       setGalleryItems(data)
     } catch (err: any) {
       setError(err.message || "Gagal memuat item galeri.")
-      toast({
-        title: "Kesalahan",
-        description: "Gagal memuat item galeri.",
-        variant: "destructive",
-      })
+      toast.error("Gagal memuat item galeri: " + (err.message || "Unknown error"));
     } finally {
       setLoading(false)
     }
@@ -50,31 +48,33 @@ export default function AdminGalleryPage() {
     setIsFormOpen(true)
   }
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus item galeri ini?")) {
-      return
-    }
+  const handleDelete = (item: GalleryItem) => {
+    setDeletingItem(item);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingItem) return;
+
+    setIsSubmitting(true);
     try {
-      const response = await fetch(`/api/admin/gallery/${id}`, {
+      const response = await fetch(`/api/admin/gallery/${deletingItem.id}`, {
         method: "DELETE",
       })
       if (!response.ok) {
         const errorData = await response.json()
         throw new Error(errorData.error || "Gagal menghapus item galeri.")
       }
-      toast({
-        title: "Sukses",
-        description: "Item galeri berhasil dihapus.",
-      })
+      toast.success("Item galeri berhasil dihapus.");
       fetchGalleryItems() // Refresh list
+      setIsDeleteDialogOpen(false);
+      setDeletingItem(null);
     } catch (err: any) {
-      toast({
-        title: "Kesalahan",
-        description: err.message,
-        variant: "destructive",
-      })
+      toast.error("Gagal menghapus item galeri: " + (err.message || "Unknown error"));
+    } finally {
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFormClose = () => {
     setIsFormOpen(false)
@@ -86,51 +86,35 @@ export default function AdminGalleryPage() {
     handleFormClose()
   }
 
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Manajemen Galeri</h1>
-        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setEditingItem(null)}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Tambah Item Baru
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
-            <DialogHeader>
-              <DialogTitle>{editingItem ? "Edit Item Galeri" : "Tambah Item Galeri Baru"}</DialogTitle>
-            </DialogHeader>
-            <GalleryForm initialData={editingItem} onSuccess={handleFormSuccess} onClose={handleFormClose} />
-          </DialogContent>
-        </Dialog>
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
       </div>
+    );
+  }
 
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <Loader2 className="h-10 w-10 animate-spin text-orange-600" />
-          <p className="ml-2 text-lg text-gray-600">Memuat item galeri...</p>
-        </div>
-      ) : error ? (
-        <div className="text-center text-red-500 py-8">
-          <p>Kesalahan: {error}</p>
-          <Button onClick={fetchGalleryItems} className="mt-4">
-            Coba Lagi
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto py-8">
+      <Card>
+        <CardHeader className="flex flex-row justify-between items-center">
+          <CardTitle>Manajemen Galeri</CardTitle>
+          <Button onClick={() => { setEditingItem(null); setIsFormOpen(true); }}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Tambah Item Baru
           </Button>
-        </div>
-      ) : galleryItems.length === 0 ? (
-        <Card>
-          <CardContent className="p-6 text-center">
-            <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Tidak ada item galeri ditemukan.</h3>
-            <p className="text-gray-600">Klik "Tambah Item Baru" untuk mulai menambahkan foto ke galeri Anda.</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <Card>
-          <CardHeader>
-            <CardTitle>Daftar Item Galeri</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
+        </CardHeader>
+        <CardContent>
+          {galleryItems.length === 0 ? (
+            <p className="text-center text-gray-500">Tidak ada item galeri ditemukan.</p>
+          ) : (
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
@@ -138,7 +122,7 @@ export default function AdminGalleryPage() {
                     <TableHead className="w-[80px]">Gambar</TableHead>
                     <TableHead>Judul</TableHead>
                     <TableHead>Kategori</TableHead>
-                    <TableHead>Tanggal Acara</TableHead>
+                    <TableHead>Tanggal Dibuat</TableHead>
                     <TableHead className="text-right">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -157,13 +141,13 @@ export default function AdminGalleryPage() {
                       </TableCell>
                       <TableCell className="font-medium">{item.title}</TableCell>
                       <TableCell>{item.category}</TableCell>
-                      <TableCell>{new Date(item.event_date).toLocaleDateString("id-ID")}</TableCell>
+                      <TableCell>{new Date(item.created_at).toLocaleDateString("id-ID")}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" onClick={() => handleEdit(item)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleEdit(item)} className="mr-2">
                           <Edit className="h-4 w-4" />
                           <span className="sr-only">Ubah</span>
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDelete(item.id)}>
+                        <Button variant="ghost" size="icon" onClick={() => handleDelete(item)}>
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Hapus</span>
                         </Button>
@@ -173,9 +157,52 @@ export default function AdminGalleryPage() {
                 </TableBody>
               </Table>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Gallery Form Dialog */}
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingItem ? "Edit Item Galeri" : "Tambah Item Galeri Baru"}</DialogTitle>
+            <DialogDescription>
+              {editingItem ? "Ubah detail di bawah ini." : "Isi detail untuk item galeri baru."}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <GalleryForm initialData={editingItem} onSuccess={handleFormSuccess} onClose={handleFormClose} />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Hapus Item Galeri</DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin menghapus item galeri "{deletingItem?.title}"? Tindakan ini tidak dapat dibatalkan.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isSubmitting}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Menghapus...' : 'Hapus'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
-  )
+  );
 }

@@ -27,9 +27,9 @@ import { useState, useEffect, useCallback } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge }nimport { StickyHeader } from "@/components/sticky-header"
+import { Badge } from "@/components/ui/badge";
+import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
-import { getPlayerById } from "@/lib/players"
 import type { Player } from "@/lib/types"
 
 // Animation variants
@@ -137,10 +137,12 @@ export default function PlayerPage({ params }: PlayerPageProps) {
     setLoading(true)
     setError(null)
     try {
-      const { player: fetchedPlayer, error: fetchError } = await getPlayerById(id)
-      if (fetchError) {
-        throw new Error(fetchError)
+      const response = await fetch(`/api/pemain/${id}`)
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || `Error: ${response.status}`)
       }
+      const fetchedPlayer = await response.json()
       setPlayer(fetchedPlayer)
     } catch (err: any) {
       console.error("Kesalahan mengambil pemain:", err)

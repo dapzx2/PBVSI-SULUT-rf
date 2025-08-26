@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge"
 import { Search, Filter, Building2, Loader2, RefreshCw, WifiOff } from 'lucide-react'
 import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
-import { Separator } from "@/components/ui/separator"
 import { getClubs } from "@/lib/clubs"
 import type { Club } from "@/lib/types"
 import Image from "next/image"
@@ -65,7 +64,7 @@ export default function KlubPage() {
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="Klub" />
+          <StickyHeader currentPage="klub" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Memuat Daftar Klub...</h1>
             <p className="text-gray-600">Harap tunggu sebentar.</p>
@@ -80,7 +79,7 @@ export default function KlubPage() {
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="Klub" />
+          <StickyHeader currentPage="klub" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <div className="text-6xl mb-4">
               <WifiOff className="h-16 w-16 mx-auto text-red-500" />
@@ -100,7 +99,7 @@ export default function KlubPage() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        <StickyHeader currentPage="Klub" />
+        <StickyHeader currentPage="klub" />
         
         <div className="container mx-auto px-4 py-8 pt-24">
           <div className="text-center mb-12">
@@ -207,6 +206,23 @@ export default function KlubPage() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          )}
+
+          {/* Statistics Section */}
+          {allClubs.length > 0 && (
+            <div className="mt-12 bg-white rounded-lg shadow-sm border p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Klub</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600">{allClubs.length}</div>
+                  <div className="text-sm text-gray-600">Total Klub</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600">{cities.length}</div>
+                  <div className="text-sm text-gray-600">Total Kota</div>
+                </div>
+              </div>
             </div>
           )}
         </div>

@@ -1,208 +1,242 @@
-"use client"
-import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+
+'use client';
+
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableHead,
   TableBody,
   TableCell,
-} from "@/components/ui/table"
-import { Alert, AlertDescription } from "@/components/ui/alert"
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogDescription
-} from "@/components/ui/dialog"
-import { PlayerForm } from "@/components/admin/player-form"
-import { Loader2, Plus, Edit, Trash2, Search, Users } from "lucide-react"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { Player } from "@/lib/types"
+  DialogFooter,
+} from '@/components/ui/dialog';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { PlayerForm } from '@/components/admin/player-form';
+import { toast } from 'sonner';
+import { PlusCircle, Loader2, Edit, Trash2 } from 'lucide-react';
+import { Player } from '@/lib/types';
 
-export default function AdminPlayersPage() {
-  const [players, setPlayers] = useState<Player[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false)
-  const [editingPlayer, setEditingPlayer] = useState<Player | null>(null)
-  const router = useRouter()
+export default function PlayersPage() {
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingPlayer, setEditingPlayer] = useState<Player | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [deletingPlayer, setDeletingPlayer] = useState<Player | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchPlayers = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  const fetchPlayers = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const response = await fetch("/api/admin/players")
-      if (!response.ok) {
-        throw new Error("Failed to fetch players")
-      }
-      const data = await response.json()
-      setPlayers(data.players)
-    } catch (err: any) {
-      setError(err.message)
+      const response = await fetch('/api/admin/players');
+      if (!response.ok) throw new Error('Gagal mengambil data pemain');
+      const data = await response.json();
+      setPlayers(data);
+    } catch (err) {
+      setError(err.message);
+      toast.error('Gagal memuat pemain: ' + err.message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [])
+  };
 
   useEffect(() => {
-    fetchPlayers()
-  }, [fetchPlayers])
+    fetchPlayers();
+  }, []);
+
+  const handleAdd = () => {
+    setEditingPlayer(null);
+    setIsFormOpen(true);
+  };
 
   const handleEdit = (player: Player) => {
-    setEditingPlayer(player)
-    setIsAddPlayerModalOpen(true)
-  }
+    setEditingPlayer(player);
+    setIsFormOpen(true);
+  };
 
-  const handleDelete = async (playerId: string) => {
-    if (!confirm("Apakah Anda yakin ingin menghapus pemain ini?")) {
-      return
-    }
+  const handleDelete = (player: Player) => {
+    setDeletingPlayer(player);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deletingPlayer) return;
+
+    setIsSubmitting(true);
     try {
-      const response = await fetch(`/api/admin/players?id=${playerId}`, {
-        method: "DELETE",
-      })
+      const response = await fetch(`/api/admin/players/${deletingPlayer.id}`, {
+        method: 'DELETE',
+      });
       if (!response.ok) {
-        throw new Error("Failed to delete player")
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Gagal menghapus pemain');
       }
-      fetchPlayers() // Refresh the list
-    } catch (err: any) {
-      setError(err.message)
+      toast.success('Pemain berhasil dihapus.');
+      fetchPlayers(); // Refresh list
+      setIsDeleteDialogOpen(false);
+      setDeletingPlayer(null);
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFormSuccess = () => {
-    setIsAddPlayerModalOpen(false)
-    setEditingPlayer(null)
-    fetchPlayers()
-  }
+    setIsFormOpen(false);
+    setEditingPlayer(null);
+    fetchPlayers();
+  };
 
   const handleFormClose = () => {
-    setIsAddPlayerModalOpen(false)
-    setEditingPlayer(null)
+    setIsFormOpen(false);
+    setEditingPlayer(null);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
+      </div>
+    );
   }
 
-  const filteredPlayers = players.filter((player) =>
-    player.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    player.position.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
-            <Users className="h-8 w-8" />
-            Manajemen Pemain
-          </h2>
-          <Dialog open={isAddPlayerModalOpen} onOpenChange={setIsAddPlayerModalOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={() => setEditingPlayer(null)}>
-                <Plus className="mr-2 h-4 w-4" /> Tambah Pemain Baru
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[600px]">
-              <DialogHeader>
-                <DialogTitle>{editingPlayer ? "Edit Pemain" : "Tambah Pemain Baru"}</DialogTitle>
-                <DialogDescription>
-                  {editingPlayer ? "Edit detail pemain di sini." : "Tambahkan pemain baru ke database."}
-                </DialogDescription>
-              </DialogHeader>
-              <ScrollArea className="h-[400px] pr-4">
-                <PlayerForm
-                  initialData={editingPlayer}
-                  onSuccess={handleFormSuccess}
-                  onClose={handleFormClose}
-                />
-              </ScrollArea>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        {error && (
-          <Alert variant="destructive" className="mb-6">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              Daftar Pemain
-              <div className="relative w-full max-w-sm">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Cari pemain..."
-                  className="pl-9"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {loading ? (
-              <div className="flex justify-center items-center h-48">
-                <Loader2 className="h-8 w-8 animate-spin text-orange-600" />
-                <p className="ml-2 text-gray-600">Memuat data pemain...</p>
-              </div>
-            ) : filteredPlayers.length === 0 ? (
-              <p className="text-center text-gray-500">Tidak ada pemain ditemukan.</p>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nama Pemain</TableHead>
-                      <TableHead>Posisi</TableHead>
-                      <TableHead>Klub</TableHead>
-                      <TableHead>Tinggi (cm)</TableHead>
-                      <TableHead>Berat (kg)</TableHead>
-                      <TableHead className="text-right">Aksi</TableHead>
+    <div className="container mx-auto py-8">
+      <Card>
+        <CardHeader className="flex flex-row justify-between items-center">
+          <CardTitle>Manajemen Pemain</CardTitle>
+          <Button onClick={handleAdd}>
+            <PlusCircle className="mr-2 h-4 w-4" /> Tambah Pemain
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {players.length === 0 ? (
+            <p className="text-center text-gray-500">Belum ada pemain.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Foto</TableHead>
+                    <TableHead>Nama Pemain</TableHead>
+                    <TableHead>Posisi</TableHead>
+                    <TableHead>Klub</TableHead>
+                    <TableHead className="text-right">Aksi</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {players.map((player) => (
+                    <TableRow key={player.id}>
+                      <TableCell>
+                        <Avatar>
+                          <AvatarImage src={player.image_url || undefined} alt={player.name} />
+                          <AvatarFallback>{player.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                      </TableCell>
+                      <TableCell className="font-medium">{player.name}</TableCell>
+                      <TableCell>{player.position || 'N/A'}</TableCell>
+                      <TableCell>{(player as any).club_name || 'Tanpa Klub'}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleEdit(player)}
+                          className="mr-2"
+                        >
+                          <Edit className="h-4 w-4" />
+                          <span className="sr-only">Ubah</span>
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(player)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Hapus</span>
+                        </Button>
+                      </TableCell>
                     </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredPlayers.map((player) => (
-                      <TableRow key={player.id}>
-                        <TableCell className="font-medium">{player.name}</TableCell>
-                        <TableCell>{player.position}</TableCell>
-                        <TableCell>{player.club?.name || "N/A"}</TableCell>
-                        <TableCell>{player.height}</TableCell>
-                        <TableCell>{player.weight}</TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="mr-2"
-                            onClick={() => handleEdit(player)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => handleDelete(player.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </main>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Player Form Dialog */}
+      <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingPlayer ? 'Ubah Pemain' : 'Tambah Pemain Baru'}</DialogTitle>
+            <DialogDescription>
+              {editingPlayer ? 'Ubah detail di bawah ini.' : 'Isi detail untuk pemain baru.'}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <PlayerForm
+              initialData={editingPlayer}
+              onSuccess={handleFormSuccess}
+              onClose={handleFormClose}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Konfirmasi Hapus Pemain</DialogTitle>
+            <DialogDescription>
+              Apakah Anda yakin ingin menghapus pemain "{deletingPlayer?.name}"? Tindakan ini tidak dapat dibatalkan.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteDialogOpen(false)}
+              disabled={isSubmitting}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleConfirmDelete}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Menghapus...' : 'Hapus'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
-  )
+  );
 }

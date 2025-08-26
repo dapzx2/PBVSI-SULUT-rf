@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server"
 import { getGalleryItems, createGalleryItem, updateGalleryItem, deleteGalleryItem } from "@/lib/gallery"
-import { verifyAuth } from "@/lib/auth"
+import { requireAuth } from "@/lib/auth"
 
-export async function GET(request: Request) {
+export const GET = requireAuth(async (request: Request) => {
   try {
-    const authResult = await verifyAuth(request)
-    if (authResult.status !== 200) {
-      return NextResponse.json({ error: authResult.error }, { status: authResult.status })
-    }
-
     const { searchParams } = new URL(request.url)
     const category = searchParams.get("category")
 
@@ -21,15 +16,10 @@ export async function GET(request: Request) {
     console.error("API Error (GET gallery items):", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
-}
+})
 
-export async function POST(request: Request) {
+export const POST = requireAuth(async (request: Request) => {
   try {
-    const authResult = await verifyAuth(request)
-    if (authResult.status !== 200) {
-      return NextResponse.json({ error: authResult.error }, { status: authResult.status })
-    }
-
     const itemData = await request.json()
     const { galleryItem, error } = await createGalleryItem(itemData)
     if (error) {
@@ -40,15 +30,10 @@ export async function POST(request: Request) {
     console.error("API Error (POST gallery item):", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
-}
+})
 
-export async function PUT(request: Request) {
+export const PUT = requireAuth(async (request: Request) => {
   try {
-    const authResult = await verifyAuth(request)
-    if (authResult.status !== 200) {
-      return NextResponse.json({ error: authResult.error }, { status: authResult.status })
-    }
-
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
 
@@ -66,15 +51,10 @@ export async function PUT(request: Request) {
     console.error("API Error (PUT gallery item):", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
-}
+})
 
-export async function DELETE(request: Request) {
+export const DELETE = requireAuth(async (request: Request) => {
   try {
-    const authResult = await verifyAuth(request)
-    if (authResult.status !== 200) {
-      return NextResponse.json({ error: authResult.error }, { status: authResult.status })
-    }
-
     const { searchParams } = new URL(request.url)
     const id = searchParams.get("id")
 
@@ -91,4 +71,4 @@ export async function DELETE(request: Request) {
     console.error("API Error (DELETE gallery item):", error.message)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
-}
+})
