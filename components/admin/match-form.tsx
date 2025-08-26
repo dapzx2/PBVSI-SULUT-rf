@@ -27,8 +27,10 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
     home_team_id: initialData?.home_team_id || '',
     away_team_id: initialData?.away_team_id || '',
     match_date: initialData?.match_date ? new Date(initialData.match_date).toISOString().slice(0, 16) : '',
-    score_home: initialData?.score_home || 0,
-    score_away: initialData?.score_away || 0,
+    score_home_sets: initialData?.score_home_sets || 0,
+    score_away_sets: initialData?.score_away_sets || 0,
+    score_home_points: initialData?.score_home_points || [],
+    score_away_points: initialData?.score_away_points || [],
     status: initialData?.status || 'scheduled',
     league: initialData?.league || '',
     venue: initialData?.venue || '',
@@ -135,20 +137,20 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="score_home">Skor Kandang</Label>
+          <Label htmlFor="score_home_sets">Skor Set Kandang</Label>
           <Input
-            id="score_home"
-            type="text"
-            value={formData.score_home}
+            id="score_home_sets"
+            type="number"
+            value={String(formData.score_home_sets)}
             onChange={handleChange}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="score_away">Skor Tandang</Label>
+          <Label htmlFor="score_away_sets">Skor Set Tandang</Label>
           <Input
-            id="score_away"
-            type="text"
-            value={formData.score_away}
+            id="score_away_sets"
+            type="number"
+            value={String(formData.score_away_sets)}
             onChange={handleChange}
           />
         </div>

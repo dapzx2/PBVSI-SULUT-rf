@@ -56,8 +56,10 @@ export interface Match {
   match_date: string // ISO string or similar
   score_home: number | null
   score_away: number | null
+  score_home_sets: number | null
+  score_away_sets: number | null
   status: "scheduled" | "live" | "finished"
-  tournament: string | null
+  league: string | null
   venue: string | null
   created_at: string
   updated_at: string
