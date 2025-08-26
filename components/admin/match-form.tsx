@@ -26,7 +26,17 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
   const [formData, setFormData] = useState({
     home_team_id: initialData?.home_team_id || '',
     away_team_id: initialData?.away_team_id || '',
-    match_date: initialData?.match_date ? new Date(initialData.match_date).toISOString().slice(0, 16) : '',
+    match_date: initialData?.match_date ? (() => {
+      console.log('Form Init - Raw initialData.match_date:', initialData.match_date);
+      const date = new Date(initialData.match_date);
+      console.log('Form Init - Parsed Date (local):', date);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0');
+      const day = date.getDate().toString().padStart(2, '0');
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    })() : '',
     score_home_sets: initialData?.score_home_sets || 0,
     score_away_sets: initialData?.score_away_sets || 0,
     score_home_points: initialData?.score_home_points || [],
@@ -41,7 +51,7 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
     const { id, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [id]: id.startsWith('score_') ? parseInt(value) || 0 : value,
+      [id]: id.startsWith('score_') ? (value === '' ? null : (isNaN(parseInt(value)) ? null : parseInt(value))) : value,
     }));
   };
 
@@ -63,6 +73,8 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
         ...formData,
         match_date: new Date(formData.match_date).toISOString(), // Ensure correct format
       };
+      console.log('Form Submit - formData.match_date (before ISOString):', formData.match_date);
+      console.log('Form Submit - match_date (after ISOString):', body.match_date);
 
       const response = await fetch(apiEndpoint, {
         method,
@@ -140,8 +152,8 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
           <Label htmlFor="score_home_sets">Skor Set Kandang</Label>
           <Input
             id="score_home_sets"
-            type="number"
-            value={String(formData.score_home_sets)}
+            type="text"
+            value={formData.score_home_sets === null ? '' : String(formData.score_home_sets)}
             onChange={handleChange}
           />
         </div>
@@ -149,8 +161,8 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
           <Label htmlFor="score_away_sets">Skor Set Tandang</Label>
           <Input
             id="score_away_sets"
-            type="number"
-            value={String(formData.score_away_sets)}
+            type="text"
+            value={formData.score_away_sets === null ? '' : String(formData.score_away_sets)}
             onChange={handleChange}
           />
         </div>

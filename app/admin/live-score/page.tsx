@@ -149,16 +149,20 @@ export default function AdminLiveScorePage() {
                 <TableBody>
                   {matches.map((match) => (
                     <TableRow key={match.id}>
-                      <TableCell>{new Date(match.match_date).toLocaleString("id-ID")}</TableCell>
+                      <TableCell>
+                        {console.log('Display - Raw match_date:', match.match_date)}
+                        {console.log('Display - Parsed Date (local):', new Date(match.match_date))}
+                        {match.match_date ? new Date(match.match_date).toLocaleString("id-ID") : "N/A"}
+                      </TableCell>
                       <TableCell className="font-medium">
                         {clubs.find(c => c.id === match.home_team_id)?.name || "N/A"}
                       </TableCell>
                       <TableCell className="font-medium">
                         {clubs.find(c => c.id === match.away_team_id)?.name || "N/A"}
                       </TableCell>
-                      <TableCell>{match.score_home ?? "-"} - {match.score_away ?? "-"}</TableCell>
+                      <TableCell>{match.score_home_sets ?? "-"} - {match.score_away_sets ?? "-"}</TableCell>
                       <TableCell>{match.status}</TableCell>
-                      <TableCell>{match.tournament || "N/A"}</TableCell>
+                      <TableCell>{match.league || "N/A"}</TableCell>
                       <TableCell className="text-right">
                         <Button variant="ghost" size="icon" onClick={() => handleEdit(match)} className="mr-2">
                           <Edit className="h-4 w-4" />

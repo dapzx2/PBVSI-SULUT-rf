@@ -77,7 +77,7 @@ export default function LiveScoresPage() {
   }, [scores, searchQuery, selectedLeague])
 
   const liveMatches = useMemo(() => filteredScores.filter(m => m.status === 'live'), [filteredScores]);
-  const upcomingMatches = useMemo(() => filteredScores.filter(m => m.status === 'upcoming'), [filteredScores]);
+  const upcomingMatches = useMemo(() => filteredScores.filter(m => m.status === 'scheduled'), [filteredScores]);
   const finishedMatches = useMemo(() => filteredScores.filter(m => m.status === 'finished'), [filteredScores]);
 
   const featuredMatch = useMemo(() => {

@@ -55,20 +55,19 @@ export function LiveScoreCard({ match, delay = 0 }: LiveScoreCardProps) {
     })
   }
 
-  const getScoreClass = (team: "home" | "away", homeSetsWon: number, awaySetsWon: number) => {
+  const getScoreClass = (team: "home" | "away", homeSets: number, awaySets: number) => {
     if (match.status === "upcoming") return "text-gray-900"
 
-    if (team === "home" && homeSetsWon > awaySetsWon) {
+    if (team === "home" && homeSets > awaySets) {
       return "text-orange-600 font-bold"
-    } else if (team === "away" && awaySetsWon > homeSetsWon) {
+    } else if (team === "away" && awaySets > homeSets) {
       return "text-orange-600 font-bold"
     }
     return "text-gray-900"
   }
 
-  // Assuming match.score_home_points and match.score_away_points are JSON arrays of numbers
-  const homeSetsWon = match.score_home_points ? (match.score_home_points as number[]).filter((score, index) => score > (match.score_away_points as number[])[index]).length : 0;
-  const awaySetsWon = match.score_away_points ? (match.score_away_points as number[]).filter((score, index) => score > (match.score_home_points as number[])[index]).length : 0;
+  const homeSets = match.score_home_sets || 0;
+  const awaySets = match.score_away_sets || 0;
 
   return (
     <Link href={`/live-score/${match.id}`} className="block">
@@ -104,7 +103,7 @@ export function LiveScoreCard({ match, delay = 0 }: LiveScoreCardProps) {
                     className="rounded-full"
                   />
                 )}
-                <p className={cn("font-semibold text-lg", getScoreClass("home", homeSetsWon, awaySetsWon))}>
+                <p className={cn("font-semibold text-lg", getScoreClass("home", homeSets, awaySets))}>
                   {match.home_team?.name}
                 </p>
               </div>
@@ -115,12 +114,12 @@ export function LiveScoreCard({ match, delay = 0 }: LiveScoreCardProps) {
                   <span className="text-sm text-gray-500">VS</span>
                 ) : (
                   <div className="flex items-center gap-1">
-                    <span className={cn("text-xl font-bold", getScoreClass("home", homeSetsWon, awaySetsWon))}>
-                      {homeSetsWon}
+                    <span className={cn("text-xl font-bold", getScoreClass("home", homeSets, awaySets))}>
+                      {homeSets}
                     </span>
                     <span className="text-gray-400 mx-0.5">-</span>
-                    <span className={cn("text-xl font-bold", getScoreClass("away", homeSetsWon, awaySetsWon))}>
-                      {awaySetsWon}
+                    <span className={cn("text-xl font-bold", getScoreClass("away", homeSets, awaySets))}>
+                      {awaySets}
                     </span>
                   </div>
                 )}
@@ -128,7 +127,7 @@ export function LiveScoreCard({ match, delay = 0 }: LiveScoreCardProps) {
 
               {/* Away Team */}
               <div className="flex items-center justify-end gap-2 text-right">
-                <p className={cn("font-semibold text-lg", getScoreClass("away", homeSetsWon, awaySetsWon))}>
+                <p className={cn("font-semibold text-lg", getScoreClass("away", homeSets, awaySets))}>
                   {match.away_team?.name}
                 </p>
                 {match.away_team?.logo_url && (

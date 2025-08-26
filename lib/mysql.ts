@@ -7,7 +7,8 @@ const pool = createPool({
   database: process.env.MYSQL_DATABASE || 'PBVSI-SULUT',
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  timezone: 'Z'
 });
 
 export async function testConnection(): Promise<{ success: boolean; error: string | null }> {

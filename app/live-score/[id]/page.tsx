@@ -1,5 +1,4 @@
 import { getMatchDetails } from "@/lib/matches"
-import { getMatchPredictions } from "@/lib/predictions"
 import { notFound } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -31,7 +30,17 @@ interface MatchDetailPageProps {
 
 export default async function MatchDetailPage({ params }: MatchDetailPageProps) {
   const { match, error: matchError } = await getMatchDetails(params.id)
-  const { predictions, error: predictionsError } = await getMatchPredictions(params.id) // Fetch predictions
+  const predictionsResponse = await fetch(`/api/predictions?matchId=${params.id}`);
+  let predictions: Prediction[] | null = null;
+  let predictionsError: string | null = null;
+
+  if (predictionsResponse.ok) {
+    const data = await predictionsResponse.json();
+    predictions = data.predictions;
+  } else {
+    const errorData = await predictionsResponse.json();
+    predictionsError = errorData.message || 'Failed to fetch predictions';
+  }
 
   if (matchError || !match) {
     notFound()

@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `matches` (
     `id` VARCHAR(36) PRIMARY KEY,
     `home_team_id` VARCHAR(36),
     `away_team_id` VARCHAR(36),
-    `match_date` DATETIME NOT NULL,
+    `match_date` TIMESTAMP NOT NULL,
     `venue` VARCHAR(255),
     `score_home_sets` INT,
     `score_away_sets` INT,
