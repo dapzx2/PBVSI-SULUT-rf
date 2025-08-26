@@ -22,10 +22,7 @@ export async function testConnection(): Promise<{ success: boolean; error: strin
   }
 }
 
-export async function query<T extends RowDataPacket[] | ResultSetHeader>(
-  sql: string,
-  values?: any[]
-): Promise<T> {
+export const query = async <T extends RowDataPacket[] | ResultSetHeader>(sql: string, values?: any[]): Promise<T> => {
   let connection: PoolConnection | undefined;
   try {
     connection = await pool.getConnection();

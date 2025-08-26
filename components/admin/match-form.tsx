@@ -30,7 +30,7 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
     score_home: initialData?.score_home || 0,
     score_away: initialData?.score_away || 0,
     status: initialData?.status || 'scheduled',
-    tournament: initialData?.tournament || '',
+    league: initialData?.league || '',
     venue: initialData?.venue || '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -138,7 +138,7 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
           <Label htmlFor="score_home">Skor Kandang</Label>
           <Input
             id="score_home"
-            type="number"
+            type="text"
             value={formData.score_home}
             onChange={handleChange}
           />
@@ -147,7 +147,7 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
           <Label htmlFor="score_away">Skor Tandang</Label>
           <Input
             id="score_away"
-            type="number"
+            type="text"
             value={formData.score_away}
             onChange={handleChange}
           />
@@ -172,8 +172,8 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="tournament">Turnamen</Label>
-        <Input id="tournament" value={formData.tournament} onChange={handleChange} />
+        <Label htmlFor="league">Turnamen</Label>
+        <Input id="league" value={formData.league} onChange={handleChange} />
       </div>
 
       <div className="space-y-2">
