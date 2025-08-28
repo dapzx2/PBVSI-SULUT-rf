@@ -146,16 +146,20 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
             {/* Individual Set Scores */}
             {match.status.toLowerCase() !== "upcoming" && match.score_home_points && match.score_away_points && (
               <div className="flex justify-end gap-2 text-sm text-gray-600 mb-3">
-                {(match.score_home_points as number[]).map((homeScore, index) => {
-                  const awayScore = (match.score_away_points as number[])[index];
-                  return (
-                    <span key={index} className="flex gap-0.5">
-                      <span className={cn(homeScore > awayScore ? "font-bold text-gray-900" : "")}>{homeScore}</span>
-                      <span>:</span>
-                      <span className={cn(awayScore > homeScore ? "font-bold text-gray-900" : "")}>{awayScore}</span>
-                    </span>
-                  );
-                })}
+                {Array.isArray(match.score_home_points) && Array.isArray(match.score_away_points) ? (
+                  match.score_home_points.map((homeScore, index) => {
+                    const awayScore = match.score_away_points![index];
+                    return (
+                      <span key={index} className="flex gap-0.5">
+                        <span className={cn(homeScore > awayScore ? "font-bold text-gray-900" : "")}>{homeScore}</span>
+                        <span>:</span>
+                        <span className={cn(awayScore > homeScore ? "font-bold text-gray-900" : "")}>{awayScore}</span>
+                      </span>
+                    );
+                  })
+                ) : (
+                  <span>Skor tidak tersedia</span>
+                )}
               </div>
             )}
 

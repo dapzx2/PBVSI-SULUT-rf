@@ -95,9 +95,9 @@ export function PertandinganWidget() {
                 </div>
               </div>
 
-              <div className="mt-2 text-xs text-gray-500 text-center">
-                Set {match.score_home_points && match.score_away_points ? (match.score_home_points as number[]).length + 1 : 'N/A'} • {match.league}
-              </div>
+                <div className="mt-2 text-xs text-gray-500 text-center">
+                  Set {Array.isArray(match.score_home_points) && Array.isArray(match.score_away_points) ? (match.score_home_points.length + 1) : 'N/A'} • {match.league}
+                </div>
             </div>
           ))}
         </div>
