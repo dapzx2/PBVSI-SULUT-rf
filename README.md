@@ -1,6 +1,5 @@
 # PBVSI Sulut - Portal Resmi Bola Voli Sulawesi Utara
 
-
 [![Built with Next.js](https://img.shields.io/badge/Built%20with-Next.js-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
 [![Styled with Tailwind](https://img.shields.io/badge/Styled%20with-Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 
