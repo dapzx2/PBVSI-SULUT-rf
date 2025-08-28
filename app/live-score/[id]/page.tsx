@@ -30,7 +30,8 @@ interface MatchDetailPageProps {
 
 export default async function MatchDetailPage({ params }: MatchDetailPageProps) {
   const { match, error: matchError } = await getMatchDetails(params.id)
-  const predictionsResponse = await fetch(`/api/predictions?matchId=${params.id}`);
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const predictionsResponse = await fetch(`${baseUrl}/api/predictions?matchId=${params.id}`);
   let predictions: Prediction[] | null = null;
   let predictionsError: string | null = null;
 

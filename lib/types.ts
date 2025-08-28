@@ -58,6 +58,8 @@ export interface Match {
   score_away: number | null
   score_home_sets: number | null
   score_away_sets: number | null
+  score_home_points: number[] | null; // Array of scores per set for home team
+  score_away_points: number[] | null; // Array of scores per set for away team
   status: "scheduled" | "live" | "finished"
   league: string | null
   venue: string | null

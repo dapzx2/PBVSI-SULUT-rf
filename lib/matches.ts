@@ -1,6 +1,6 @@
 import pool from './mysql';
 import { v4 as uuidv4 } from 'uuid';
-import type { Match } from './types';
+import type { Match, Club } from './types';
 
 export async function getMatches(): Promise<{ matches: Match[] | null; error: string | null }> {
   try {
@@ -23,7 +23,7 @@ export async function getMatches(): Promise<{ matches: Match[] | null; error: st
   }
 }
 
-export async function createMatch(matchData: Omit<Match, 'id' | 'created_at' | 'updated_at' | 'home_team' | 'away_team'>): Promise<{ match: Match | null; error: string | null }> {
+export async function createMatch(matchData: Omit<Match, 'id' | 'created_at' | 'updated_at' | 'home_team' | 'away_team' | 'score_home_points' | 'score_away_points'>): Promise<{ match: Match | null; error: string | null }> {
   const newMatchId = uuidv4();
   const newMatch = { id: newMatchId, ...matchData };
   try {
@@ -35,7 +35,7 @@ export async function createMatch(matchData: Omit<Match, 'id' | 'created_at' | '
   }
 }
 
-export async function updateMatch(id: string, matchData: Partial<Omit<Match, 'id' | 'created_at' | 'updated_at' | 'home_team' | 'away_team'>>): Promise<{ match: Match | null; error: string | null }> {
+export async function updateMatch(id: string, matchData: Partial<Omit<Match, 'id' | 'created_at' | 'updated_at' | 'home_team' | 'away_team' | 'score_home_points' | 'score_away_points'>>): Promise<{ match: Match | null; error: string | null }> {
   try {
     await pool.query('UPDATE matches SET ? WHERE id = ?', [matchData, id]);
     const [rows] = await pool.query('SELECT * FROM matches WHERE id = ?', [id]);
@@ -77,11 +77,22 @@ export async function getMatchDetails(id: string): Promise<{ match: Match | null
       WHERE m.id = ?`,
       [id]
     );
-    const matches = rows as Match[];
+    const matches = rows as any[]; // Use any[] for initial type to handle raw data
     if (matches.length === 0) {
       return { match: null, error: 'Match not found' };
     }
-    return { match: matches[0], error: null };
+
+    const rawMatch = matches[0];
+
+    const match: Match = {
+      ...rawMatch,
+      home_team: rawMatch.home_team_name ? { id: rawMatch.home_team_id, name: rawMatch.home_team_name, logo_url: rawMatch.home_team_logo_url, slug: '', city: '', established_year: 0, coach_name: null, home_arena: null, description: null, achievements: null, created_at: '', updated_at: '' } : undefined,
+      away_team: rawMatch.away_team_name ? { id: rawMatch.away_team_id, name: rawMatch.away_team_name, logo_url: rawMatch.away_team_logo_url, slug: '', city: '', established_year: 0, coach_name: null, home_arena: null, description: null, achievements: null, created_at: '', updated_at: '' } : undefined,
+      score_home_points: rawMatch.score_home_points ? JSON.parse(rawMatch.score_home_points) : null,
+      score_away_points: rawMatch.score_away_points ? JSON.parse(rawMatch.score_away_points) : null,
+    };
+
+    return { match, error: null };
   } catch (error: any) {
     return { match: null, error: error.message };
   }
