@@ -22,7 +22,7 @@ Portal resmi PBVSI Sulawesi Utara dengan informasi lengkap tentang bola voli put
 - **Styling**: Tailwind CSS + shadcn/ui
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Deployment**: Vercel
+- **Deployment**: 
 - **Language**: TypeScript
 
 ## 📦 Instalasi Lokal
