@@ -7,13 +7,13 @@ import Image from "next/image"
 import Link from "next/link" // Import Link
 
 interface PertandinganCardProps {
-  match: LiveScore
+  match: Pertandingan
   delay?: number
 }
 
 export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
   const getStatusBadge = (status: string) => {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "live":
         return (
           <Badge
@@ -24,7 +24,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
             </span>
-            LIVE
+            Langsung
           </Badge>
         )
       case "finished":
@@ -33,6 +33,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
             Selesai
           </Badge>
         )
+      case "scheduled":
       case "upcoming":
         return (
           <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
@@ -56,7 +57,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
   }
 
   const getScoreClass = (team: "home" | "away", homeSets: number, awaySets: number) => {
-    if (match.status === "upcoming") return "text-gray-900"
+    if (match.status.toLowerCase() === "upcoming") return "text-gray-900"
 
     if (team === "home" && homeSets > awaySets) {
       return "text-orange-600 font-bold"
@@ -70,7 +71,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
   const awaySets = match.score_away_sets || 0;
 
   return (
-    <Link href={`/live-score/${match.id}`} className="block">
+    <Link href={`/pertandingan/${match.id}`} className="block">
       {" "}
       {/* Wrap with Link */}
       <Card className="overflow-hidden hover:shadow-md transition-shadow duration-300">
@@ -110,7 +111,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
 
               {/* Total Sets Score */}
               <div className="px-2 py-1 bg-gray-50 rounded-lg flex items-center justify-center min-w-[60px]">
-                {match.status === "upcoming" ? (
+                {match.status.toLowerCase() === "upcoming" ? (
                   <span className="text-sm text-gray-500">VS</span>
                 ) : (
                   <div className="flex items-center gap-1">
@@ -143,7 +144,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
             </div>
 
             {/* Individual Set Scores */}
-            {match.status !== "upcoming" && match.score_home_points && match.score_away_points && (
+            {match.status.toLowerCase() !== "upcoming" && match.score_home_points && match.score_away_points && (
               <div className="flex justify-end gap-2 text-sm text-gray-600 mb-3">
                 {(match.score_home_points as number[]).map((homeScore, index) => {
                   const awayScore = (match.score_away_points as number[])[index];
@@ -164,7 +165,7 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
                 <MapPin className="h-3 w-3" />
                 <span>{match.venue}</span>
               </div>
-              {match.status === "live" && match.score_home_sets && match.score_away_sets && (
+              {match.status.toLowerCase() === "live" && match.score_home_sets && match.score_away_sets && (
                 <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200 text-xs">
                   Set {match.score_home_sets + match.score_away_sets + 1}
                 </Badge>

@@ -1,10 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getLiveMatches } from "@/lib/live-scores"
+import { getPertandinganLangsung } from "@/lib/pertandingan"
 import type { Match } from "@/lib/types"
 
-export function useLiveScores() {
+export function usePertandingan() {
   const [matches, setMatches] = useState<Match[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -13,11 +13,11 @@ export function useLiveScores() {
     async function fetchMatches() {
       try {
         setLoading(true)
-        const { matches: liveMatches, error: fetchError } = await getLiveMatches()
+        const { matches: pertandinganLangsung, error: fetchError } = await getPertandinganLangsung()
         if (fetchError) {
           throw new Error(fetchError);
         }
-        setMatches(liveMatches || [])
+        setMatches(pertandinganLangsung || [])
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to fetch matches")
       } finally {

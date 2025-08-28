@@ -1,7 +1,7 @@
 import pool from './mysql';
 import type { Match } from './types';
 
-export async function getLiveMatches(): Promise<{ matches: Match[] | null; error: string | null }> {
+export async function getPertandinganLangsung(): Promise<{ matches: Match[] | null; error: string | null }> {
   try {
     const [rows] = await pool.query(
       `SELECT 

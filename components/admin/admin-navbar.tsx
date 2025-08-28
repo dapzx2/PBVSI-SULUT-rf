@@ -18,7 +18,7 @@ const adminNavItems = [
   { name: 'Klub', href: '/admin/klub' },
   { name: 'Pemain', href: '/admin/pemain' },
   { name: 'Galeri', href: '/admin/galeri' },
-  { name: 'Live Score', href: '/admin/live-score' },
+  { name: 'Pertandingan', href: '/admin/pertandingan' },
   { name: 'Pengaturan', href: '/admin/pengaturan' },
 ]
 

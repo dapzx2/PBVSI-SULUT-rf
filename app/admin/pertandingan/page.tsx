@@ -11,7 +11,7 @@ import { MatchForm } from "@/components/admin/match-form" // Will create this ne
 import type { Match, Club } from "@/lib/types"
 import Image from "next/image"
 
-export default function AdminLiveScorePage() {
+export default function AdminPertandinganPage() {
   const [matches, setMatches] = useState<Match[]>([])
   const [clubs, setClubs] = useState<Club[]>([])
   const [loading, setLoading] = useState(true)
@@ -104,6 +104,19 @@ export default function AdminLiveScorePage() {
     handleFormClose()
   }
 
+  const translateStatus = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "live":
+        return "Langsung";
+      case "finished":
+        return "Selesai";
+      case "scheduled":
+        return "Terjadwal";
+      default:
+        return status;
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -124,7 +137,7 @@ export default function AdminLiveScorePage() {
     <div className="container mx-auto py-8">
       <Card>
         <CardHeader className="flex flex-row justify-between items-center">
-          <CardTitle>Manajemen Live Score</CardTitle>
+          <CardTitle>Manajemen Pertandingan</CardTitle>
           <Button onClick={handleAdd}>
             <PlusCircle className="mr-2 h-4 w-4" /> Tambah Pertandingan
           </Button>
@@ -161,7 +174,7 @@ export default function AdminLiveScorePage() {
                         {clubs.find(c => c.id === match.away_team_id)?.name || "N/A"}
                       </TableCell>
                       <TableCell>{match.score_home_sets ?? "-"} - {match.score_away_sets ?? "-"}</TableCell>
-                      <TableCell>{match.status}</TableCell>
+                      <TableCell>{translateStatus(match.status)}</TableCell>
                       <TableCell>{match.league || "N/A"}</TableCell>
                       <TableCell className="text-right">
                         <Button variant="ghost" size="icon" onClick={() => handleEdit(match)} className="mr-2">

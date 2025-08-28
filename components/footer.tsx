@@ -92,8 +92,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/live-score" className="text-gray-300 hover:text-white transition-colors text-sm">
-                  Live Scores
+                <Link href="/pertandingan" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Pertandingan
                 </Link>
               </li>
               <li>

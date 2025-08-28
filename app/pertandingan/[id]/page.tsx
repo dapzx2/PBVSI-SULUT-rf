@@ -130,11 +130,11 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
-        <div className="mb-6">
-          <Link href="/live-score" passHref>
-            <Button variant="ghost" className="text-gray-600 hover:text-gray-900">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Kembali ke Live Skor
+        <div class="mb-6">
+          <Link href="/pertandingan" passHref>
+            <Button variant="ghost" class="text-gray-600 hover:text-gray-900">
+              <ArrowLeft class="h-4 w-4 mr-2" />
+              Kembali ke Pertandingan
             </Button>
           </Link>
         </div>

@@ -360,7 +360,7 @@ export default function AdminDashboard() {
             className="cursor-pointer hover:shadow-lg transition-shadow"
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Live Score</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Pertandingan</CardTitle>
               <Trophy className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -369,7 +369,7 @@ export default function AdminDashboard() {
               ) : (
                 <div className="text-2xl font-bold">{stats.totalMatches}</div>
               )}
-              <p className="text-xs text-muted-foreground">Live Score tercatat</p>
+              <p className="text-xs text-muted-foreground">Pertandingan tercatat</p>
               <div className="flex items-center space-x-2 mt-2">
                 <Dialog>
                   <DialogTrigger asChild>
@@ -386,8 +386,8 @@ export default function AdminDashboard() {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
-                      <DialogTitle>Tambah Live Score Baru</DialogTitle>
-                      <DialogDescription>Isi detail untuk live score baru.</DialogDescription>
+                      <DialogTitle>Tambah Pertandingan Baru</DialogTitle>
+                      <DialogDescription>Isi detail untuk pertandingan baru.</DialogDescription>
                     </DialogHeader>
                     <div className="py-4">
                       <form className="space-y-4">
@@ -447,7 +447,7 @@ export default function AdminDashboard() {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/live-score")
+                    router.push("/admin/pertandingan")
                   }}
                 >
                   <Eye className="h-3 w-3 mr-1" />
@@ -555,10 +555,10 @@ export default function AdminDashboard() {
                   <Button
                     variant="outline"
                     className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/live-score")}
+                    onClick={() => router.push("/admin/pertandingan")}
                   >
                     <CalendarPlus className="h-6 w-6" />
-                    <span className="text-sm">Kelola Live Score</span>
+                    <span className="text-sm">Kelola Pertandingan</span>
                   </Button>
                   <Button
                     variant="outline"
@@ -639,7 +639,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   size="sm"
                   className="w-full bg-transparent"
-                  onClick={() => router.push("/admin/live-score")}
+                  onClick={() => router.push("/admin/pertandingan")}
                 >
                   Lihat Semua Aktivitas
                 </Button>

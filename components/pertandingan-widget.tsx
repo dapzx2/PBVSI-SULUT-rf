@@ -1,12 +1,12 @@
 "use client"
 
-import { useLiveScores } from "@/hooks/use-live-scores"
+import { usePertandingan } from "@/hooks/use-pertandingan"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MapPin } from "lucide-react"
 
-export function LiveScoresWidget() {
-  const { matches, loading, error } = useLiveScores()
+export function PertandinganWidget() {
+  const { matches, loading, error } = usePertandingan()
 
   if (loading) {
     return (
@@ -14,7 +14,7 @@ export function LiveScoresWidget() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-            Skor Langsung
+            Pertandingan Langsung
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -51,7 +51,7 @@ export function LiveScoresWidget() {
           <CardTitle>Skor Langsung</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-500 text-sm">Tidak ada pertandingan live saat ini</p>
+          <p className="text-gray-500 text-sm">Tidak ada pertandingan langsung saat ini</p>
         </CardContent>
       </Card>
     )
@@ -62,7 +62,7 @@ export function LiveScoresWidget() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-          Live Scores
+          Pertandingan Langsung
         </CardTitle>
       </CardHeader>
       <CardContent>

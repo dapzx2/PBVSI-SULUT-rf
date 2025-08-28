@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getLiveMatches } from '@/lib/live-scores';
+import { getPertandinganLangsung as getLiveMatches } from '@/lib/pertandingan';
 import { getMatches } from '@/lib/matches'; // Assuming getMatches fetches all matches
 
 export async function GET() {

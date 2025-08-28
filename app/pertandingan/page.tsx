@@ -5,14 +5,14 @@ import { Search, X, RefreshCw, SlidersHorizontal, WifiOff, Loader2, Calendar, Tr
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { LiveScoreCard } from "@/components/live-score-card"
+import { PertandinganCard } from "@/components/pertandingan-card"
 import { StickyHeader } from "@/components/sticky-header"
 import type { Match } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
-export default function LiveScoresPage() {
+export default function PertandinganPage() {
   const [scores, setScores] = useState<Match[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedLeague, setSelectedLeague] = useState<string>("all")
@@ -105,7 +105,7 @@ export default function LiveScoresPage() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {matches.map((match) => (
-          <LiveScoreCard key={match.id} match={match} />
+          <PertandinganCard key={match.id} match={match} />
         ))}
       </div>
     )
@@ -123,7 +123,7 @@ export default function LiveScoresPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <StickyHeader currentPage="live-scores" />
+      <StickyHeader currentPage="pertandingan" />
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
           {/* Main Content */}
@@ -131,7 +131,7 @@ export default function LiveScoresPage() {
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
               <div>
-                <h1 className="text-4xl font-bold text-gray-900">Live Skor</h1>
+                <h1 className="text-4xl font-bold text-gray-900">Pertandingan</h1>
                 <p className="text-lg text-gray-600 mt-1">Ikuti semua pertandingan bola voli Sulawesi Utara.</p>
               </div>
               <div className="flex items-center gap-2 mt-4 sm:mt-0">
@@ -146,7 +146,7 @@ export default function LiveScoresPage() {
             {featuredMatch && (
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">Pertandingan Utama</h2>
-                <LiveScoreCard match={featuredMatch} />
+                <PertandinganCard match={featuredMatch} />
               </div>
             )}
 
