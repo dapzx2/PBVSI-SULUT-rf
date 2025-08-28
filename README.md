@@ -5,7 +5,7 @@
 [![Styled with Tailwind](https://img.shields.io/badge/Styled%20with-Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com)
 
 Portal resmi PBVSI Sulawesi Utara dengan informasi lengkap tentang bola voli putra dan putri, database pemain, berita terkini, dan struktur organisasi.
-.
+
 
 ## ✨ Fitur Utama
 
