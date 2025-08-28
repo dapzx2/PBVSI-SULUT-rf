@@ -180,4 +180,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-**Dibuat dengan ❤️ untuk PBVSI Sulawesi Utara**
+
