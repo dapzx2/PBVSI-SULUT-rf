@@ -6,9 +6,6 @@
 
 Portal resmi PBVSI Sulawesi Utara dengan informasi lengkap tentang bola voli putra dan putri, database pemain, berita terkini, dan struktur organisasi.
 
-## 🚀 Live Demo
-
-**[https://pbvsi-sulut.vercel.app](https://pbvsi-sulut.vercel.app)**
 
 ## ✨ Fitur Utama
 
