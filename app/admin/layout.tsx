@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname } from "next/navigation"
 import { AdminNavbar } from "@/components/admin/admin-navbar"
 import { PageTransition } from "@/components/page-transition"
 import React from "react"
@@ -9,11 +10,14 @@ export default function AdminLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const pathname = usePathname()
+  const isLoginPage = pathname === "/admin/login"
+
   return (
     <div className="min-h-screen flex flex-col">
-      <AdminNavbar />
+      {!isLoginPage && <AdminNavbar />}
       <PageTransition>
-        <main className="flex-1 pt-14">
+        <main className={!isLoginPage ? "flex-1 pt-14" : "flex-1"}>
           {children}
         </main>
       </PageTransition>

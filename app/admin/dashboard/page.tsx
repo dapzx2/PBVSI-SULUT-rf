@@ -35,6 +35,11 @@ import {
   Target,
   Zap,
 } from "lucide-react"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+
 import { AdminUser } from "@/lib/types"
 
 interface DashboardStats {
@@ -144,12 +149,7 @@ export default function AdminDashboard() {
         },
       ])
 
-      setQuickStats([
-        { label: "Pemain Aktif", value: 142, change: 8, trend: "up" },
-        { label: "Pertandingan Bulan Ini", value: 12, change: 3, trend: "up" },
-        { label: "Artikel Terbaru", value: 8, change: -2, trend: "down" },
-        { label: "Pengunjung Hari Ini", value: 1247, change: 156, trend: "up" },
-      ])
+      setQuickStats([])
     } catch (error: any) {
       setError(error.message)
     } finally {
@@ -197,32 +197,7 @@ export default function AdminDashboard() {
           </Alert>
         )}
 
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {quickStats.map((stat, index) => (
-            <Card key={index}>
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value.toLocaleString()}</p>
-                  </div>
-                  <div
-                    className={`flex items-center space-x-1 text-sm ${
-                      stat.trend === "up" ? "text-green-600" : stat.trend === "down" ? "text-red-600" : "text-gray-600"
-                    }`}
-                  >
-                    <TrendingUp className={`h-4 w-4 ${stat.trend === "down" ? "rotate-180" : ""}`} />
-                    <span>{Math.abs(stat.change)}</span>
-                  </div>
-                </div>
-                <div className="mt-4">
-                  <Progress value={Math.min((stat.value / 200) * 100, 100)} className="h-2" />
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        
 
         {/* Main Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -242,17 +217,62 @@ export default function AdminDashboard() {
               )}
               <p className="text-xs text-muted-foreground">Pemain terdaftar</p>
               <div className="flex items-center space-x-2 mt-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push("/admin/pemain/add")
-                  }}
-                >
-                  <UserPlus className="h-3 w-3 mr-1" />
-                  Tambah
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <UserPlus className="h-3 w-3 mr-1" />
+                      Tambah
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Tambah Pemain Baru</DialogTitle>
+                      <DialogDescription>Isi detail untuk pemain baru.</DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <form className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="image">Foto Pemain</Label>
+                          <Input id="image" accept="image/*" type="file" />
+                          <p className="text-sm text-muted-foreground">Pilih gambar baru untuk mengganti foto saat ini.</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="name">Nama Pemain</Label>
+                          <Input id="name" required="" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="position">Posisi</Label>
+                          <Input id="position" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_id">Klub</Label>
+                          <Select>
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Tanpa Klub" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="null">Tanpa Klub</SelectItem>
+                              <SelectItem value="dcaec988-1b17-4527-93f0-00d334d8cb82">Klub 1</SelectItem>
+                              <SelectItem value="eccbe43c-27dc-4e91-b30f-41cb3d38128d">Klub 2</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="button" variant="outline">Batal</Button>
+                          </DialogClose>
+                          <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                      </form>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -284,17 +304,45 @@ export default function AdminDashboard() {
               )}
               <p className="text-xs text-muted-foreground">Klub aktif</p>
               <div className="flex items-center space-x-2 mt-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push("/admin/klub/add")
-                  }}
-                >
-                  <Plus className="h-3 w-3 mr-1" />
-                  Tambah
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <Plus className="h-3 w-3 mr-1" />
+                      Tambah
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Tambah Klub Baru</DialogTitle>
+                      <DialogDescription>Isi detail untuk klub baru.</DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <form className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="club_name">Nama Klub</Label>
+                          <Input id="club_name" required="" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_logo">Logo Klub</Label>
+                          <Input id="club_logo" accept="image/*" type="file" />
+                          <p className="text-sm text-muted-foreground">Pilih logo untuk klub.</p>
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="button" variant="outline">Batal</Button>
+                          </DialogClose>
+                          <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                      </form>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -326,17 +374,56 @@ export default function AdminDashboard() {
               )}
               <p className="text-xs text-muted-foreground">Pertandingan tercatat</p>
               <div className="flex items-center space-x-2 mt-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push("/admin/pertandingan/add")
-                  }}
-                >
-                  <CalendarPlus className="h-3 w-3 mr-1" />
-                  Jadwal
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <CalendarPlus className="h-3 w-3 mr-1" />
+                      Jadwal
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Jadwal Pertandingan Baru</DialogTitle>
+                      <DialogDescription>Isi detail untuk pertandingan baru.</DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <form className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="match_name">Nama Pertandingan</Label>
+                          <Input id="match_name" required="" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="match_date">Tanggal</Label>
+                          <Input id="match_date" type="date" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="match_time">Waktu</Label>
+                          <Input id="match_time" type="time" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="team1">Tim 1</Label>
+                          <Input id="team1" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="team2">Tim 2</Label>
+                          <Input id="team2" />
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="button" variant="outline">Batal</Button>
+                          </DialogClose>
+                          <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                      </form>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -368,17 +455,48 @@ export default function AdminDashboard() {
               )}
               <p className="text-xs text-muted-foreground">Artikel berita</p>
               <div className="flex items-center space-x-2 mt-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push("/admin/publikasi/add")
-                  }}
-                >
-                  <FileTextIcon className="h-3 w-3 mr-1" />
-                  Tulis
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <FileTextIcon className="h-3 w-3 mr-1" />
+                      Tulis
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Tulis Artikel Baru</DialogTitle>
+                      <DialogDescription>Isi detail untuk artikel baru.</DialogDescription>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <form className="space-y-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="article_title">Judul Artikel</Label>
+                          <Input id="article_title" required="" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="article_content">Konten Artikel</Label>
+                          <textarea id="article_content" className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="article_author">Penulis</Label>
+                          <Input id="article_author" value="" />
+                        </div>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="button" variant="outline">Batal</Button>
+                          </DialogClose>
+                          <Button type="submit">Simpan</Button>
+                        </DialogFooter>
+                      </form>
+                    </div>
+                  </DialogContent>
+                </Dialog>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -398,7 +516,7 @@ export default function AdminDashboard() {
         {/* Main Dashboard Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           {/* Quick Actions */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -464,52 +582,11 @@ export default function AdminDashboard() {
             </Card>
           </div>
 
-          {/* System Status */}
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Activity className="h-5 w-5" />
-                  Status Sistem
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Database</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Online</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Server</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-sm text-green-600">Normal</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Backup</span>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                    <span className="text-sm text-yellow-600">Scheduled</span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Users Online</span>
-                  <span className="text-sm font-medium">{stats.recentActivity}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Pending Approvals</span>
-                  <Badge variant="secondary">0</Badge>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          
         </div>
 
         {/* Recent Activity & Management Sections */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {/* Recent Activity */}
           <Card>
             <CardHeader>
@@ -553,60 +630,7 @@ export default function AdminDashboard() {
             </CardContent>
           </Card>
 
-          {/* Management Overview */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Database className="h-5 w-5" />
-                Ringkasan Manajemen
-              </CardTitle>
-              <CardDescription>Overview data dan statistik</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Pemain Aktif</span>
-                    <span className="text-sm text-gray-600">{stats.totalPlayers}/200</span>
-                  </div>
-                  <Progress value={(stats.totalPlayers / 200) * 100} className="h-2" />
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Klub Terdaftar</span>
-                    <span className="text-sm text-gray-600">{stats.totalClubs}/30</span>
-                  </div>
-                  <Progress value={(stats.totalClubs / 30) * 100} className="h-2" />
-                </div>
-
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">Artikel Bulan Ini</span>
-                    <span className="text-sm text-gray-600">{stats.totalArticles}/15</span>
-                  </div>
-                  <Progress value={(stats.totalArticles / 15) * 100} className="h-2" />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-                  <div className="text-center">
-                    <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-lg mx-auto mb-2">
-                      <Award className="h-6 w-6 text-blue-600" />
-                    </div>
-                    <p className="text-sm font-medium">Turnamen Aktif</p>
-                    <p className="text-2xl font-bold text-blue-600">3</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="flex items-center justify-center w-12 h-12 bg-green-100 rounded-lg mx-auto mb-2">
-                      <Target className="h-6 w-6 text-green-600" />
-                    </div>
-                    <p className="text-sm font-medium">Target Bulan</p>
-                    <p className="text-2xl font-bold text-green-600">85%</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          
         </div>
       </main>
     </div>

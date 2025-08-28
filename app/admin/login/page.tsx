@@ -113,31 +113,7 @@ export default function AdminLogin() {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* Demo Buttons */}
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => fillDemoCredentials("super")}
-              className="flex items-center gap-2"
-              disabled={loading}
-            >
-              <Shield className="w-4 h-4" />
-              Super Admin
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => fillDemoCredentials("regular")}
-              className="flex items-center gap-2"
-              disabled={loading}
-            >
-              <User className="w-4 h-4" />
-              Admin Biasa
-            </Button>
-          </div>
+          
 
           {/* Success Message */}
           {success && (
@@ -164,7 +140,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@pbvsisulut.com"
+                placeholder="Masukkan email Anda"
                 required
                 disabled={loading}
               />
@@ -205,14 +181,18 @@ export default function AdminLogin() {
                 "Masuk"
               )}
             </Button>
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => fillDemoCredentials("super")}
+              disabled={loading}
+            >
+              Isi Otomatis Admin Demo
+            </Button>
           </form>
 
-          {/* Demo Credentials Info */}
-          <div className="text-xs text-gray-500 text-center mt-4 space-y-1">
-            <p className="font-medium">Kredensial Demo:</p>
-            <p>Super Admin: admin@pbvsisulut.com / admin123</p>
-            <p>Regular Admin: user@pbvsisulut.com / admin123</p>
-          </div>
+          
         </CardContent>
       </Card>
       </motion.div>
