@@ -2,8 +2,6 @@
 
 Situs resmi PBVSI Sulawesi Utara. Menyediakan informasi tentang bola voli putra dan putri, data pemain, berita, dan struktur organisasi.
 
-Dibuat oleh Dava.
-
 ## Teknologi yang Digunakan
 
 -   **Framework**: Next.js 14 (App Router)
