@@ -140,3 +140,11 @@ export function requireSuperAdmin(handler: Function) {
     return handler(request, context, admin);
   };
 }
+
+export async function verifyAuth(request: NextRequest): Promise<{ status: number; error?: string }> {
+  const admin = await getAdminFromRequest(request);
+  if (!admin) {
+    return { status: 401, error: "Unauthorized" };
+  }
+  return { status: 200 };
+}
