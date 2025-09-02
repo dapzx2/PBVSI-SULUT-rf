@@ -118,7 +118,7 @@ export default function AdminDashboard() {
             throw new Error("Failed to fetch recent activities");
           }
           const activityData = await activityResponse.json();
-          setRecentActivities(activityData.data.logs);
+          setRecentActivities(activityData.data?.logs || []);
 
       setQuickStats([])
     } catch (error: any) {
@@ -295,12 +295,32 @@ export default function AdminDashboard() {
                       <form className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="club_name">Nama Klub</Label>
-                          <Input id="club_name" required="" value="" />
+                          <Input id="club_name" required="" placeholder="Nama lengkap klub" value="" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="club_logo">Logo Klub</Label>
+                          <Label htmlFor="club_city">Kota</Label>
+                          <Input id="club_city" placeholder="Kota asal klub" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_established_year">Tahun Berdiri</Label>
+                          <Input id="club_established_year" type="number" placeholder="0" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_coach">Pelatih</Label>
+                          <Input id="club_coach" placeholder="Nama pelatih utama" value="" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_logo">Unggah Logo Baru</Label>
                           <Input id="club_logo" accept="image/*" type="file" />
                           <p className="text-sm text-muted-foreground">Pilih logo untuk klub.</p>
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_description">Deskripsi</Label>
+                          <textarea id="club_description" className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" placeholder="Deskripsi singkat tentang klub" />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="club_achievements">Prestasi</Label>
+                          <Input id="club_achievements" placeholder="Daftar prestasi klub (pisahkan dengan koma)" value="" />
                         </div>
                         <DialogFooter>
                           <DialogClose asChild>
