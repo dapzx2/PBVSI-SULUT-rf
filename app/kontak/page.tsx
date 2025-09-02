@@ -1,5 +1,6 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -89,7 +90,13 @@ export default function ContactPage() {
       <StickyHeader />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-16 mt-16">
+      {/* Hero Section */}
+      <motion.section
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-16 mt-16"
+      >
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Hubungi Kami</h1>
@@ -98,12 +105,16 @@ export default function ContactPage() {
             </p>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             <Card className="shadow-lg">
               <CardHeader>
                 <CardTitle className="text-2xl text-gray-900">Kirim Pesan</CardTitle>
@@ -195,10 +206,15 @@ export default function ContactPage() {
                 </Form>
               </CardContent>
             </Card>
-          </div>
+          </motion.div>
 
           {/* Contact Information */}
-          <div className="space-y-6">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="space-y-6"
+          >
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Informasi Kontak</h2>
               <p className="text-gray-600 mb-8">
@@ -211,26 +227,33 @@ export default function ContactPage() {
               {contactInfo.map((info, index) => {
                 const IconComponent = info.icon
                 return (
-                  <Card key={index} className="hover:shadow-md transition-shadow">
-                    <CardContent className="p-6">
-                      <div className="flex items-start space-x-4">
-                        <div className="bg-orange-100 p-3 rounded-lg">
-                          <IconComponent className="w-6 h-6 text-orange-600" />
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
+                  >
+                    <Card className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-6">
+                        <div className="flex items-start space-x-4">
+                          <div className="bg-orange-100 p-3 rounded-lg">
+                            <IconComponent className="w-6 h-6 text-orange-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="font-semibold text-gray-900 mb-1">{info.title}</h3>
+                            <p className="text-gray-900 font-medium mb-1">{info.content}</p>
+                            <p className="text-sm text-gray-600">{info.description}</p>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">{info.title}</h3>
-                          <p className="text-gray-900 font-medium mb-1">{info.content}</p>
-                          <p className="text-sm text-gray-600">{info.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 )
               })}
             </div>
 
             
-          </div>
+          </motion.div>
         </div>
 
         
