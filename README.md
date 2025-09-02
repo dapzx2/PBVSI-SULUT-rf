@@ -1,4 +1,4 @@
-# PBVSI Sulut - Portal Resmi Bola Voli Sulawesi Utara..
+# PBVSI Sulut - Portal Resmi Bola Voli Sulawesi Utara.
 
 Situs resmi PBVSI Sulawesi Utara. Menyediakan informasi tentang bola voli putra dan putri, data pemain, berita, dan struktur organisasi.
 
