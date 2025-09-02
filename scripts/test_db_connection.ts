@@ -1,4 +1,4 @@
-import { testConnection } from './lib/mysql';
+import { testConnection } from '../lib/mysql';
 
 async function runTest() {
   console.log('Attempting to connect to the database...');

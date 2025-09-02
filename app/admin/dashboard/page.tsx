@@ -530,77 +530,7 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Main Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-          {/* Quick Actions */}
-          <div className="lg:col-span-3">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5" />
-                  Aksi Cepat
-                </CardTitle>
-                <CardDescription>Akses fitur utama dengan cepat</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <Button
-                    variant="outline"
-                    className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/pemain/add")}
-                  >
-                    <UserPlus className="h-6 w-6" />
-                    <span className="text-sm">Tambah Pemain</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/pertandingan")}
-                  >
-                    <CalendarPlus className="h-6 w-6" />
-                    <span className="text-sm">Kelola Pertandingan</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/publikasi/add")}
-                  >
-                    <FileTextIcon className="h-6 w-6" />
-                    <span className="text-sm">Tulis Berita</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/galeri")}
-                  >
-                    <Upload className="h-6 w-6" />
-                    <span className="text-sm">Upload Foto</span>
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                    onClick={() => router.push("/admin/reports")}
-                  >
-                    <Download className="h-6 w-6" />
-                    <span className="text-sm">Export Data</span>
-                  </Button>
-                  {user.role === "super_admin" && (
-                    <Button
-                      variant="outline"
-                      className="h-20 flex flex-col items-center justify-center space-y-2 bg-transparent"
-                      onClick={() => router.push("/admin/pengaturan")}
-                    >
-                      <Settings className="h-6 w-6" />
-                      <span className="text-sm">Pengaturan</span>
-                    </Button>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          
-        </div>
+        
 
         {/* Recent Activity & Management Sections */}
         <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
