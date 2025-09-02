@@ -41,6 +41,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import { AdminUser } from "@/lib/types"
+import { AdminActivityLog } from "@/lib/admin"
 
 interface DashboardStats {
   totalPlayers: number
@@ -51,13 +52,7 @@ interface DashboardStats {
   recentActivity: number
 }
 
-interface RecentActivity {
-  id: string
-  type: string
-  description: string
-  timestamp: string
-  user: string
-}
+
 
 interface QuickStat {
   label: string
@@ -79,7 +74,7 @@ export default function AdminDashboard() {
     totalGalleryItems: 0,
     recentActivity: 0,
   })
-  const [recentActivities, setRecentActivities] = useState<RecentActivity[]>([])
+  const [recentActivities, setRecentActivities] = useState<AdminActivityLog[]>([])
   const [quickStats, setQuickStats] = useState<QuickStat[]>([])
   const router = useRouter()
 
@@ -118,36 +113,12 @@ export default function AdminDashboard() {
       setStats(data.data);
 
       // Mock data for recent activities and quick stats for now
-      setRecentActivities([
-        {
-          id: "1",
-          type: "player_added",
-          description: "Pemain baru Jordan Susanto ditambahkan",
-          timestamp: "2 menit yang lalu",
-          user: "Admin User",
-        },
-        {
-          id: "2",
-          type: "match_updated",
-          description: "Hasil pertandingan SMANSA vs SMAN 2 diperbarui",
-          timestamp: "15 menit yang lalu",
-          user: "Super Admin",
-        },
-        {
-          id: "3",
-          type: "article_published",
-          description: "Artikel 'Turnamen Antar Sekolah' dipublikasikan",
-          timestamp: "1 jam yang lalu",
-          user: "Content Manager",
-        },
-        {
-          id: "4",
-          type: "gallery_updated",
-          description: "5 foto baru ditambahkan ke galeri",
-          timestamp: "2 jam yang lalu",
-          user: "Admin User",
-        },
-      ])
+      const activityResponse = await fetch("/api/admin/activity");
+          if (!activityResponse.ok) {
+            throw new Error("Failed to fetch recent activities");
+          }
+          const activityData = await activityResponse.json();
+          setRecentActivities(activityData.data.logs);
 
       setQuickStats([])
     } catch (error: any) {
@@ -548,17 +519,18 @@ export default function AdminDashboard() {
                 {recentActivities.map((activity) => (
                   <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg bg-gray-50">
                     <div className="flex-shrink-0">
-                      {activity.type === "player_added" && <UserPlus className="h-4 w-4 text-blue-600" />}
-                      {activity.type === "match_updated" && <Trophy className="h-4 w-4 text-green-600" />}
-                      {activity.type === "article_published" && <FileText className="h-4 w-4 text-purple-600" />}
-                      {activity.type === "gallery_updated" && <ImageIcon className="h-4 w-4 text-orange-600" />}
+                      {activity.action.includes("player") && <UserPlus className="h-4 w-4 text-blue-600" />}
+                      {activity.action.includes("match") && <Trophy className="h-4 w-4 text-green-600" />}
+                      {activity.action.includes("article") && <FileText className="h-4 w-4 text-purple-600" />}
+                      {activity.action.includes("gallery") && <ImageIcon className="h-4 w-4 text-orange-600" />}
+                      {/* Add more icons based on action type if needed */}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{activity.description}</p>
+                      <p className="text-sm font-medium text-gray-900">{activity.action}</p>
                       <div className="flex items-center space-x-2 mt-1">
-                        <p className="text-xs text-gray-500">{activity.user}</p>
+                        <p className="text-xs text-gray-500">{activity.username || "Unknown User"}</p>
                         <span className="text-xs text-gray-400">•</span>
-                        <p className="text-xs text-gray-500">{activity.timestamp}</p>
+                        <p className="text-xs text-gray-500">{new Date(activity.timestamp).toLocaleString()}</p>
                       </div>
                     </div>
                   </div>
@@ -569,7 +541,7 @@ export default function AdminDashboard() {
                   variant="outline"
                   size="sm"
                   className="w-full bg-transparent"
-                  onClick={() => router.push("/admin/pertandingan")}
+                  onClick={() => router.push("/admin/activity")}
                 >
                   Lihat Semua Aktivitas
                 </Button>

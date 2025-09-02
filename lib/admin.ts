@@ -95,3 +95,37 @@ export async function deleteAdminUser(id: string): Promise<{ success: boolean; e
     return { success: false, error: error.message };
   }
 }
+
+export interface AdminActivityLog {
+  id: string;
+  admin_user_id: string | null;
+  action: string;
+  resource_type: string | null;
+  resource_id: string | null;
+  details: any; // JSON type
+  ip_address: string | null;
+  user_agent: string | null;
+  timestamp: string;
+  username?: string; // Added for join result
+}
+
+export const getAdminActivityLogs = async (limit: number = 10): Promise<{ logs: AdminActivityLog[]; error: string | null }> => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT
+         aal.*,
+         au.username
+       FROM
+         admin_activity_logs aal
+       LEFT JOIN
+         admin_users au ON aal.admin_user_id = au.id
+       ORDER BY
+         aal.timestamp DESC
+       LIMIT ?`,
+      [limit]
+    );
+    return { logs: rows as AdminActivityLog[], error: null };
+  } catch (error: any) {
+    return { logs: [], error: error.message };
+  }
+};
