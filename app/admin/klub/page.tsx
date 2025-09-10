@@ -19,9 +19,14 @@ import {
   DialogDescription,
   DialogFooter
 } from "@/components/ui/dialog"
-import { ClubForm } from "@/components/admin/club-form"
 import { toast } from "sonner"
 import { Loader2, Plus, Edit, Trash2, Search } from "lucide-react"
+import dynamic from 'next/dynamic'
+
+const ClubForm = dynamic(() => import('@/components/admin/club-form').then(mod => mod.ClubForm), {
+  ssr: false,
+  loading: () => <div className="flex justify-center items-center h-40"><Loader2 className="h-8 w-8 animate-spin" /></div>
+})
 
 interface Club {
   id: string
@@ -206,18 +211,16 @@ export default function AdminClubsPage() {
       <Dialog open={isAddClubModalOpen} onOpenChange={setIsAddClubModalOpen}>
         <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>{editingClub ? 'Ubah Klub' : 'Tambah Klub Baru'}</DialogTitle>
+            <DialogTitle>{editingClub ? "Ubah Klub" : "Tambah Klub Baru"}</DialogTitle>
             <DialogDescription>
-              {editingClub ? 'Ubah detail di bawah ini.' : 'Isi detail untuk klub baru.'}
+              {editingClub ? "Ubah detail klub yang sudah ada." : "Isi detail untuk klub baru."}
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
-            <ClubForm
-              initialData={editingClub}
-              onSuccess={handleFormSuccess}
-              onClose={handleFormClose}
-            />
-          </div>
+          <ClubForm
+            initialData={editingClub}
+            onSuccess={handleFormSuccess}
+            onClose={handleFormClose}
+          />
         </DialogContent>
       </Dialog>
 

@@ -40,7 +40,8 @@ export async function getPlayerById(id: string): Promise<Player | null> {
       p.position, 
       p.image_url,
       p.club_id,
-      c.name as club_name
+      c.name as club_name,
+      c.city as club_city
     FROM players p
     LEFT JOIN clubs c ON p.club_id = c.id
     WHERE p.id = ?
