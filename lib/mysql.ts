@@ -1,6 +1,11 @@
-import { createPool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
+import { createPool, Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
-const pool = createPool({
+// Extend the NodeJS Global object to include our mysql connection pool
+declare global {
+  var mysqlPool: Pool | undefined;
+}
+
+const pool = global.mysqlPool || createPool({
   host: process.env.MYSQL_HOST || 'localhost',
   user: process.env.MYSQL_USER || 'root',
   password: process.env.MYSQL_PASSWORD || '',
@@ -10,6 +15,10 @@ const pool = createPool({
   queueLimit: 0,
   timezone: 'Z'
 });
+
+if (process.env.NODE_ENV !== 'production') {
+  global.mysqlPool = pool;
+}
 
 export async function testConnection(): Promise<{ success: boolean; error: string | null }> {
   try {

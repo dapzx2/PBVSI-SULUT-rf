@@ -1,3 +1,4 @@
+"use client"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Clock, UserPlus, Trophy, FileText, ImageIcon, Loader2, AlertCircle } from "lucide-react"

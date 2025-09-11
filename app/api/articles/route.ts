@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import { getArticles, createArticle, updateArticle, deleteArticle } from '@/lib/articles';
 
 export async function GET() {
-  console.log('API route /api/articles hit!'); // Add this line
   try {
     const { articles, error } = await getArticles();
 

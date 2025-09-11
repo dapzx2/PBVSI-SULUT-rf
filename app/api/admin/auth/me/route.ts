@@ -3,12 +3,9 @@ import { getAdminFromRequest } from "@/lib/auth";
 
 export async function GET(request: NextRequest) {
   try {
-    console.log("=== AUTH ME API CALLED ===")
-
     const admin = await getAdminFromRequest(request);
 
     if (!admin) {
-      console.log("❌ No admin session found or invalid token")
       return NextResponse.json(
         {
           success: false,
@@ -17,8 +14,6 @@ export async function GET(request: NextRequest) {
         { status: 401 },
       )
     }
-
-    console.log("✅ Session valid for user:", admin.email)
 
     return NextResponse.json({
       success: true,

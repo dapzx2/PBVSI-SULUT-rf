@@ -4,20 +4,20 @@ import { createSession, generateToken, logActivity } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("=== LOGIN API CALLED ===")
+    
 
     const body = await request.json()
     const { email, password } = body
 
     if (!email || !password) {
-      console.log("❌ Missing credentials")
+      
       return NextResponse.json({ success: false, message: "Email dan password harus diisi" }, { status: 400 })
     }
 
     const { adminUser: user, error: userError } = await getAdminUserByEmail(email);
 
     if (userError || !user) {
-      console.log("❌ Invalid credentials for:", email)
+      
       await logActivity(
         null, // No user ID yet
         "Login Failed",
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const passwordMatch = await verifyPassword(password, user.password_hash);
 
     if (!passwordMatch) {
-      console.log("❌ Invalid credentials for:", email)
+      
       await logActivity(
         user.id,
         "Login Failed",
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       sessionId: sessionId,
     });
 
-    console.log("✅ Login successful, creating session and token")
+    
 
     const response = NextResponse.json({
       success: true,
@@ -93,7 +93,6 @@ export async function POST(request: NextRequest) {
       request.headers.get("user-agent") || "Unknown"
     );
 
-    console.log("🍪 Session cookie set successfully")
     return response
   } catch (error: any) {
     console.error("💥 Login API error:", error)
