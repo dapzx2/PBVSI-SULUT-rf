@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getPertandinganLangsung as getLiveMatches } from '@/lib/pertandingan';
+import { getPertandinganLangsung } from '@/lib/pertandingan';
 import { getMatches } from '@/lib/matches'; // Assuming getMatches fetches all matches
 
 export async function GET() {
   try {
-    const { matches: liveMatches, error: liveError } = await getLiveMatches();
+    const { matches: liveMatches, error: liveError } = await getPertandinganLangsung();
     const { matches: allMatches, error: allError } = await getMatches();
 
     if (liveError || allError) {

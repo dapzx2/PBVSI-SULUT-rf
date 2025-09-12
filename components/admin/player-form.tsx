@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
@@ -26,13 +27,17 @@ interface PlayerFormProps {
   onClose: () => void;
 }
 
-export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps) {
-  const { toast } = useToast();
+  const PlayerForm: React.FC<PlayerFormProps> = ({ initialData, onSuccess, onClose }) => {
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
     position: initialData?.position || '',
     club_id: initialData?.club_id || null,
     image_url: initialData?.image_url || null,
+    birth_date: initialData?.birth_date || '',
+    height_cm: initialData?.height_cm || '',
+    weight_kg: initialData?.weight_kg || '',
+    country: initialData?.country || '',
+    achievements: initialData?.achievements || '',
   });
   const [clubs, setClubs] = useState<Club[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,6 +45,8 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialData?.image_url || null
   );
+
+  const { toast } = useToast();
 
   useEffect(() => {
     async function fetchClubs() {
@@ -55,7 +62,7 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
     fetchClubs();
   }, [toast]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
     setFormData((prev) => ({ ...prev, [id]: value }));
   };
@@ -160,6 +167,26 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
         <Input id="position" value={formData.position} onChange={handleChange} />
       </div>
       <div className="space-y-2">
+        <Label htmlFor="birth_date">Tanggal Lahir</Label>
+        <Input id="birth_date" type="date" value={formData.birth_date} onChange={handleChange} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="height_cm">Tinggi (cm)</Label>
+        <Input id="height_cm" type="number" value={formData.height_cm} onChange={handleChange} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="weight_kg">Berat (kg)</Label>
+        <Input id="weight_kg" type="number" value={formData.weight_kg} onChange={handleChange} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="country">Negara</Label>
+        <Input id="country" value={formData.country} onChange={handleChange} />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="achievements">Prestasi</Label>
+        <Textarea id="achievements" value={formData.achievements} onChange={handleChange} />
+      </div>
+      <div className="space-y-2">
         <Label htmlFor="club_id">Klub</Label>
         <Select onValueChange={handleClubChange} value={formData.club_id ?? 'null'}>
           <SelectTrigger>
@@ -185,4 +212,7 @@ export function PlayerForm({ initialData, onSuccess, onClose }: PlayerFormProps)
       </div>
     </form>
   );
-}
+};
+
+export default PlayerForm;
+

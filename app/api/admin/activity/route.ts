@@ -2,6 +2,8 @@ import { NextResponse, NextRequest } from 'next/server';
 import { getAdminActivityLogs } from '@/lib/admin';
 import { verifyAuth } from '@/lib/auth'; // Assuming auth utility
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Authenticate the request

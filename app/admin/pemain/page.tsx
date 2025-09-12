@@ -27,7 +27,7 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { PlayerForm } from '@/components/admin/player-form';
+import PlayerForm from '@/components/admin/player-form';
 import { toast } from 'sonner';
 import { PlusCircle, Loader2, Edit, Trash2 } from 'lucide-react';
 import { Player } from '@/lib/types';

@@ -1,5 +1,6 @@
 
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import {
   getPlayerById,
   updatePlayer,
@@ -27,9 +28,11 @@ export async function GET(request: Request, { params }: Params) {
 export async function PUT(request: Request, { params }: Params) {
   try {
     const body = await request.json();
-    const { name, position, club_id, image_url } = body;
+    const { name, position, club_id, image_url, birth_date } = body;
 
-    await updatePlayer(params.id, { name, position, club_id, image_url });
+    await updatePlayer(params.id, { name, position, club_id, image_url, birth_date });
+    revalidatePath('/database');
+    revalidatePath(`/pemain/${params.id}`);
     return NextResponse.json({ message: 'Player updated successfully' });
   } catch (error) {
     console.error(`Failed to update player ${params.id}:`, error);

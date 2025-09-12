@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getLiveMatches } from '@/lib/pertandingan';
+import { getPertandinganLangsung } from '@/lib/pertandingan';
 
 export async function GET() {
   try {
-    const { matches, error } = await getLiveMatches();
+    const { matches, error } = await getPertandinganLangsung();
 
     if (error) {
       console.error('Error fetching live matches in API route:', error);

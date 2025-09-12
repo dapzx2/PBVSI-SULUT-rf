@@ -121,6 +121,26 @@ const floatingVariants = {
   },
 }
 
+const calculateAge = (birthDateString: string | null) => {
+  if (!birthDateString) return 'N/A';
+  const today = new Date();
+  const birthDate = new Date(birthDateString);
+
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age >= 0 ? `${age} tahun` : 'N/A';
+};
+
+const formatDate = (dateString: string | null) => {
+  if (!dateString) return 'N/A';
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('id-ID', options);
+};
+
 interface PlayerPageProps {
   params: {
     id: string
@@ -372,7 +392,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   initial="hidden"
                   animate="visible"
                 >
-                  {[player.position, player.club?.name, `${new Date().getFullYear() - new Date(player.birth_date).getFullYear()} tahun`].filter(Boolean).map((item, index) => (
+                  {[player.position, player.club?.name, calculateAge(player.birth_date)].filter(Boolean).map((item, index) => (
                     <motion.div key={index} variants={itemVariants} whileHover={{ scale: 1.05 }}>
                       <Badge className="bg-white/20 text-white text-lg px-4 py-2 border border-white/30 hover:bg-white/30 transition-all duration-200">
                         {item}
@@ -468,7 +488,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                     >
                       <div className="space-y-4">
                         {[
-                          { icon: Calendar, label: "Tanggal Lahir", value: player.birth_date },
+                          { icon: Calendar, label: "Tanggal Lahir", value: formatDate(player.birth_date) },
                           { icon: MapPin, label: "Asal Klub", value: player.club?.city || 'N/A' },
                           { icon: Clock, label: "Pengalaman", value: 'N/A' }, // Placeholder
                         ].map((item, index) => (
@@ -488,8 +508,8 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       </div>
                       <div className="space-y-4">
                         {[
-                          { icon: TrendingUp, label: "Tinggi Badan", value: `${player.height_cm} cm` },
-                          { icon: Target, label: "Berat Badan", value: `${player.weight_kg} kg` },
+                          { icon: TrendingUp, label: "Tinggi Badan", value: player.height_cm ? `${player.height_cm} cm` : 'N/A' },
+                          { icon: Target, label: "Berat Badan", value: player.weight_kg ? `${player.weight_kg} kg` : 'N/A' },
                           { icon: Users, label: "Tim Saat Ini", value: player.club?.name || 'N/A' },
                         ].map((item, index) => (
                           <motion.div

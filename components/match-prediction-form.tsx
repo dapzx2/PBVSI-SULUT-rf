@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useTransition } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,14 +9,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { CheckCircle, XCircle, Loader2 } from "lucide-react"
 
-import { useActionState } from "react"
-import { useFormStatus } from "react-dom"
-
 // Assuming submitPrediction is a server action defined elsewhere
 // You will need to import this from your server actions file, e.g.,
 // import { submitPrediction } from "@/app/actions";
 // For now, let's define a placeholder to avoid compilation errors
-async function submitPrediction(prevState: any, formData: FormData) {
+// The action now only needs the formData
+async function submitPrediction(formData: FormData): Promise<{ success: boolean; message: string }> {
   // This is a placeholder. Replace with your actual server action logic.
   console.log("Server action placeholder received:", formData);
   // Simulate API call
@@ -43,7 +41,15 @@ export function MatchPredictionForm({
   const [predictedHomeScore, setPredictedHomeScore] = useState<number>(0)
   const [predictedAwayScore, setPredictedAwayScore] = useState<number>(0)
 
-  const [state, formAction, isPending] = useActionState(submitPrediction, null)
+  const [isPending, startTransition] = useTransition();
+  const [state, setState] = useState<{ success: boolean; message: string } | null>(null);
+
+  const handleSubmit = (formData: FormData) => {
+    startTransition(async () => {
+      const result = await submitPrediction(formData);
+      setState(result);
+    });
+  };
 
   return (
     <Card>
@@ -52,7 +58,7 @@ export function MatchPredictionForm({
         <CardDescription>Pilih tim pemenang dan masukkan skor prediksi Anda.</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-6"> 
+        <form action={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <div>
               <Label htmlFor="winner">Tim Pemenang</Label>
