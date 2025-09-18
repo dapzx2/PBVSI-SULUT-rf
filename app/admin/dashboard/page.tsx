@@ -214,7 +214,7 @@ export default function AdminDashboard() {
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="name">Nama Pemain</Label>
-                          <Input id="name" required="" value="" />
+                          <Input id="name" required={true} value="" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="position">Posisi</Label>
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
                       <form className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="club_name">Nama Klub</Label>
-                          <Input id="club_name" required="" placeholder="Nama lengkap klub" value="" />
+                          <Input id="club_name" required={true} placeholder="Nama lengkap klub" value="" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="club_city">Kota</Label>
@@ -384,15 +384,15 @@ export default function AdminDashboard() {
                       <form className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="home_team">Tim Kandang</Label>
-                          <Input id="home_team" required="" value="" />
+                          <Input id="home_team" required={true} value="" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="away_team">Tim Tandang</Label>
-                          <Input id="away_team" required="" value="" />
+                          <Input id="away_team" required={true} value="" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="match_datetime">Tanggal & Waktu Pertandingan</Label>
-                          <Input id="match_datetime" type="datetime-local" required="" value="" />
+                          <Input id="match_datetime" type="datetime-local" required={true} value="" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="home_set_score">Skor Set Kandang</Label>
@@ -485,7 +485,7 @@ export default function AdminDashboard() {
                       <form className="space-y-4">
                         <div className="space-y-2">
                           <Label htmlFor="article_title">Judul Artikel</Label>
-                          <Input id="article_title" required="" value="" />
+                          <Input id="article_title" required={true} value="" />
                         </div>
                         <div className="space-y-2">
                           <Label htmlFor="article_content">Konten Artikel</Label>
