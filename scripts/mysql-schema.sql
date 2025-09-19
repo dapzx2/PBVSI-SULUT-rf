@@ -4,6 +4,7 @@
 CREATE TABLE IF NOT EXISTS `clubs` (
     `id` VARCHAR(36) PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
+    `slug` VARCHAR(255) UNIQUE NOT NULL,
     `city` VARCHAR(100),
     `country` VARCHAR(100),
     `logo_url` VARCHAR(255),
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `players` (
     `country` VARCHAR(100),
     `image_url` VARCHAR(255),
     `club_id` VARCHAR(36),
+    `achievements` TEXT,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`club_id`) REFERENCES `clubs`(`id`)
 );
@@ -81,8 +83,8 @@ CREATE TABLE IF NOT EXISTS `matches` (
     `status` VARCHAR(50),
     `league` VARCHAR(100),
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (`home_team_id`) REFERENCES `clubs`(`id`),
-    FOREIGN KEY (`away_team_id`) REFERENCES `clubs`(`id`)
+    FOREIGN KEY (`home_team_id`) REFERENCES `clubs`(`id`) ON DELETE SET NULL,
+    FOREIGN KEY (`away_team_id`) REFERENCES `clubs`(`id`) ON DELETE SET NULL
 );
 
 -- Create articles table
