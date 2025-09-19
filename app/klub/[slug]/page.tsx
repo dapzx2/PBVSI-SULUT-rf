@@ -67,9 +67,9 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
             <div className="text-6xl mb-4">🔍</div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Klub Tidak Ditemukan</h1>
             <p className="text-gray-600 mb-8">Maaf, klub yang Anda cari tidak ada.</p>
-            <Link href="/klub" passHref>
-              <Button asChild>
-                <a>Kembali ke Daftar Klub</a>
+            <Link href="/klub">
+              <Button>
+                Kembali ke Daftar Klub
               </Button>
             </Link>
           </div>
@@ -171,9 +171,9 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
                     <p className="text-sm text-gray-700 mb-1">Posisi: <span className="font-semibold">{player.position}</span></p>
                     <p className="text-sm text-gray-700 mb-1">Tinggi: <span className="font-semibold">{player.height} cm</span></p>
                     <p className="text-sm text-gray-700 mb-3">Berat: <span className="font-semibold">{player.weight} kg</span></p>
-                    <Link href={`/pemain/${player.id}`} passHref className="mt-auto">
-                      <Button asChild variant="outline" className="w-full bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100">
-                        <a>Lihat Detail</a>
+                    <Link href={`/pemain/${player.id}`} className="mt-auto">
+                      <Button variant="outline" className="w-full bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100">
+                        Lihat Detail
                       </Button>
                     </Link>
                   </CardContent>
