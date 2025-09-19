@@ -73,7 +73,7 @@ export default function AdminArticlesPage() {
   const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at'> & { imageFile?: File | null }) => {
     setIsSubmitting(true)
     try {
-      let finalImageUrl = data.image_url || null;
+      let finalImageUrl = currentArticle?.image_url || null;
       const { imageFile, ...restOfData } = data; // Destructure imageFile out
 
       if (imageFile) {

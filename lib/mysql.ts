@@ -52,10 +52,8 @@ export async function testConnection(): Promise<{ success: boolean; error: strin
     // Use the proxy to get a connection
     const connection = await poolProxy.getConnection();
     connection.release();
-    console.log('MySQL connection test successful.');
     return { success: true, error: null };
   } catch (error: any) {
-    console.error('MySQL connection test failed:', error.message);
     return { success: false, error: error.message };
   }
 }

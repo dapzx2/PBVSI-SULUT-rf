@@ -34,4 +34,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-"\n# Ignore user-uploaded files\n/public/uploads/" 
+
+# Ignore user-uploaded files
+/public/uploads/
+
+# Ignore test scripts
+scripts/*.js
