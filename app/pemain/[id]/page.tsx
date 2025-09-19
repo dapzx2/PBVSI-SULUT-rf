@@ -601,7 +601,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   <CardContent className="p-8">
                     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="visible">
                       {player.achievements && player.achievements.length > 0 ? (
-                        player.achievements.map((achievement, index) => (
+                        player.achievements.split(',').map((achievement, index) => (
                           <motion.div
                             key={index}
                             className="flex gap-4"
@@ -738,7 +738,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                   <CardContent className="p-6">
                     <div className="space-y-3">
                       {player.achievements && player.achievements.length > 0 ? (
-                        player.achievements.map((achievement, index) => (
+                        player.achievements.split(',').map((achievement, index) => (
                           <motion.div
                             key={index}
                             className="flex items-center space-x-3"
