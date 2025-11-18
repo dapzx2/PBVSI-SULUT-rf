@@ -1,8 +1,8 @@
-import { type NextRequest, NextResponse } from "next/server"
+import { NextResponse } from "next/server"
 import pool from "@/lib/mysql";
 // import { getAdminFromRequest } from "@/lib/auth" // Commented out for temporary bypass
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // const admin = await getAdminFromRequest(request) // Temporarily bypass authentication
 
@@ -85,3 +85,4 @@ export async function GET(request: NextRequest) {
     )
   }
 }
+

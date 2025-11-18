@@ -1,12 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { StickyHeader } from "@/components/sticky-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Users, Trophy, ArrowRight, Award, Target, Heart, Loader2 } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
 import { useEffect, useState } from "react"
 import type { Article } from "@/lib/types"
 
@@ -101,10 +101,13 @@ export default function HomePage() {
                 <CardHeader className="text-center pb-6">
                   <div className="flex justify-center mb-6">
                     <div className="relative">
-                      <img
+                      <Image
                         src="/images/irjen-pol-roycke-langie.jpg"
                         alt="Irjen Pol. Roycke Harry Langie, S.I.K., MH"
+                        width={192}
+                        height={256}
                         className="w-48 h-auto object-contain border-4 border-orange-200 shadow-lg"
+                        priority
                       />
                       <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
                         <Award className="w-4 h-4 text-white" />
@@ -146,7 +149,7 @@ export default function HomePage() {
 
                   <div className="prose prose-lg max-w-none text-gray-700 leading-relaxed">
                     <p className="text-lg mb-6">
-                      <strong>Assalamu'alaikum Warahmatullahi Wabarakatuh,</strong>
+                      <strong>Assalamu&apos;alaikum Warahmatullahi Wabarakatuh,</strong>
                     </p>
 
                     <p className="mb-6">
@@ -164,8 +167,8 @@ export default function HomePage() {
 
                     <blockquote className="border-l-4 border-orange-500 pl-6 py-4 bg-orange-50 rounded-r-lg mb-6">
                       <p className="text-lg italic text-gray-800 mb-2">
-                        "Mari kita bersama-sama membangun ekosistem bola voli yang kuat, mulai dari pembinaan grassroot
-                        hingga prestasi elite, demi kemajuan olahraga bola voli Sulawesi Utara."
+                        &quot;Mari kita bersama-sama membangun ekosistem bola voli yang kuat, mulai dari pembinaan grassroot
+                        hingga prestasi elite, demi kemajuan olahraga bola voli Sulawesi Utara.&quot;
                       </p>
                       <cite className="text-sm font-semibold text-orange-600">
                         - Irjen Pol. Roycke Harry Langie, S.I.K., MH
@@ -184,7 +187,7 @@ export default function HomePage() {
                     </p>
 
                     <p className="font-semibold">
-                      <strong>Wassalamu'alaikum Warahmatullahi Wabarakatuh</strong>
+                      <strong>WAssalamu&apos;alaikum Warahmatullahi Wabarakatuh</strong>
                     </p>
                   </div>
                 </CardContent>
@@ -225,10 +228,12 @@ export default function HomePage() {
                   <motion.div variants={fadeInUp} key={article.id}>
                     <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                       <div className="aspect-video bg-gradient-to-br from-orange-100 to-red-100 rounded-t-lg flex items-center justify-center">
-                        <img
+                        <Image
                           src={article.image_url || "/placeholder.svg"}
                           alt={article.title}
+                          fill
                           className="w-full h-full object-cover rounded-t-lg"
+                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         />
                       </div>
                       <CardContent className="p-6">
@@ -250,7 +255,7 @@ export default function HomePage() {
                             href={`/berita/${article.slug}`}
                             className="text-orange-600 hover:text-orange-700 font-medium"
                           >
-                            Baca selengkapnya →
+                            Baca selengkapnya 
                           </Link>
                         </div>
                       </CardContent>
@@ -289,3 +294,15 @@ export default function HomePage() {
     </div>
   )
 }
+
+
+
+
+
+
+
+
+
+
+
+

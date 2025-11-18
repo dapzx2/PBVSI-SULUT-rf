@@ -4,6 +4,7 @@ import { requireAuth } from "@/lib/auth"
 import { revalidatePath } from "next/cache"
 
 export const GET = requireAuth(async (request: Request) => {
+  void request;
   try {
     const { clubs, error } = await getClubs()
     if (error) {

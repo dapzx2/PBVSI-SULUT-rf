@@ -9,13 +9,14 @@ import { Input } from "@/components/ui/input"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
+import Image from "next/image"
 import type { Club } from "@/lib/types"
 import { Loader2 } from "lucide-react"
 
 const clubFormSchema = z.object({
   name: z.string().min(2, { message: "Nama klub harus minimal 2 karakter." }),
   city: z.string().min(2, { message: "Kota harus minimal 2 karakter." }),
-  established_year: z.coerce.number().min(1900, { message: "Tahun berdiri tidak valid." }).max(new Date().getFullYear(), { message: "Tahun berdiri tidak boleh di masa depan." }),
+  established_year: z.number({ required_error: "Tahun berdiri wajib diisi." }).min(1900, { message: "Tahun berdiri tidak valid." }).max(new Date().getFullYear(), { message: "Tahun berdiri tidak boleh di masa depan." }),
   coach_name: z.string().min(2, { message: "Nama pelatih harus minimal 2 karakter." }),
   logo_url: z.string().url({ message: "URL logo tidak valid." }).nullable().optional().or(z.literal("")),
   description: z.string().nullable().optional(),
@@ -38,7 +39,7 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
     defaultValues: {
       name: initialData?.name || "",
       city: initialData?.city || "",
-      established_year: initialData?.established_year || 0,
+      established_year: initialData?.established_year ?? undefined,
       coach_name: initialData?.coach_name || "",
       logo_url: initialData?.logo_url || "",
       description: initialData?.description || "",
@@ -51,7 +52,7 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
       form.reset({
         name: initialData.name || "",
         city: initialData.city || "",
-        established_year: initialData.established_year || 0,
+        established_year: initialData.established_year ?? undefined,
         coach_name: initialData.coach_name || "",
         logo_url: initialData.logo_url || "",
         description: initialData.description || "",
@@ -172,7 +173,23 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
             <FormItem>
               <FormLabel>Tahun Berdiri</FormLabel>
               <FormControl>
-                <Input type="number" placeholder="Contoh: 2005" {...field} />
+                <Input
+                  type="number"
+                  placeholder="Contoh: 2005"
+                  value={field.value ?? ""}
+                  onChange={(event) => {
+                    const inputValue = event.target.value
+                    if (inputValue === "") {
+                      field.onChange(undefined)
+                      return
+                    }
+                    const parsedValue = Number.parseInt(inputValue, 10)
+                    field.onChange(Number.isNaN(parsedValue) ? undefined : parsedValue)
+                  }}
+                  onBlur={field.onBlur}
+                  name={field.name}
+                  ref={field.ref}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -198,7 +215,7 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
           {initialData?.logo_url && !logoFile && (
             <div className="mt-2">
               <p className="text-sm text-gray-500">Logo saat ini:</p>
-              <img src={initialData.logo_url} alt="Current Club Logo" className="max-h-40 object-contain" />
+              <Image src={initialData.logo_url} alt="Current Club Logo" width={256} height={160} className="max-h-40 object-contain w-auto" />
             </div>
           )}
         </div>

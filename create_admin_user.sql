@@ -1,0 +1,2 @@
+INSERT INTO `admin_users` (`id`, `username`, `email`, `password_hash`, `role`, `created_at`) VALUES
+('569fa375-71b2-4d66-bf54-5fbb9f89c63b', 'admin', 'admin@pbvsisulut.com', '$2b$12$siwLhkKjjlGARqPhkHpt3uxuYGUymzuu2ebTggdXa/GdulkTuGDMG', 'super_admin', NOW());

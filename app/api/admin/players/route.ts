@@ -4,6 +4,7 @@ import { getPlayers, createPlayer } from '@/lib/players';
 import { requireAuth } from '@/lib/auth';
 
 export const GET = requireAuth(async (request: Request) => {
+  void request;
   try {
     const { players, error } = await getPlayers();
     if (error) {
@@ -32,3 +33,4 @@ export const POST = requireAuth(async (request: Request) => {
     return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
   }
 });
+

@@ -51,7 +51,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     }
 
     const { id } = params
-    const { success, error } = await deleteGalleryItem(id)
+    const { success } = await deleteGalleryItem(id)
 
     if (!success) {
       return NextResponse.json({ error: "Gallery item not found or failed to delete" }, { status: 404 })

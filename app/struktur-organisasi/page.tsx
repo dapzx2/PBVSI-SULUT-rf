@@ -399,7 +399,7 @@ export default function StrukturOrganisasiPage() {
             <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
               <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Pelindung</h3>
               <div className="space-y-4">
-                {pelindung.map((item, index) => (
+                {pelindung.map((item) => (
                   <Card key={item.name} className="hover:shadow-lg transition-all duration-300">
                     <CardContent className="p-6 text-center">
                       <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -420,7 +420,7 @@ export default function StrukturOrganisasiPage() {
             >
               <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Penasehat</h3>
               <div className="space-y-4">
-                {penasehat.map((item, index) => (
+                {penasehat.map((item) => (
                   <Card key={item.name} className="hover:shadow-lg transition-all duration-300">
                     <CardContent className="p-6 text-center">
                       <div className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -581,3 +581,4 @@ export default function StrukturOrganisasiPage() {
     </div>
   )
 }
+

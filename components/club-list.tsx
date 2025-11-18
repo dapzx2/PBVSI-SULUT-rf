@@ -87,7 +87,7 @@ export function ClubList({ initialClubs }: ClubListProps) {
             <span className="text-sm text-gray-600">Filter aktif:</span>
             {searchTerm && (
               <Badge variant="secondary" className="cursor-pointer" onClick={() => setSearchTerm("")}>
-                Pencarian: "{searchTerm}" ×
+                Pencarian: &quot;{searchTerm}&quot; ×
               </Badge>
             )}
             {selectedCity !== "all" && (
@@ -165,3 +165,4 @@ export function ClubList({ initialClubs }: ClubListProps) {
     </div>
   )
 }
+

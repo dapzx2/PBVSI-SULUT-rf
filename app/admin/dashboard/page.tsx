@@ -4,36 +4,19 @@ import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
 import {
   Users,
   Trophy,
   FileText,
-  Settings,
-  LogOut,
   Shield,
-  User,
   Loader2,
-  Database,
-  Activity,
   ImageIcon,
   AlertCircle,
-  TrendingUp,
   Eye,
   Plus,
-  Edit,
   UserPlus,
-  CalendarPlus,
   FileTextIcon,
-  Upload,
-  Download,
-  Bell,
   Clock,
-  Award,
-  Target,
-  Zap,
 } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
@@ -52,17 +35,7 @@ interface DashboardStats {
   recentActivity: number
 }
 
-
-
-interface QuickStat {
-  label: string
-  value: number
-  change: number
-  trend: "up" | "down" | "stable"
-}
-
 export default function AdminDashboard() {
-  const [currentRole, setCurrentRole] = useState<"super_admin" | "admin">("super_admin")
   const [user, setUser] = useState<AdminUser | null>(null)
   const [loadingStats, setLoadingStats] = useState(true)
   const [error, setError] = useState("")
@@ -75,7 +48,6 @@ export default function AdminDashboard() {
     recentActivity: 0,
   })
   const [recentActivities, setRecentActivities] = useState<AdminActivityLog[]>([])
-  const [quickStats, setQuickStats] = useState<QuickStat[]>([])
   const router = useRouter()
 
   useEffect(() => {
@@ -86,7 +58,6 @@ export default function AdminDashboard() {
         if (response.ok) {
           const data = await response.json();
           setUser(data.user);
-          setCurrentRole(data.user.role);
         } else {
           // If not authenticated, redirect to login
           router.push("/admin/login");
@@ -99,7 +70,7 @@ export default function AdminDashboard() {
 
     fetchAdminUser();
     loadDashboardData();
-  }, [])
+  }, [router])
 
   const loadDashboardData = async () => {
     setLoadingStats(true)
@@ -120,24 +91,15 @@ export default function AdminDashboard() {
           const activityData = await activityResponse.json();
           setRecentActivities(activityData.data?.logs || []);
 
-      setQuickStats([])
-    } catch (error: any) {
-      setError(error.message)
+    } catch (err: any) {
+      if (err instanceof Error) {
+        setError(err.message)
+      } else {
+        setError("An unknown error occurred")
+      }
     } finally {
       setLoadingStats(false)
     }
-  }
-
-  const handleLogout = async () => {
-    try {
-      await fetch("/api/admin/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      })
-    } catch (error) {
-      // Handle error
-    }
-    window.location.href = "/admin/login"
   }
 
   if (!user) {

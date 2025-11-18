@@ -230,7 +230,7 @@ export default function AdminClubsPage() {
           <DialogHeader>
             <DialogTitle>Konfirmasi Hapus Klub</DialogTitle>
             <DialogDescription>
-              Apakah Anda yakin ingin menghapus klub "{deletingClub?.name}"? Tindakan ini tidak dapat dibatalkan.
+              Apakah Anda yakin ingin menghapus klub &quot;{deletingClub?.name}&quot;? Tindakan ini tidak dapat dibatalkan.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

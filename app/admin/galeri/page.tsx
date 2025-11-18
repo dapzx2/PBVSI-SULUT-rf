@@ -4,9 +4,9 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"
 import { toast } from "sonner"
-import { Loader2, PlusCircle, Edit, Trash2, ImageIcon } from "lucide-react"
+import { Loader2, PlusCircle, Edit, Trash2 } from "lucide-react"
 import { GalleryForm } from "@/components/admin/gallery-form"
 import type { GalleryItem } from "@/lib/types"
 import Image from "next/image"
@@ -182,7 +182,7 @@ export default function AdminGalleryPage() {
           <DialogHeader>
             <DialogTitle>Konfirmasi Hapus Item Galeri</DialogTitle>
             <DialogDescription>
-              Apakah Anda yakin ingin menghapus item galeri "{deletingItem?.title}"? Tindakan ini tidak dapat dibatalkan.
+              Apakah Anda yakin ingin menghapus item galeri &apos;{deletingItem?.title}&apos;? Tindakan ini tidak dapat dibatalkan.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Article } from "@/lib/types"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import Image from "next/image"
 
 interface ArticleFormProps {
   initialData?: Article | null;
@@ -74,7 +75,7 @@ export function ArticleForm({ initialData, onSubmit, onCancel, isLoading }: Arti
             {initialData?.image_url && !imageFile && (
               <div className="mt-2">
                 <p className="text-sm text-gray-500">Gambar saat ini:</p>
-                <img src={initialData.image_url} alt="Current Article Image" className="max-h-40 object-contain" />
+                <Image src={initialData.image_url} alt="Current Article Image" width={320} height={160} className="max-h-40 object-contain w-auto" />
               </div>
             )}
           </div>
@@ -101,3 +102,7 @@ export function ArticleForm({ initialData, onSubmit, onCancel, isLoading }: Arti
     </form>
   );
 }
+
+
+
+

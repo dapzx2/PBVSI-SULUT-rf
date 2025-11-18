@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Facebook, Instagram, Twitter, Youtube, Mail, Phone, MapPin, Clock } from "lucide-react"
 
 export default function Footer() {
@@ -25,12 +26,7 @@ export default function Footer() {
           {/* Logo and Description */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img
-                src="/images/pbvsi-logo.png"
-                alt="PBVSI Sulut Logo"
-                className="w-12 h-12 cursor-pointer transition-transform hover:scale-110"
-                onClick={handleLogoClick}
-              />
+              <Image src="/images/pbvsi-logo.png" alt="PBVSI Sulut Logo" width={48} height={48} className="w-12 h-12 cursor-pointer transition-transform hover:scale-110" onClick={handleLogoClick} />
               <div>
                 <h3 className="text-lg font-bold">PBVSI</h3>
                 <p className="text-sm text-gray-300">Sulawesi Utara</p>
@@ -166,3 +162,4 @@ export default function Footer() {
     </footer>
   )
 }
+

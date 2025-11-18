@@ -8,10 +8,9 @@ import Link from "next/link" // Import Link
 
 interface PertandinganCardProps {
   match: Pertandingan
-  delay?: number
 }
 
-export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
+export function PertandinganCard({ match }: PertandinganCardProps) {
   const getStatusBadge = (status: string) => {
     switch (status.toLowerCase()) {
       case "live":
@@ -181,3 +180,4 @@ export function PertandinganCard({ match, delay = 0 }: PertandinganCardProps) {
     </Link>
   )
 }
+

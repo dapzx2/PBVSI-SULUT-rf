@@ -15,7 +15,8 @@ interface StickyHeaderProps {
   currentPage?: string
 }
 
-export function StickyHeader({ currentPage }: StickyHeaderProps) {
+export function StickyHeader({ currentPage: _currentPage }: StickyHeaderProps) {
+  void _currentPage;
   const [isOpen, setIsOpen] = React.useState(false)
   const [openDropdowns, setOpenDropdowns] = React.useState<string[]>([])
   const [hoveredDropdown, setHoveredDropdown] = React.useState<string | null>(null)
@@ -329,3 +330,5 @@ export function StickyHeader({ currentPage }: StickyHeaderProps) {
     </header>
   )
 }
+
+

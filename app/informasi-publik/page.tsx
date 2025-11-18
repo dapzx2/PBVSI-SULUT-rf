@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { StickyHeader } from "@/components/sticky-header"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Download, Shield } from "lucide-react"
 
 export default function InformasiPublikPage() {

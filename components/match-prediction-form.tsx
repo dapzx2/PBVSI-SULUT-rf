@@ -59,6 +59,7 @@ export function MatchPredictionForm({
       </CardHeader>
       <CardContent>
         <form action={handleSubmit} className="space-y-6">
+          <input type="hidden" name="matchId" value={matchId} />
           <div className="space-y-4">
             <div>
               <Label htmlFor="winner">Tim Pemenang</Label>
@@ -131,3 +132,4 @@ export function MatchPredictionForm({
     </Card>
   )
 }
+

@@ -1,10 +1,9 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { Search, X, RefreshCw, SlidersHorizontal, WifiOff, Loader2, Calendar, Trophy, ChevronRight } from "lucide-react"
+import { Search, RefreshCw, Calendar } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { PertandinganCard } from "@/components/pertandingan-card"
 import type { Match } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -21,7 +20,6 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
   const [selectedLeague, setSelectedLeague] = useState<string>("all")
   const [activeTab, setActiveTab] = useState<"live" | "upcoming" | "finished">("live")
   const [isLoading, setIsLoading] = useState(false) // Initially false, as we have initial data
-  const [error, setError] = useState<string | null>(null)
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [formattedLastUpdate, setFormattedLastUpdate] = useState("")
 
@@ -33,7 +31,6 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
 
   const fetchMatchesData = useCallback(async () => {
     setIsLoading(true)
-    setError(null)
     try {
       const response = await fetch('/api/matches')
       if (!response.ok) {
@@ -45,7 +42,6 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
       setLastUpdate(new Date())
     } catch (err: any) {
       console.error("Kesalahan mengambil pertandingan:", err)
-      setError(err.message || "Terjadi kesalahan saat memuat pertandingan.")
     } finally {
       setIsLoading(false)
     }
@@ -221,3 +217,10 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
     </main>
   )
 }
+
+
+
+
+
+
+

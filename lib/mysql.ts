@@ -1,15 +1,12 @@
 import { createPool, Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
-// Extend the NodeJS Global object to include our mysql connection pool
-declare global {
-  var mysqlPool: Pool | undefined;
-}
+const globalForMysql = globalThis as typeof globalThis & { mysqlPool?: Pool };
 
 // A function to lazily create and cache the connection pool
 const getPool = (): Pool => {
   // If the pool is already cached in the global object, return it
-  if (global.mysqlPool) {
-    return global.mysqlPool;
+  if (globalForMysql.mysqlPool) {
+    return globalForMysql.mysqlPool!;
   }
   
   // Otherwise, create a new pool
@@ -25,7 +22,7 @@ const getPool = (): Pool => {
   });
 
   // Cache the pool in the global object for subsequent requests
-  global.mysqlPool = pool;
+  globalForMysql.mysqlPool = pool;
   
   return pool;
 };
@@ -75,3 +72,5 @@ export const query = async <T extends RowDataPacket[] | ResultSetHeader>(sql: st
 // Export the proxy as the default.
 // This maintains API compatibility with the rest of the codebase.
 export default poolProxy;
+
+

@@ -256,7 +256,7 @@ export default function AdminArticlesPage() {
           <DialogHeader>
             <DialogTitle>Konfirmasi Hapus Artikel</DialogTitle>
             <DialogDescription>
-              Apakah Anda yakin ingin menghapus artikel "{currentArticle?.title}"? Tindakan ini tidak dapat dibatalkan.
+              Apakah Anda yakin ingin menghapus artikel &quot;{currentArticle?.title}&quot;? Tindakan ini tidak dapat dibatalkan.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -280,3 +280,4 @@ export default function AdminArticlesPage() {
     </div>
   )
 }
+

@@ -174,7 +174,7 @@ export default function TentangPage() {
             >
               <h3 className="text-3xl font-bold text-gray-900 text-center mb-12">Nilai-Nilai Kami</h3>
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {values.map((value, index) => (
+                {values.map((value) => (
                   <Card key={value.title} className="text-center hover:shadow-lg transition-all duration-300">
                     <CardContent className="p-6">
                       <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -288,3 +288,4 @@ export default function TentangPage() {
     </div>
   )
 }
+

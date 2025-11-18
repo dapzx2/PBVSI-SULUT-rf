@@ -77,18 +77,6 @@ const cardVariants = {
   },
 }
 
-const progressVariants = {
-  hidden: { width: 0 },
-  visible: (value: number) => ({
-    width: `${value}%`,
-    transition: {
-      duration: 1.5,
-      ease: "easeOut",
-      delay: 0.5,
-    },
-  }),
-}
-
 const badgeVariants = {
   hidden: { scale: 0, rotate: -180 },
   visible: {

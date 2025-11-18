@@ -1,5 +1,4 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { PageTransition } from "@/components/page-transition";
 import { StickyHeader } from "@/components/sticky-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 

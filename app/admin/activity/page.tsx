@@ -19,8 +19,12 @@ export default function AdminActivityPage() {
         }
         const data = await response.json()
         setActivities(data.data?.logs || [])
-      } catch (err: any) {
-        setError(err.message)
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false)
       }

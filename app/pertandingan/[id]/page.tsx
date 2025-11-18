@@ -7,19 +7,14 @@ import {
   MapPin,
   ArrowLeft,
   VibrateIcon as Volleyball,
-  Users,
-  Zap,
-  Shield,
   RefreshCw,
-  Timer,
-  MessageSquare,
   User,
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import type { MatchEvent, Prediction } from "@/lib/types"
+import type { Prediction } from "@/lib/types"
 import { MatchPredictionForm } from "@/components/match-prediction-form" // Import the new component
 
 interface MatchDetailPageProps {
@@ -33,14 +28,13 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   const predictionsResponse = await fetch(`${baseUrl}/api/predictions?matchId=${params.id}`);
   let predictions: Prediction[] | null = null;
-  let predictionsError: string | null = null;
 
   if (predictionsResponse.ok) {
     const data = await predictionsResponse.json();
     predictions = data.predictions;
   } else {
     const errorData = await predictionsResponse.json();
-    predictionsError = errorData.message || 'Failed to fetch predictions';
+    console.error('Failed to fetch predictions', errorData);
   }
 
   if (matchError || !match) {
@@ -106,28 +100,7 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
   const homeSetsWon = match.score_home_points ? (match.score_home_points as number[]).filter((score, index) => score > (match.score_away_points as number[])[index]).length : 0;
   const awaySetsWon = match.score_away_points ? (match.score_away_points as number[]).filter((score, index) => score > (match.score_home_points as number[])[index]).length : 0;
 
-  const getEventIcon = (type: MatchEvent["type"]) => {
-    switch (type) {
-      case "point":
-        return <Volleyball className="h-4 w-4 text-green-500" />
-      case "substitution":
-        return <Users className="h-4 w-4 text-blue-500" />
-      case "timeout":
-        return <Timer className="h-4 w-4 text-yellow-500" />
-      case "card":
-        return <Shield className="h-4 w-4 text-red-500" />
-      case "block":
-        return <Zap className="h-4 w-4 text-purple-500" />
-      case "ace":
-        return <Volleyball className="h-4 w-4 text-orange-500" />
-      case "error":
-        return <MessageSquare className="h-4 w-4 text-gray-500" />
-      default:
-        return null
-    }
-  }
-
-  return (
+    return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="container mx-auto px-4">
         <div class="mb-6">
@@ -275,11 +248,11 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
             </CardHeader>
             <CardContent>
               <div className="relative pl-6 border-l-2 border-gray-200">
-                {match.events.map((event, index) => (
+                {match.events.map((event) => (
                   <div key={event.id} className="mb-6 last:mb-0 flex items-start">
                     <div className="absolute -left-3 -translate-y-1/2 bg-white p-1 rounded-full border border-gray-200">
                       {/* Assuming event.type is a string that maps to an icon */}
-                      {/* You'll need to define getEventIcon based on your MatchEvent type */}
+                      
                       {/* For now, using a placeholder icon */}
                       <Volleyball className="h-4 w-4 text-gray-500" />
                     </div>
@@ -320,3 +293,7 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
     </div>
   )
 }
+
+
+
+

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Loader2, RefreshCw, WifiOff, MapPin, Calendar, Trophy, User } from 'lucide-react'
+import { WifiOff, MapPin, Calendar, Trophy, User } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -8,7 +8,6 @@ import { PageTransition } from "@/components/page-transition"
 import { getClubBySlug } from "@/lib/clubs"
 import { getPlayers } from "@/lib/players"
 import type { Club, Player } from "@/lib/types"
-import { Separator } from "@/components/ui/separator"
 import Link from "next/link"
 
 export default async function ClubDetailPage({ params }: { params: { slug: string } }) {

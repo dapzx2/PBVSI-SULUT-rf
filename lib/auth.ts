@@ -2,7 +2,9 @@ import type { NextRequest } from "next/server"
 import jwt from "jsonwebtoken"
 import { v4 as uuidv4 } from 'uuid';
 import pool from './mysql';
-import { AdminUser, getAdminUserById } from './admin';
+import { AdminUser } from './admin';
+
+type AuthenticatedHandler = (request: NextRequest, context: unknown, admin: AdminUser) => Promise<Response> | Response;
 
 const JWT_SECRET = process.env.JWT_SECRET || "pbvsi-sulut-secret-key-2024"
 
@@ -119,7 +121,7 @@ export async function getAdminFromRequest(request: NextRequest): Promise<AdminUs
   }
 }
 
-export function requireAuth(handler: Function) {
+export function requireAuth(handler: AuthenticatedHandler) {
   return async (request: NextRequest, context: any) => {
     const admin = await getAdminFromRequest(request);
     if (!admin) {
@@ -130,7 +132,7 @@ export function requireAuth(handler: Function) {
   };
 }
 
-export function requireSuperAdmin(handler: Function) {
+export function requireSuperAdmin(handler: AuthenticatedHandler) {
   return async (request: NextRequest, context: any) => {
     const admin = await getAdminFromRequest(request);
     if (!admin || admin.role !== "super_admin") {
@@ -148,3 +150,6 @@ export async function verifyAuth(request: NextRequest): Promise<{ status: number
   }
   return { status: 200 };
 }
+
+
+

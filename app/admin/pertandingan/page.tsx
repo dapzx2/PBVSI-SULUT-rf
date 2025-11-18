@@ -9,7 +9,6 @@ import { toast } from "sonner"
 import { Loader2, PlusCircle, Edit, Trash2 } from "lucide-react"
 import { MatchForm } from "@/components/admin/match-form" // Will create this next
 import type { Match, Club } from "@/lib/types"
-import Image from "next/image"
 
 export default function AdminPertandinganPage() {
   const [matches, setMatches] = useState<Match[]>([])

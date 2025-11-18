@@ -1,6 +1,6 @@
 import pool from './mysql';
 import { v4 as uuidv4 } from 'uuid';
-import type { Match, Club } from './types';
+import type { Match } from './types';
 
 export async function getMatches(): Promise<{ matches: Match[] | null; error: string | null }> {
   try {

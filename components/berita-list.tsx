@@ -5,7 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { Search, Filter, X, ImageIcon } from 'lucide-react'
+import { Search, Filter, ImageIcon } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -133,7 +133,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
             <span className="text-sm text-gray-600">Filter aktif:</span>
             {searchQuery && (
               <Badge variant="secondary" className="cursor-pointer" onClick={() => setSearchQuery("")}>
-                Pencarian: "{searchQuery}" ×
+                Pencarian: &quot;{searchQuery}&quot; ×
               </Badge>
             )}
             {selectedCategory !== "all" && (
@@ -232,3 +232,4 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
     </div>
   )
 }
+

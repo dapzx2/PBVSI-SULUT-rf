@@ -2,7 +2,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -216,7 +215,7 @@ export default function PlayersPage() {
           <DialogHeader>
             <DialogTitle>Konfirmasi Hapus Pemain</DialogTitle>
             <DialogDescription>
-              Apakah Anda yakin ingin menghapus pemain "{deletingPlayer?.name}"? Tindakan ini tidak dapat dibatalkan.
+              Apakah Anda yakin ingin menghapus pemain &quot;{deletingPlayer?.name}&quot;? Tindakan ini tidak dapat dibatalkan.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -240,3 +239,4 @@ export default function PlayersPage() {
     </div>
   );
 }
+
