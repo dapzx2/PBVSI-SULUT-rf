@@ -66,7 +66,7 @@ export async function GET() {
     const quickStats = [
       { label: "Pemain Aktif", value: stats.totalPlayers, change: 0, trend: "stable" }, // Change and trend are placeholders
       { label: "Pertandingan Bulan Ini", value: (matchesThisMonthResult[0] as any[])[0].count || 0, change: 0, trend: "stable" },
-      { label: "Artikel Terbaru", value: (articlesThisMonthResult[0] as any[])[0].count || 0, change: 0, trend: "stable" },
+      { label: "Berita Terbaru", value: (articlesThisMonthResult[0] as any[])[0].count || 0, change: 0, trend: "stable" },
       { label: "Pengunjung Hari Ini", value: 0, change: 0, trend: "stable" }, // Placeholder, no direct data
     ];
 

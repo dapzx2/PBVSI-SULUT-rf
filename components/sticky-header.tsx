@@ -33,8 +33,7 @@ export function StickyHeader({ currentPage: _currentPage }: StickyHeaderProps) {
         { name: "Struktur Organisasi", href: "/struktur-organisasi" },
       ],
     },
-    { name: "Publikasi", href: "/berita" },
-    { name: "Galeri", href: "/galeri" },
+          { name: "Berita", href: "/berita" },    { name: "Galeri", href: "/galeri" },
     { name: "Pertandingan", href: "/pertandingan" },
     {
       name: "Informasi Publik",

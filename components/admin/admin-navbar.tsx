@@ -14,8 +14,7 @@ import { cn } from '@/lib/utils'
 
 const adminNavItems = [
   { name: 'Dashboard', href: '/admin/dashboard' },
-  { name: 'Publikasi', href: '/admin/publikasi' },
-  { name: 'Klub', href: '/admin/klub' },
+        { name: 'Berita', href: '/admin/berita' },  { name: 'Klub', href: '/admin/klub' },
   { name: 'Pemain', href: '/admin/pemain' },
   { name: 'Galeri', href: '/admin/galeri' },
   { name: 'Pertandingan', href: '/admin/pertandingan' },

@@ -76,9 +76,9 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
   return (
     <div className="container mx-auto px-4 py-8 pt-24">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Publikasi PBVSI Sulut</h1>
+        <h1 className="text-4xl font-bold text-gray-900 mb-4">Berita PBVSI Sulut</h1>
         <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Berita, artikel, dan pengumuman terbaru dari PBVSI Sulawesi Utara.
+          Berita dan pengumuman terbaru dari PBVSI Sulawesi Utara.
         </p>
       </div>
 
@@ -88,7 +88,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Cari publikasi..."
+                placeholder="Cari berita..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10"
@@ -159,14 +159,14 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
             <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
               <ImageIcon className="w-12 h-12 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Tidak ada publikasi ditemukan</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Tidak ada berita ditemukan</h3>
             <p className="text-gray-600 mb-6">
               {hasActiveFilters
                 ? "Coba ubah kriteria pencarian atau filter Anda"
                 : "Belum ada data di dalam database."}
             </p>
             <div className="text-sm text-gray-500">
-              <p>📰 Artikel berita akan segera tersedia</p>
+              <p>📰 Berita akan segera tersedia</p>
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
                 <p className="text-xs text-gray-500">
                   {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: id })}
                 </p>
-                <Link href={`/berita/${article.slug}`} className="bg-orange-600 hover:text-orange-700 text-sm font-medium mt-2 inline-block">
+                <Link href={`/berita/${article.slug}`} className="bg-orange-600 text-white hover:bg-orange-700 text-sm font-medium mt-2 inline-block px-3 py-1 rounded-md transition-colors">
                   Baca Selengkapnya →
                 </Link>
               </CardContent>
@@ -208,11 +208,11 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
 
       {(articles.length > 0) && (
         <div className="mt-12 bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Publikasi</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Berita</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold bg-orange-600">{articles.length}</div>
-              <div className="text-sm text-gray-600">Total Artikel</div>
+              <div className="text-sm text-gray-600">Total Berita</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600">{categories.length}</div>

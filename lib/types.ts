@@ -31,12 +31,17 @@ export interface Club {
 export interface Article {
   id: string
   title: string
+  slug: string
   content: string
+  excerpt: string | null
   author: string
+  category: string
   image_url: string | null
   published_at: string // ISO string or similar
   created_at: string
   updated_at: string
+  views?: number
+  comments?: number
 }
 
 export interface GalleryItem {

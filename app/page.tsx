@@ -67,7 +67,7 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3">
                   <Link href="/berita" className="flex items-center gap-2">
-                    Publikasi Terbaru
+                    Berita Terbaru
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </Button>
@@ -208,7 +208,7 @@ export default function HomePage() {
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-4">Seputar PBVSI</h2>
               <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                Publikasi terkini dan update kegiatan PBVSI Sulawesi Utara
+                Berita terkini dan update kegiatan PBVSI Sulawesi Utara
               </p>
             </motion.div>
 
@@ -266,7 +266,7 @@ export default function HomePage() {
             ) : (
               <div className="text-center py-16">
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Belum ada data dalam database</h3>
-                <p className="text-gray-600">Tidak ada artikel berita yang ditemukan saat ini.</p>
+                <p className="text-gray-600">Tidak ada berita yang ditemukan saat ini.</p>
               </div>
             )}
 
@@ -283,7 +283,7 @@ export default function HomePage() {
                 className="border-orange-600 text-orange-600 hover:bg-orange-50 bg-transparent"
               >
                 <Link href="/berita" className="flex items-center gap-2">
-                  Lihat Semua Publikasi
+                  Lihat Semua Berita
                   <ArrowRight className="w-4 h-4" />
                 </Link>
               </Button>

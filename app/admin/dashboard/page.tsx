@@ -414,7 +414,7 @@ export default function AdminDashboard() {
             className="cursor-pointer hover:shadow-lg transition-shadow"
           >
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Artikel</CardTitle>
+              <CardTitle className="text-sm font-medium">Total Berita</CardTitle>
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -423,7 +423,7 @@ export default function AdminDashboard() {
               ) : (
                 <div className="text-2xl font-bold">{stats.totalArticles}</div>
               )}
-              <p className="text-xs text-muted-foreground">Artikel berita</p>
+              <p className="text-xs text-muted-foreground">Berita</p>
               <div className="flex items-center space-x-2 mt-2">
                 <Dialog>
                   <DialogTrigger asChild>
@@ -440,17 +440,17 @@ export default function AdminDashboard() {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
-                      <DialogTitle>Tulis Artikel Baru</DialogTitle>
-                      <DialogDescription>Isi detail untuk artikel baru.</DialogDescription>
+                      <DialogTitle>Tulis Berita Baru</DialogTitle>
+                      <DialogDescription>Isi detail untuk berita baru.</DialogDescription>
                     </DialogHeader>
                     <div className="py-4">
                       <form className="space-y-4">
                         <div className="space-y-2">
-                          <Label htmlFor="article_title">Judul Artikel</Label>
+                          <Label htmlFor="article_title">Judul Berita</Label>
                           <Input id="article_title" required={true} value="" />
                         </div>
                         <div className="space-y-2">
-                          <Label htmlFor="article_content">Konten Artikel</Label>
+                          <Label htmlFor="article_content">Konten Berita</Label>
                           <textarea id="article_content" className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" />
                         </div>
                         <div className="space-y-2">
@@ -472,7 +472,7 @@ export default function AdminDashboard() {
                   variant="ghost"
                   onClick={(e) => {
                     e.stopPropagation()
-                    router.push("/admin/publikasi")
+                    router.push("/admin/berita")
                   }}
                 >
                   <Eye className="h-3 w-3 mr-1" />

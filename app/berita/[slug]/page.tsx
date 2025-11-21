@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import Image from "next/image"
 import { useParams } from "next/navigation"
-import { Loader2, RefreshCw } from "lucide-react"
+import { Loader2, RefreshCw, User } from "lucide-react"
 
 import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
@@ -29,7 +29,7 @@ export default function ArticleDetailPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.error || `Gagal memuat artikel dengan slug ${slug}`)
+        throw new Error(data.error || `Gagal memuat berita dengan slug ${slug}`)
       }
       setArticle(data)
     } catch (err: any) {
@@ -38,14 +38,14 @@ export default function ArticleDetailPage() {
         setError("Gagal terhubung ke server. Pastikan koneksi internet Anda stabil dan coba lagi.")
         toast({
           title: "Kesalahan Jaringan",
-          description: "Tidak dapat memuat artikel. Periksa koneksi internet Anda.",
+          description: "Tidak dapat memuat berita. Periksa koneksi internet Anda.",
           variant: "destructive",
         })
       } else {
-        setError(err.message || `Gagal memuat artikel ${slug}. Silakan coba lagi.`)
+        setError(err.message || `Gagal memuat berita ${slug}. Silakan coba lagi.`)
         toast({
           title: "Kesalahan",
-          description: err.message || `Gagal memuat artikel ${slug}.`,
+          description: err.message || `Gagal memuat berita ${slug}.`,
           variant: "destructive",
         })
       }
@@ -65,7 +65,7 @@ export default function ArticleDetailPage() {
       <PageTransition>
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white">
           <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
-          <p className="ml-2 text-xl text-gray-600 mt-4">Memuat artikel...</p>
+          <p className="ml-2 text-xl text-gray-600 mt-4">Memuat berita...</p>
         </div>
       </PageTransition>
     )
@@ -77,7 +77,7 @@ export default function ArticleDetailPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white">
           <div className="text-center py-16">
             <div className="text-6xl mb-4">⚠️</div>
-            <h3 className="text-2xl font-bold text-red-600 mb-2">Gagal Memuat Artikel</h3>
+            <h3 className="text-2xl font-bold text-red-600 mb-2">Gagal Memuat Berita</h3>
             <p className="text-gray-600 mb-6">{error}</p>
             <Button onClick={fetchArticle} className="bg-orange-600 hover:bg-orange-700">
               <RefreshCw className="h-4 w-4 mr-2" />
@@ -95,8 +95,8 @@ export default function ArticleDetailPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white">
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📰</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Artikel tidak ditemukan</h3>
-            <p className="text-gray-600 mb-6">Maaf, artikel dengan slug &quot;{slug}&quot; tidak ditemukan.</p>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Berita tidak ditemukan</h3>
+            <p className="text-gray-600 mb-6">Maaf, berita dengan slug &quot;{slug}&quot; tidak ditemukan.</p>
             <Button onClick={() => window.history.back()} className="bg-orange-600 hover:bg-orange-700">
               Kembali
             </Button>
@@ -108,41 +108,58 @@ export default function ArticleDetailPage() {
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      <div className="min-h-screen bg-gray-50">
         <StickyHeader currentPage="berita" />
 
-        <section className="relative bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 pt-32 md:py-24 overflow-hidden">
-          <div className="container mx-auto px-4 text-center relative z-10">
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">{article.title}</h1>
-            <p className="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
-              {new Date(article.published_at).toLocaleDateString("id-ID", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </p>
-          </div>
-        </section>
-
-        <section className="py-12 md:py-16">
-          <div className="container mx-auto px-4">
-            <Card className="p-6">
-              {article.image_url && (
-                <div className="relative w-full h-80 mb-6 rounded-lg overflow-hidden bg-gray-100">
-                  <Image
-                    src={article.image_url || "/placeholder.svg?height=320&width=600&query=article image"}
-                    alt={article.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+        <main className="pt-32 pb-16">
+          <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white shadow-lg rounded-lg p-8">
+            {/* Header section with category and title */}
+            <div className="text-center mb-8">
+              {article.category && (
+                <p className="text-base font-semibold text-orange-600 tracking-wide uppercase">{article.category}</p>
               )}
-              <div className="prose max-w-none text-gray-800">
-                <p>{article.content}</p>
+              <h1 className="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+                {article.title}
+              </h1>
+            </div>
+
+            {/* Metadata: Author and Date */}
+            <div className="flex items-center justify-center space-x-4 text-sm text-gray-500 mb-8 border-y py-4">
+                <div className="flex items-center gap-2">
+                    <User aria-label={article.author} className="h-8 w-8 text-gray-400 rounded-full bg-gray-100 p-1" />
+                    <span className="font-medium text-gray-800">{article.author}</span>
+                </div>
+                <span className="text-gray-300">•</span>
+                <time dateTime={article.published_at}>
+                  {new Date(article.published_at).toLocaleDateString("id-ID", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+            </div>
+
+
+            {/* Main Image */}
+            {article.image_url && (
+              <div className="relative w-full aspect-[16/9] mb-8 rounded-lg overflow-hidden bg-gray-100">
+                <Image
+                  src={article.image_url}
+                  alt={article.title}
+                  fill
+                  className="object-cover"
+                />
               </div>
-            </Card>
-          </div>
-        </section>
+            )}
+
+            {/* Article Content */}
+            <div 
+                className="prose prose-lg max-w-none text-gray-800 mx-auto" 
+                dangerouslySetInnerHTML={{ __html: article.content }} 
+            />
+
+          </article>
+        </main>
       </div>
     </PageTransition>
   )
