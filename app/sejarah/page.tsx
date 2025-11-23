@@ -8,88 +8,80 @@ import { Badge } from "@/components/ui/badge"
 const timelineEvents = [
   {
     year: "1955",
-    title: "Pendirian PBVSI",
-    description: "Persatuan Bola Voli Seluruh Indonesia didirikan secara nasional",
+    title: "PBVSI Nasional Didirikan",
+    description: "Persatuan Bola Voli Seluruh Indonesia didirikan secara nasional di Jakarta dengan tujuan mengembangkan bola voli di Indonesia",
     type: "founding",
   },
   {
-    year: "1960",
-    title: "PBVSI Sulut Terbentuk",
-    description: "Pengurus Provinsi Sulawesi Utara resmi dibentuk",
+    year: "1960-an",
+    title: "PBVSI Sulut Mulai Terbentuk",
+    description: "Organisasi bola voli Sulawesi Utara mulai terstruktur dan aktif (catatan: waktu pembentukan eksak belum terdokumentasi)",
     type: "milestone",
   },
   {
-    year: "1975",
-    title: "Kompetisi Pertama",
-    description: "Menyelenggarakan kompetisi bola voli tingkat provinsi pertama",
+    year: "1961-1962",
+    title: "Kompetisi Tingkat Nasional & Internasional",
+    description: "Sulawesi Utara mulai mengirim kontingen ke PON V Bandung (1961) dan Asian Games Jakarta (1962), menunjukkan organisasi sudah terstruktur",
     type: "achievement",
   },
   {
-    year: "1985",
-    title: "Prestasi Nasional",
-    description: "Atlet Sulut meraih medali pertama di tingkat nasional",
-    type: "achievement",
-  },
-  {
-    year: "1995",
-    title: "Era Profesional",
-    description: "Mulai menerapkan sistem pembinaan yang lebih profesional",
+    year: "1978",
+    title: "Pengembangan SDM",
+    description: "Pimpinan Daerah PBVSI Sulut mengirim pelatih Drs. M.M Rambing untuk kursus pelatih internasional di Hongkong (Maret-April 1978), membuktikan organisasi sudah memiliki struktur profesional",
     type: "milestone",
   },
   {
-    year: "2005",
-    title: "Modernisasi",
-    description: "Implementasi teknologi dan sistem manajemen modern",
+    year: "2015-2019",
+    title: "Era Kepemimpinan Berkelanjutan",
+    description: "Periode kepengurusan dengan fokus pengembangan klub dan atlet lokal",
     type: "milestone",
   },
   {
-    year: "2015",
-    title: "Prestasi Internasional",
-    description: "Atlet Sulut tampil di kompetisi internasional",
+    year: "2020-2024",
+    title: "Transformasi Modern",
+    description: "Dipimpin Kapolda Sulut, PBVSI Sulut melanjutkan pembinaan atlet dan pengembangan infrastruktur olahraga bola voli di Sulawesi Utara",
     type: "achievement",
   },
   {
-    year: "2023",
-    title: "Era Digital",
-    description: "Transformasi digital dan pengembangan platform online",
+    year: "2024-2028",
+    title: "Era Digital & Inovasi",
+    description: "Transformasi platform digital dan pengembangan jejaring kemitraan dengan institusi pendidikan di tingkat regional",
     type: "milestone",
   },
 ]
 
 const achievements = [
   {
-    icon: Trophy,
-    title: "50+ Medali",
-    description: "Medali di berbagai kompetisi nasional",
-    color: "orange",
-  },
-  {
     icon: Users,
-    title: "500+ Atlet",
-    description: "Atlet aktif yang terdaftar",
+    title: "Ratusan Atlet Aktif",
+    description: "Atlet dari berbagai klub terdaftar di Sulawesi Utara",
     color: "orange",
   },
   {
-    icon: Star,
-    title: "25+ Klub",
-    description: "Klub terdaftar di seluruh Sulut",
+    icon: Trophy,
+    title: "Kompetisi Nasional",
+    description: "Peserta aktif dalam PON, Kejurnas, dan kompetisi regional",
     color: "orange",
   },
   {
     icon: Award,
-    title: "10+ Pelatih",
-    description: "Pelatih bersertifikat nasional",
+    title: "Pelatih Bersertifikat",
+    description: "Pelatih dan pengurus bersertifikat nasional dan internasional",
+    color: "orange",
+  },
+  {
+    icon: Target,
+    title: "Infrastruktur Berkembang",
+    description: "Infrastruktur olahraga bola voli yang terus dikembangkan",
     color: "orange",
   },
 ]
 
 const legacyPoints = [
-  "Menghasilkan atlet-atlet berprestasi tingkat nasional dan internasional",
-  "Membangun tradisi olahraga bola voli yang kuat di Sulawesi Utara",
-  "Menciptakan sistem pembinaan yang berkelanjutan dan terstruktur",
-  "Mengembangkan infrastruktur olahraga bola voli di daerah",
-  "Membangun kerjasama dengan berbagai institusi pendidikan",
-  "Menjadi wadah pengembangan bakat muda di bidang bola voli",
+  "Turut berkontribusi dalam sejarah perbolavolian nasional sejak tahun 1960-an",
+  "Mengembangkan sistem pembinaan atlet muda yang berkelanjutan",
+  "Membangun jaringan kerjasama dengan institusi pendidikan lokal",
+  "Memberikan kesempatan kepada atlet untuk berkompetisi di tingkat nasional",
 ]
 
 export default function SejarahPage() {
@@ -102,7 +94,7 @@ export default function SejarahPage() {
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">Sejarah PBVSI Sulawesi Utara</h1>
               <p className="text-xl md:text-2xl text-orange-100 leading-relaxed">
-                Perjalanan panjang membangun prestasi bola voli di Sulawesi Utara sejak 1960
+                Perjalanan membangun bola voli sejak era 1955
               </p>
             </motion.div>
           </div>
@@ -135,9 +127,8 @@ export default function SejarahPage() {
                   initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`relative flex items-center mb-12 ${
-                    index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
-                  }`}
+                  className={`relative flex items-center mb-12 ${index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                    }`}
                 >
                   {/* Timeline Node */}
                   <div className="absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-6 h-6 bg-gradient-to-r from-orange-500 to-red-500 rounded-full border-4 border-white shadow-lg z-10"></div>
@@ -252,8 +243,7 @@ export default function SejarahPage() {
                   <Target className="w-16 h-16 mx-auto mb-4 opacity-90" />
                   <h3 className="text-2xl font-bold mb-4">Visi Masa Depan</h3>
                   <p className="text-orange-100 text-lg leading-relaxed">
-                    Melanjutkan tradisi keunggulan dan terus berinovasi untuk menghasilkan atlet-atlet berprestasi yang
-                    dapat mengharumkan nama Sulawesi Utara di kancah nasional dan internasional.
+                    Melanjutkan tradisi dan inovasi untuk menghasilkan atlet-atlet berprestasi yang dapat membawa nama Sulawesi Utara hingga jenjang nasional dan internasional.
                   </p>
                 </CardContent>
               </Card>

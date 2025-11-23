@@ -101,10 +101,6 @@ const pelindung = [
     icon: Shield,
   },
   {
-    name: "Kapolda Sulawesi Utara",
-    icon: Shield,
-  },
-  {
     name: "Pangdam XIII/Merdeka",
     icon: Shield,
   },
@@ -243,7 +239,7 @@ export default function StrukturOrganisasiPage() {
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">Struktur Organisasi</h1>
               <p className="text-xl md:text-2xl text-orange-100 leading-relaxed">
-                Susunan pengurus PBVSI Sulawesi Utara periode 2021-2025
+                Susunan pengurus PBVSI Sulawesi Utara periode 2025-2029
               </p>
             </motion.div>
           </div>

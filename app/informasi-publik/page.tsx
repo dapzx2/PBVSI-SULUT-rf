@@ -5,12 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Download, Shield } from "lucide-react"
 
 export default function InformasiPublikPage() {
-  const documents = [
-    { name: "Laporan Tahunan 2023", category: "Laporan", size: "2.5 MB" },
-    { name: "Anggaran Dasar & Anggaran Rumah Tangga (AD/ART)", category: "Regulasi", size: "1.2 MB" },
-    { name: "Rencana Strategis 2025-2029", category: "Perencanaan", size: "3.1 MB" },
-    { name: "Laporan Keuangan 2023", category: "Keuangan", size: "1.8 MB" },
-  ]
+  const documents: { name: string; category: string; size: string }[] = []
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -42,36 +37,58 @@ export default function InformasiPublikPage() {
               <p className="text-lg text-gray-600">Berikut adalah dokumen-dokumen yang dapat diakses oleh publik.</p>
             </motion.div>
 
-            <div className="space-y-4">
-              {documents.map((doc, index) => (
-                <motion.div
-                  key={doc.name}
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                >
-                  <Card className="hover:shadow-lg transition-shadow duration-300">
-                    <CardContent className="p-6 flex items-center justify-between">
-                      <div className="flex items-center">
-                        <FileText className="w-8 h-8 text-orange-500 mr-4" />
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-800">{doc.name}</h3>
-                          <div className="flex items-center text-sm text-gray-500 mt-1">
-                            <span>{doc.category}</span>
-                            <span className="mx-2">•</span>
-                            <span>{doc.size}</span>
+            {documents.length === 0 ? (
+              // Empty State
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Card className="bg-white">
+                  <CardContent className="p-12 text-center">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <FileText className="w-10 h-10 text-gray-400" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-3">Belum Ada Dokumen</h3>
+                    <p className="text-gray-600 text-lg max-w-md mx-auto">
+                      Dokumen publik belum tersedia saat ini. Kami akan mengunggah dokumen segera.
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ) : (
+              // Documents List
+              <div className="space-y-4">
+                {documents.map((doc, index) => (
+                  <motion.div
+                    key={doc.name}
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <Card className="hover:shadow-lg transition-shadow duration-300">
+                      <CardContent className="p-6 flex items-center justify-between">
+                        <div className="flex items-center">
+                          <FileText className="w-8 h-8 text-orange-500 mr-4" />
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-800">{doc.name}</h3>
+                            <div className="flex items-center text-sm text-gray-500 mt-1">
+                              <span>{doc.category}</span>
+                              <span className="mx-2">•</span>
+                              <span>{doc.size}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <a href="#" download className="flex items-center text-orange-600 hover:text-orange-700">
-                        <Download className="w-5 h-5 mr-2" />
-                        <span>Unduh</span>
-                      </a>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
+                        <a href="#" download className="flex items-center text-orange-600 hover:text-orange-700">
+                          <Download className="w-5 h-5 mr-2" />
+                          <span>Unduh</span>
+                        </a>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            )}
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
