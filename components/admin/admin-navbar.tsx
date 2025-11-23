@@ -14,7 +14,9 @@ import { cn } from '@/lib/utils'
 
 const adminNavItems = [
   { name: 'Dashboard', href: '/admin/dashboard' },
-        { name: 'Berita', href: '/admin/berita' },  { name: 'Klub', href: '/admin/klub' },
+  { name: 'Berita', href: '/admin/berita' },
+  { name: 'Informasi Publik', href: '/admin/informasi-publik' },
+  { name: 'Klub', href: '/admin/klub' },
   { name: 'Pemain', href: '/admin/pemain' },
   { name: 'Galeri', href: '/admin/galeri' },
   { name: 'Pertandingan', href: '/admin/pertandingan' },
@@ -32,7 +34,7 @@ export function AdminNavbar() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm transition-all duration-300">
+    <header className="sticky top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm transition-all duration-300">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
         <Link href="/admin/dashboard" className="flex items-center gap-2 flex-shrink-0">
           <Image

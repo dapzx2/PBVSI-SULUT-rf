@@ -1,8 +1,9 @@
 "use client"
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
 import {
   Table,
   TableHeader,
@@ -20,7 +21,8 @@ import {
   DialogFooter
 } from "@/components/ui/dialog"
 import { toast } from "sonner"
-import { Loader2, Plus, Edit, Trash2, Search } from "lucide-react"
+import { Loader2, Plus, Edit, Trash2, Search, RefreshCw, Shield, Image as ImageIcon } from "lucide-react"
+import Image from "next/image"
 import dynamic from 'next/dynamic'
 
 const ClubForm = dynamic(() => import('@/components/admin/club-form').then(mod => mod.ClubForm), {
@@ -94,7 +96,7 @@ export default function AdminClubsPage() {
         throw new Error(errorData.message || "Gagal menghapus klub");
       }
       toast.success("Klub berhasil dihapus.");
-      fetchClubs(); // Refresh list
+      fetchClubs();
       setIsDeleteDialogOpen(false);
       setDeletingClub(null);
     } catch (err: any) {
@@ -120,88 +122,130 @@ export default function AdminClubsPage() {
     club.city.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        <p>Error: {error}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto py-8">
-      <Card>
-        <CardHeader className="flex flex-row justify-between items-center">
-          <CardTitle>Manajemen Klub</CardTitle>
-          <Button onClick={() => { setEditingClub(null); setIsAddClubModalOpen(true); }}>
-            <Plus className="mr-2 h-4 w-4" /> Tambah Klub Baru
-          </Button>
+      <Card className="border-none shadow-md">
+        <CardHeader className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6">
+          <div>
+            <CardTitle className="text-2xl font-bold flex items-center gap-2">
+              <Shield className="h-6 w-6 text-primary" />
+              Manajemen Klub
+            </CardTitle>
+            <CardDescription className="mt-1">
+              Kelola data klub voli di Sulawesi Utara.
+            </CardDescription>
+          </div>
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <Button variant="outline" size="icon" onClick={fetchClubs} disabled={loading}>
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            </Button>
+            <Button onClick={() => { setEditingClub(null); setIsAddClubModalOpen(true); }} className="flex-1 md:flex-none">
+              <Plus className="mr-2 h-4 w-4" /> Tambah Klub
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
-          <div className="relative w-full max-w-sm mb-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <CardContent className="pt-6">
+          <div className="mb-6 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Cari klub..."
-              className="pl-9"
+              placeholder="Cari klub berdasarkan nama atau kota..."
+              className="pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          {filteredClubs.length === 0 ? (
-            <p className="text-center text-gray-500">Tidak ada klub ditemukan.</p>
+
+          {loading && clubs.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
+              <Loader2 className="h-8 w-8 animate-spin mb-2 text-primary" />
+              <p>Memuat klub...</p>
+            </div>
+          ) : filteredClubs.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed rounded-lg">
+              <Shield className="h-12 w-12 mb-2 opacity-20" />
+              <p className="font-medium">Tidak ada klub ditemukan</p>
+              {searchTerm && <p className="text-sm">Coba kata kunci pencarian lain</p>}
+              {!searchTerm && (
+                <Button variant="link" onClick={() => { setEditingClub(null); setIsAddClubModalOpen(true); }} className="mt-2">
+                  Tambah Klub Baru
+                </Button>
+              )}
+            </div>
           ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Nama Klub</TableHead>
-                    <TableHead>Kota</TableHead>
-                    <TableHead>Tahun Berdiri</TableHead>
-                    <TableHead>Pelatih</TableHead>
-                    <TableHead>Arena Kandang</TableHead>
-                    <TableHead className="text-right">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredClubs.map((club) => (
-                    <TableRow key={club.id}>
-                      <TableCell className="font-medium">{club.name}</TableCell>
-                      <TableCell>{club.city}</TableCell>
-                      <TableCell>{club.established_year}</TableCell>
-                      <TableCell>{club.coach_name}</TableCell>
-                      <TableCell>{club.home_arena}</TableCell>
-                      <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleEdit(club)}
-                          className="mr-2"
-                        >
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Ubah</span>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDelete(club)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          <span className="sr-only">Hapus</span>
-                        </Button>
-                      </TableCell>
+            <div className="rounded-md border overflow-hidden">
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader className="bg-muted/50">
+                    <TableRow>
+                      <TableHead className="w-[80px]">Logo</TableHead>
+                      <TableHead>Nama Klub</TableHead>
+                      <TableHead>Kota</TableHead>
+                      <TableHead className="hidden md:table-cell">Tahun</TableHead>
+                      <TableHead className="hidden lg:table-cell">Pelatih</TableHead>
+                      <TableHead className="hidden xl:table-cell">Arena</TableHead>
+                      <TableHead className="text-right">Aksi</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredClubs.map((club) => (
+                      <TableRow key={club.id} className="hover:bg-muted/5">
+                        <TableCell>
+                          <div className="relative h-12 w-16 rounded overflow-hidden bg-muted flex items-center justify-center">
+                            {club.logo_url ? (
+                              <Image
+                                src={club.logo_url}
+                                alt={`${club.name} logo`}
+                                fill
+                                className="object-contain p-1"
+                              />
+                            ) : (
+                              <Shield className="h-6 w-6 text-muted-foreground/50" />
+                            )}
+                          </div>
+                        </TableCell>
+                        <TableCell className="font-medium">{club.name}</TableCell>
+                        <TableCell>
+                          <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-none">
+                            {club.city}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+                          {club.established_year}
+                        </TableCell>
+                        <TableCell className="hidden lg:table-cell text-sm">
+                          {club.coach_name}
+                        </TableCell>
+                        <TableCell className="hidden xl:table-cell text-sm text-muted-foreground">
+                          {club.home_arena || "-"}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleEdit(club)}
+                              className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            >
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Ubah</span>
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDelete(club)}
+                              className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span className="sr-only">Hapus</span>
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           )}
         </CardContent>
@@ -209,18 +253,20 @@ export default function AdminClubsPage() {
 
       {/* Club Form Dialog */}
       <Dialog open={isAddClubModalOpen} onOpenChange={setIsAddClubModalOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[900px] h-[90vh] flex flex-col p-0 gap-0">
+          <DialogHeader className="px-6 py-4 border-b">
             <DialogTitle>{editingClub ? "Ubah Klub" : "Tambah Klub Baru"}</DialogTitle>
             <DialogDescription>
               {editingClub ? "Ubah detail klub yang sudah ada." : "Isi detail untuk klub baru."}
             </DialogDescription>
           </DialogHeader>
-          <ClubForm
-            initialData={editingClub}
-            onSuccess={handleFormSuccess}
-            onClose={handleFormClose}
-          />
+          <div className="flex-1 overflow-y-auto p-6">
+            <ClubForm
+              initialData={editingClub}
+              onSuccess={handleFormSuccess}
+              onClose={handleFormClose}
+            />
+          </div>
         </DialogContent>
       </Dialog>
 

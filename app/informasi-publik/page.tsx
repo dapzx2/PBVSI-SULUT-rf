@@ -1,11 +1,32 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
-import { FileText, Download, Shield } from "lucide-react"
+import { FileText, Download, Shield, Loader2 } from "lucide-react"
+import { PublicInformation } from "@/lib/types"
 
 export default function InformasiPublikPage() {
-  const documents: { name: string; category: string; size: string }[] = []
+  const [documents, setDocuments] = useState<PublicInformation[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        const response = await fetch("/api/public-information")
+        if (response.ok) {
+          const data = await response.json()
+          setDocuments(data)
+        }
+      } catch (error) {
+        console.error("Failed to fetch documents:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchDocuments()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,7 +58,11 @@ export default function InformasiPublikPage() {
               <p className="text-lg text-gray-600">Berikut adalah dokumen-dokumen yang dapat diakses oleh publik.</p>
             </motion.div>
 
-            {documents.length === 0 ? (
+            {loading ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="w-12 h-12 animate-spin text-orange-600" />
+              </div>
+            ) : documents.length === 0 ? (
               // Empty State
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -61,7 +86,7 @@ export default function InformasiPublikPage() {
               <div className="space-y-4">
                 {documents.map((doc, index) => (
                   <motion.div
-                    key={doc.name}
+                    key={doc.id}
                     initial={{ opacity: 0, x: -30 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -71,15 +96,23 @@ export default function InformasiPublikPage() {
                         <div className="flex items-center">
                           <FileText className="w-8 h-8 text-orange-500 mr-4" />
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-800">{doc.name}</h3>
+                            <h3 className="text-lg font-semibold text-gray-800">{doc.title}</h3>
                             <div className="flex items-center text-sm text-gray-500 mt-1">
                               <span>{doc.category}</span>
                               <span className="mx-2">•</span>
-                              <span>{doc.size}</span>
+                              <span>{new Date(doc.created_at).toLocaleDateString()}</span>
                             </div>
+                            {doc.description && (
+                              <p className="text-sm text-gray-600 mt-1">{doc.description}</p>
+                            )}
                           </div>
                         </div>
-                        <a href="#" download className="flex items-center text-orange-600 hover:text-orange-700">
+                        <a
+                          href={doc.file_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center text-orange-600 hover:text-orange-700"
+                        >
                           <Download className="w-5 h-5 mr-2" />
                           <span>Unduh</span>
                         </a>
@@ -106,3 +139,4 @@ export default function InformasiPublikPage() {
     </div>
   )
 }
+

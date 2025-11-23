@@ -42,6 +42,7 @@ export interface Article {
   updated_at: string
   views?: number
   comments?: number
+  tags?: string[] | string
 }
 
 export interface GalleryItem {
@@ -81,4 +82,14 @@ export interface AdminUser {
   password_hash: string
   role: "super_admin" | "admin"
   created_at: string
+}
+
+export interface PublicInformation {
+  id: string
+  title: string
+  description: string | null
+  file_url: string
+  category: string
+  created_at: string
+  updated_at: string
 }

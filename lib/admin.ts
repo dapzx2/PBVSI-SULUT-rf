@@ -109,8 +109,14 @@ export interface AdminActivityLog {
   username?: string; // Added for join result
 }
 
-export const getAdminActivityLogs = async (limit: number = 10): Promise<{ logs: AdminActivityLog[]; error: string | null }> => {
+export const getAdminActivityLogs = async (page: number = 1, limit: number = 10): Promise<{ logs: AdminActivityLog[]; total: number; error: string | null }> => {
   try {
+    const offset = (page - 1) * limit;
+
+    // Get total count
+    const [countRows] = await pool.query('SELECT COUNT(*) as total FROM admin_activity_logs');
+    const total = (countRows as any)[0].total;
+
     const [rows] = await pool.query(
       `SELECT
          aal.*,
@@ -121,11 +127,11 @@ export const getAdminActivityLogs = async (limit: number = 10): Promise<{ logs: 
          admin_users au ON aal.admin_user_id = au.id
        ORDER BY
          aal.timestamp DESC
-       LIMIT ?`,
-      [limit]
+       LIMIT ? OFFSET ?`,
+      [limit, offset]
     );
-    return { logs: rows as AdminActivityLog[], error: null };
+    return { logs: rows as AdminActivityLog[], total, error: null };
   } catch (error: any) {
-    return { logs: [], error: error.message };
+    return { logs: [], total: 0, error: error.message };
   }
 };

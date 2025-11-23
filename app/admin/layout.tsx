@@ -17,7 +17,7 @@ export default function AdminLayout({
     <div className="min-h-screen flex flex-col">
       {!isLoginPage && <AdminNavbar />}
       <PageTransition>
-        <main className={!isLoginPage ? "flex-1 pt-14" : "flex-1"}>
+        <main className="flex-1">
           {children}
         </main>
       </PageTransition>

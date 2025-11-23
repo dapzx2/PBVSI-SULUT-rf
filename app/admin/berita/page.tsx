@@ -1,33 +1,38 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import { Input } from "@/components/ui/input"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table"
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogFooter 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
 } from "@/components/ui/dialog"
-import { Loader2, PlusCircle, Edit, Trash2 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Loader2, PlusCircle, Edit, Trash2, Search, RefreshCw, FileText, Image as ImageIcon } from "lucide-react"
 import { Article } from "@/lib/types"
 import { ArticleForm } from "@/components/admin/article-form"
 import { toast } from "sonner"
+import Image from "next/image"
 
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
+  const [filteredArticles, setFilteredArticles] = useState<Article[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState("")
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
   const [currentArticle, setCurrentArticle] = useState<Article | null>(null)
@@ -43,6 +48,7 @@ export default function AdminArticlesPage() {
       }
       const data: Article[] = await response.json()
       setArticles(data)
+      setFilteredArticles(data)
     } catch (e: any) {
       setError(e.message)
       toast.error("Gagal memuat berita: " + e.message)
@@ -54,6 +60,19 @@ export default function AdminArticlesPage() {
   useEffect(() => {
     fetchArticles()
   }, [])
+
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = articles.filter(article =>
+        article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (article.author && article.author.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (article.category && article.category.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+      setFilteredArticles(filtered)
+    } else {
+      setFilteredArticles(articles)
+    }
+  }, [searchQuery, articles])
 
   const handleAddArticle = () => {
     setCurrentArticle(null)
@@ -70,11 +89,11 @@ export default function AdminArticlesPage() {
     setIsDeleteDialogOpen(true)
   }
 
-  const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at'> & { imageFile?: File | null }) => {
+  const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at' | 'image_url'> & { imageFile?: File | null }) => {
     setIsSubmitting(true)
     try {
       let finalImageUrl = currentArticle?.image_url || null;
-      const { imageFile, ...restOfData } = data; // Destructure imageFile out
+      const { imageFile, ...restOfData } = data;
 
       if (imageFile) {
         const formData = new FormData();
@@ -94,20 +113,18 @@ export default function AdminArticlesPage() {
       }
 
       const articlePayload = {
-        ...restOfData, // Spread the rest of the data without imageFile
+        ...restOfData,
         image_url: finalImageUrl,
       };
 
       let response: Response
       if (currentArticle) {
-        // Update existing article
         response = await fetch("/api/articles", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: currentArticle.id, ...articlePayload }),
         })
       } else {
-        // Create new article
         response = await fetch("/api/articles", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -122,7 +139,7 @@ export default function AdminArticlesPage() {
 
       toast.success(`Berita berhasil ${currentArticle ? "diperbarui" : "ditambahkan"}`)
       setIsFormOpen(false)
-      fetchArticles() // Refresh the list
+      fetchArticles()
     } catch (e: any) {
       toast.error("Gagal menyimpan berita: " + e.message)
     } finally {
@@ -148,7 +165,7 @@ export default function AdminArticlesPage() {
 
       toast.success("Berita berhasil dihapus")
       setIsDeleteDialogOpen(false)
-      fetchArticles() // Refresh the list
+      fetchArticles()
     } catch (e: any) {
       toast.error("Gagal menghapus berita: " + e.message)
     } finally {
@@ -156,70 +173,127 @@ export default function AdminArticlesPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-red-500">
-        <p>Error: {error}</p>
-      </div>
-    )
-  }
-
   return (
     <div className="container mx-auto py-8">
-      <Card>
-        <CardHeader className="flex flex-row justify-between items-center">
-          <CardTitle>Manajemen Berita</CardTitle>
-          <Button onClick={handleAddArticle}>
-            <PlusCircle className="mr-2 h-4 w-4" /> Tambah Berita
-          </Button>
+      <Card className="border-none shadow-md">
+        <CardHeader className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b pb-6">
+          <div>
+            <CardTitle className="text-2xl font-bold flex items-center gap-2">
+              <FileText className="h-6 w-6 text-primary" />
+              Manajemen Berita
+            </CardTitle>
+            <CardDescription className="mt-1">
+              Kelola artikel, berita, dan pengumuman untuk website.
+            </CardDescription>
+          </div>
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <Button variant="outline" size="icon" onClick={fetchArticles} disabled={loading}>
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            </Button>
+            <Button onClick={handleAddArticle} className="flex-1 md:flex-none">
+              <PlusCircle className="mr-2 h-4 w-4" /> Tambah Berita
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent>
-          {articles.length === 0 ? (
-            <p className="text-center text-gray-500">Belum ada berita.</p>
+        <CardContent className="pt-6">
+          <div className="mb-6 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Cari berita berdasarkan judul, penulis, atau kategori..."
+              className="pl-10"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {loading && articles.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
+              <Loader2 className="h-8 w-8 animate-spin mb-2 text-primary" />
+              <p>Memuat berita...</p>
+            </div>
+          ) : filteredArticles.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-64 text-muted-foreground border-2 border-dashed rounded-lg">
+              <FileText className="h-12 w-12 mb-2 opacity-20" />
+              <p className="font-medium">Tidak ada berita ditemukan</p>
+              {searchQuery && <p className="text-sm">Coba kata kunci pencarian lain</p>}
+              {!searchQuery && (
+                <Button variant="link" onClick={handleAddArticle} className="mt-2">
+                  Tambah Berita Baru
+                </Button>
+              )}
+            </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="rounded-md border overflow-hidden">
               <Table>
-                <TableHeader>
+                <TableHeader className="bg-muted/50">
                   <TableRow>
+                    <TableHead className="w-[80px]">Gambar</TableHead>
                     <TableHead>Judul</TableHead>
-                    <TableHead>Penulis</TableHead>
                     <TableHead>Kategori</TableHead>
-                    <TableHead>Tanggal Publikasi</TableHead>
+                    <TableHead>Penulis</TableHead>
+                    <TableHead>Tanggal</TableHead>
                     <TableHead className="text-right">Aksi</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {articles.map((article) => (
-                    <TableRow key={article.id}>
-                      <TableCell className="font-medium">{article.title}</TableCell>
-                      <TableCell>{article.author || "-"}</TableCell>
-                      <TableCell>{article.category || "-"}</TableCell>
-                      <TableCell>{new Date(article.published_at).toLocaleDateString()}</TableCell>
+                  {filteredArticles.map((article) => (
+                    <TableRow key={article.id} className="hover:bg-muted/5">
+                      <TableCell>
+                        <div className="relative h-12 w-16 rounded overflow-hidden bg-muted flex items-center justify-center">
+                          {article.image_url ? (
+                            <Image
+                              src={article.image_url}
+                              alt={article.title}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <ImageIcon className="h-6 w-6 text-muted-foreground/50" />
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="font-medium max-w-[300px]">
+                        <div className="truncate" title={article.title}>
+                          {article.title}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {article.category ? (
+                          <Badge variant="secondary" className="capitalize">
+                            {article.category}
+                          </Badge>
+                        ) : (
+                          <span className="text-muted-foreground text-sm">-</span>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-sm">{article.author || "-"}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {new Date(article.published_at).toLocaleDateString("id-ID", {
+                          day: 'numeric',
+                          month: 'short',
+                          year: 'numeric'
+                        })}
+                      </TableCell>
                       <TableCell className="text-right">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleEditArticle(article)}
-                          className="mr-2"
-                        >
-                          <Edit className="h-4 w-4" />
-                          <span className="sr-only">Ubah</span>
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteArticle(article)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleEditArticle(article)}
+                            className="h-8 w-8 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          >
+                            <Edit className="h-4 w-4" />
+                            <span className="sr-only">Ubah</span>
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDeleteArticle(article)}
+                            className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -232,14 +306,14 @@ export default function AdminArticlesPage() {
 
       {/* Article Form Dialog */}
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[900px] h-[90vh] flex flex-col p-0 gap-0">
+          <DialogHeader className="px-6 py-4 border-b">
             <DialogTitle>{currentArticle ? "Ubah Berita" : "Tambah Berita Baru"}</DialogTitle>
             <DialogDescription>
               {currentArticle ? "Edit detail berita." : "Isi detail untuk berita baru."}
             </DialogDescription>
           </DialogHeader>
-          <div className="py-4">
+          <div className="flex-1 overflow-hidden p-6">
             <ArticleForm
               initialData={currentArticle}
               onSubmit={handleFormSubmit}
