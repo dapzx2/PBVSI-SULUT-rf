@@ -5,7 +5,6 @@ import { DatabaseList } from '@/components/database-list'
 import DatabasePageLoading from './loading' // Assuming you have a loading component
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { WifiOff } from 'lucide-react'
-import { StickyHeader } from '@/components/sticky-header'
 
 async function fetchPlayersData() {
   const { players, error } = await getPlayers();
@@ -22,7 +21,6 @@ export default async function DatabasePage() {
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="database" />
           <Suspense fallback={<DatabasePageLoading />}>
             <DatabaseList initialPlayers={initialPlayers} />
           </Suspense>
@@ -33,7 +31,6 @@ export default async function DatabasePage() {
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="database" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <Alert variant="destructive">
               <WifiOff className="h-4 w-4" />

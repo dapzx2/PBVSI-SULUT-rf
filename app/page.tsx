@@ -51,7 +51,7 @@ export default function HomePage() {
       <main className="pt-16">
         {/* Hero Section */}
         <section className="relative py-20 px-4 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-600/10 to-red-600/10" />
+
           <div className="container mx-auto relative z-10">
             <motion.div
               className="text-center max-w-4xl mx-auto"
@@ -89,7 +89,7 @@ export default function HomePage() {
         {/* Quick Stats */}
 
         {/* Sambutan Ketua Umum */}
-        <section className="py-16 px-4 bg-gradient-to-r from-orange-50 to-red-50">
+        <section className="py-16 px-4 bg-gray-50">
           <div className="container mx-auto">
             <motion.div
               className="max-w-6xl mx-auto"
@@ -227,7 +227,7 @@ export default function HomePage() {
                 {articles.map((article) => (
                   <motion.div variants={fadeInUp} key={article.id}>
                     <Card className="h-full hover:shadow-lg transition-shadow duration-300">
-                      <div className="aspect-video bg-gradient-to-br from-orange-100 to-red-100 rounded-t-lg flex items-center justify-center">
+                      <div className="relative aspect-video bg-gradient-to-br from-orange-100 to-red-100 rounded-t-lg flex items-center justify-center">
                         <Image
                           src={article.image_url || "/placeholder.svg"}
                           alt={article.title}

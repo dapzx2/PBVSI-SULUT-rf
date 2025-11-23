@@ -5,7 +5,6 @@ import Image from "next/image"
 import { useParams } from "next/navigation"
 import { Loader2, RefreshCw, User } from "lucide-react"
 
-import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -109,8 +108,6 @@ export default function ArticleDetailPage() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-gray-50">
-        <StickyHeader currentPage="berita" />
-
         <main className="pt-32 pb-16">
           <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 bg-white shadow-lg rounded-lg p-8">
             {/* Header section with category and title */}

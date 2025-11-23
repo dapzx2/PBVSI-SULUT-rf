@@ -3,7 +3,6 @@ import { WifiOff, MapPin, Calendar, Trophy, User } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
 import { getClubBySlug } from "@/lib/clubs"
 import { getPlayers } from "@/lib/players"
@@ -43,7 +42,6 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="klub" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <div className="text-6xl mb-4">
               <WifiOff className="h-16 w-16 mx-auto text-red-500" />
@@ -61,7 +59,6 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="klub" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <div className="text-6xl mb-4">🔍</div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Klub Tidak Ditemukan</h1>
@@ -80,8 +77,6 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
   return (
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        <StickyHeader currentPage="klub" />
-
         {/* Club Header Section */}
         <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 border-b border-orange-200 shadow-md pt-24 pb-12 md:pt-32 md:pb-16">
           <div className="container mx-auto px-4">

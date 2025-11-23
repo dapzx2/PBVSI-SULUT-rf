@@ -5,7 +5,6 @@ import { BeritaList } from '@/components/berita-list'
 import BeritaPageLoading from './loading' // Assuming you have a loading component
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { WifiOff } from 'lucide-react'
-import { StickyHeader } from '@/components/sticky-header'
 
 async function fetchArticlesData() {
   const { articles, error } = await getArticles();
@@ -22,7 +21,6 @@ export default async function BeritaPage() {
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="berita" />
           <Suspense fallback={<BeritaPageLoading />}>
             <BeritaList initialArticles={initialArticles} />
           </Suspense>
@@ -33,7 +31,6 @@ export default async function BeritaPage() {
     return (
       <PageTransition>
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-          <StickyHeader currentPage="berita" />
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <Alert variant="destructive">
               <WifiOff className="h-4 w-4" />

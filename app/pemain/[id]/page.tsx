@@ -28,7 +28,6 @@ import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
-import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
 import type { Player } from "@/lib/types"
 
@@ -259,8 +258,6 @@ export default function PlayerPage({ params }: PlayerPageProps) {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <StickyHeader currentPage="database" />
-
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}

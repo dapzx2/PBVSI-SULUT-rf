@@ -1,11 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { StickyHeader } from "@/components/sticky-header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function PertandinganPageLoading() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <StickyHeader currentPage="pertandingan" />
       <main className="container mx-auto px-4 py-8 pt-24">
         <div className="lg:grid lg:grid-cols-12 lg:gap-8">
           {/* Main Content */}

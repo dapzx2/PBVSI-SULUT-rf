@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { StickyHeader } from "@/components/sticky-header"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Download, Shield } from "lucide-react"
 
@@ -15,8 +14,6 @@ export default function InformasiPublikPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <StickyHeader />
-
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 mt-16">
         <div className="container mx-auto px-4">

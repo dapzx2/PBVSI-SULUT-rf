@@ -1,10 +1,8 @@
-import { StickyHeader } from "@/components/sticky-header"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export default function Loading() {
   return (
     <div className="flex min-h-screen flex-col">
-      <StickyHeader />
       <main className="flex-1 pt-16">
         <section className="w-full py-12 md:py-24 lg:py-32 bg-white">
           <div className="container px-4 md:px-6">

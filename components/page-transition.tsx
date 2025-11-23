@@ -16,6 +16,7 @@ export function PageTransition({ children }: PageTransitionProps) {
         duration: 0.3,
         ease: "easeInOut",
       }}
+      className="relative z-0 will-change-transform"
     >
       {children}
     </motion.div>

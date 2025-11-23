@@ -17,7 +17,6 @@ import {
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { StickyHeader } from "@/components/sticky-header"
 import Image from "next/image"
 
 // Data for Pimpinan Pusat PBVSI
@@ -237,8 +236,6 @@ const fungsiKoordinasi = [
 export default function StrukturOrganisasiPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      <StickyHeader />
-
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 mt-16">
         <div className="container mx-auto px-4">

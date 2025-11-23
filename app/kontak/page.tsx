@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { StickyHeader } from "@/components/sticky-header"
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -87,8 +86,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <StickyHeader />
-
       {/* Hero Section */}
       {/* Hero Section */}
       <motion.section

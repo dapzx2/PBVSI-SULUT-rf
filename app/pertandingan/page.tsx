@@ -5,7 +5,6 @@ import { PertandinganList } from '@/components/pertandingan-list'
 import PertandinganPageLoading from './loading'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { WifiOff } from 'lucide-react'
-import { StickyHeader } from '@/components/sticky-header'
 
 async function fetchMatchesData() {
   const { matches, error } = await getMatches();
@@ -21,7 +20,6 @@ export default async function PertandinganPage() {
 
     return (
       <div className="min-h-screen bg-gray-50">
-        <StickyHeader currentPage="pertandingan" />
         <PageTransition>
           <Suspense fallback={<PertandinganPageLoading />}>
             <PertandinganList initialMatches={initialMatches} />
@@ -32,7 +30,6 @@ export default async function PertandinganPage() {
   } catch (error: any) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <StickyHeader currentPage="pertandingan" />
         <PageTransition>
           <div className="container mx-auto px-4 py-16 pt-32 text-center">
             <Alert variant="destructive">

@@ -1,12 +1,10 @@
 import { Skeleton } from "@/components/ui/skeleton"
-import { StickyHeader } from "@/components/sticky-header"
 import { PageTransition } from "@/components/page-transition"
 
 export default function DatabasePageLoading() {
   return (
     <PageTransition>
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        <StickyHeader currentPage="database" />
         <div className="container mx-auto px-4 py-8 pt-24">
           {/* Title Skeleton */}
           <div className="text-center mb-12">
