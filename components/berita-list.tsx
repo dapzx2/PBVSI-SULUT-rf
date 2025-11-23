@@ -205,30 +205,6 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
           ))}
         </div>
       )}
-
-      {(articles.length > 0) && (
-        <div className="mt-12 bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Berita</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold bg-orange-600">{articles.length}</div>
-              <div className="text-sm text-gray-600">Total Berita</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{categories.length}</div>
-              <div className="text-sm text-gray-600">Kategori</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{years.length}</div>
-              <div className="text-sm text-gray-600">Tahun Publikasi</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{filteredNews.length}</div>
-              <div className="text-sm text-gray-600">Hasil Filter</div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

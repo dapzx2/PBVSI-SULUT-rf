@@ -22,11 +22,11 @@ export function GaleriList({ initialItems }: GaleriListProps) {
 
   const filteredItems = useMemo(() => {
     return allItems.filter((item) => {
-      const matchesSearch = item.title?.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                           item.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesSearch = item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesCategory = selectedCategory === "all" || item.category === selectedCategory
       const matchesYear = selectedYear === "all" || new Date(item.created_at).getFullYear().toString() === selectedYear
-      
+
       return matchesSearch && matchesCategory && matchesYear
     })
   }, [allItems, searchTerm, selectedCategory, selectedYear])
@@ -178,30 +178,6 @@ export function GaleriList({ initialItems }: GaleriListProps) {
               </CardContent>
             </Card>
           ))}
-        </div>
-      )}
-
-      {(allItems.length > 0) && (
-        <div className="mt-12 bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Galeri</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">{allItems.length}</div>
-              <div className="text-sm text-gray-600">Total Item</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">{categories.length}</div>
-              <div className="text-sm text-gray-600">Kategori</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{years.length}</div>
-              <div className="text-sm text-gray-600">Tahun</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">{filteredItems.length}</div>
-              <div className="text-sm text-gray-600">Hasil Filter</div>
-            </div>
-          </div>
         </div>
       )}
     </div>
