@@ -181,8 +181,9 @@ export default function SejarahPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="h-full"
               >
-                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300">
+                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full">
                   <CardContent className="p-6">
                     <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <achievement.icon className="w-8 h-8 text-white" />
