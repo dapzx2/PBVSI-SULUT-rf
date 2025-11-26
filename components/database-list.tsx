@@ -6,10 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Search, Filter, Users } from 'lucide-react'
+import { Search, Filter, Users, Trophy, User, Shield } from 'lucide-react'
 import type { Player } from "@/lib/types"
 import Image from "next/image"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
 interface DatabaseListProps {
   initialPlayers: Player[];
@@ -45,34 +46,56 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
     setSelectedClub("all")
   }
 
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  }
+
+  const item = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 }
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8 pt-24">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Database Pemain PBVSI Sulut</h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-          Database lengkap pemain bola voli Sulawesi Utara
+    <div className="container mx-auto px-4 py-8 pt-24 min-h-screen">
+      {/* Header Section */}
+      <div className="text-center mb-16 relative">
+        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-50 to-orange-100 opacity-50 blur-3xl rounded-full transform -translate-y-1/2" />
+        <h1 className="text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
+          Database <span className="text-orange-600">Pemain</span>
+        </h1>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          Temukan talenta terbaik bola voli Sulawesi Utara. Jelajahi profil, statistik, dan prestasi para atlet kebanggaan daerah.
         </p>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+      {/* Filter Section */}
+      <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100 p-6 mb-12 sticky top-20 z-30">
         <div className="flex flex-col lg:flex-row gap-4">
           <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <div className="relative group">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-orange-500 transition-colors h-5 w-5" />
               <Input
                 placeholder="Cari nama pemain..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
+                className="pl-10 h-12 bg-gray-50 border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-all"
               />
             </div>
           </div>
 
-          <div className="w-full lg:w-48">
+          <div className="w-full lg:w-56">
             <Select value={selectedPosition} onValueChange={setSelectedPosition}>
-              <SelectTrigger>
-                <Filter className="h-4 w-4 mr-2" />
-                <SelectValue placeholder="Posisi" />
+              <SelectTrigger className="h-12 bg-gray-50 border-gray-200 focus:border-orange-500 focus:ring-orange-500">
+                <div className="flex items-center text-gray-600">
+                  <User className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Posisi" />
+                </div>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Posisi</SelectItem>
@@ -85,10 +108,13 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
             </Select>
           </div>
 
-          <div className="w-full lg:w-48">
+          <div className="w-full lg:w-56">
             <Select value={selectedClub} onValueChange={setSelectedClub}>
-              <SelectTrigger>
-                <SelectValue placeholder="Klub" />
+              <SelectTrigger className="h-12 bg-gray-50 border-gray-200 focus:border-orange-500 focus:ring-orange-500">
+                <div className="flex items-center text-gray-600">
+                  <Shield className="h-4 w-4 mr-2" />
+                  <SelectValue placeholder="Klub" />
+                </div>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Semua Klub</SelectItem>
@@ -103,88 +129,166 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
         </div>
 
         {(searchTerm || selectedPosition !== "all" || selectedClub !== "all") && (
-          <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t">
-            <span className="text-sm text-gray-600">Filter aktif:</span>
+          <div className="flex flex-wrap items-center gap-3 mt-6 pt-4 border-t border-gray-100">
+            <span className="text-sm font-medium text-gray-500 flex items-center">
+              <Filter className="w-4 h-4 mr-2" />
+              Filter aktif:
+            </span>
             {searchTerm && (
-              <Badge variant="secondary" className="cursor-pointer" onClick={() => setSearchTerm("")}>
+              <Badge variant="secondary" className="px-3 py-1 bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200 cursor-pointer transition-colors" onClick={() => setSearchTerm("")}>
                 Pencarian: &quot;{searchTerm}&quot; ×
               </Badge>
             )}
             {selectedPosition !== "all" && (
-              <Badge variant="secondary" className="cursor-pointer" onClick={() => setSelectedPosition("all")}>
+              <Badge variant="secondary" className="px-3 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 cursor-pointer transition-colors" onClick={() => setSelectedPosition("all")}>
                 Posisi: {selectedPosition} ×
               </Badge>
             )}
             {selectedClub !== "all" && (
-              <Badge variant="secondary" className="cursor-pointer" onClick={() => setSelectedClub("all")}>
+              <Badge variant="secondary" className="px-3 py-1 bg-green-50 text-green-700 hover:bg-green-100 border-green-200 cursor-pointer transition-colors" onClick={() => setSelectedClub("all")}>
                 Klub: {selectedClub} ×
               </Badge>
             )}
-            <Button variant="ghost" size="sm" onClick={resetFilters} className="h-6 px-2 text-xs">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={resetFilters} 
+              className="ml-auto text-xs text-gray-500 hover:text-red-600 hover:bg-red-50"
+            >
               Hapus Semua
             </Button>
           </div>
         )}
       </div>
 
+      {/* Players Grid */}
       <div>
         {filteredPlayers.length === 0 ? (
-          <div className="text-center py-16">
+          <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200">
             <div className="max-w-md mx-auto">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                <Users className="w-12 h-12 text-gray-400" />
+              <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
+                <Users className="w-12 h-12 text-gray-300" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Database Pemain Kosong</h3>
-              <p className="text-gray-600 mb-6">
-                Belum ada data pemain di dalam database. Silakan periksa kembali nanti atau hubungi administrator.
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Tidak Ada Pemain Ditemukan</h3>
+              <p className="text-gray-500 mb-8">
+                Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan pemain yang Anda cari.
               </p>
-              <div className="text-sm text-gray-500">
-                <p>👥 Data pemain akan segera tersedia</p>
-              </div>
+              <Button onClick={resetFilters} variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50 hover:text-orange-700">
+                Reset Filter
+              </Button>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <motion.div 
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+          >
             {filteredPlayers.map((player) => (
-              <Card key={player.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                {player.photo_url && (
-                  <Image
-                    src={player.photo_url || "/placeholder.svg?height=200&width=300&query=player photo"}
-                    alt={player.name}
-                    width={300}
-                    height={200}
-                    className="w-full h-48 object-cover"
-                  />
-                )}
-                <CardContent className="p-4">
-                  <h2 className="text-lg font-semibold line-clamp-1">{player.name}</h2>
-                  <p className="text-sm text-gray-600 mt-1">Posisi: {player.position}</p>
-                  <p className="text-sm text-gray-600">Klub: {player.club?.name || "N/A"}</p>
-                  <p className="text-sm text-gray-600">Tinggi: {player.height} cm</p>
-                  <p className="text-sm text-gray-600">Berat: {player.weight} kg</p>
-                  <Link href={`/pemain/${player.id}`} passHref>
-                    <Button variant="outline" className="w-full mt-4 bg-transparent">
-                      Lihat Detail
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
+              <motion.div key={player.id} variants={item}>
+                <Card className="group overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 rounded-2xl h-full flex flex-col">
+                  <div className="relative h-64 overflow-hidden bg-gray-100">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <Image
+                      src={player.photo_url || "/placeholder.svg?height=400&width=300&query=player"}
+                      alt={player.name}
+                      width={400}
+                      height={400}
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 right-4 z-20">
+                      <Badge className="bg-white/90 text-gray-900 backdrop-blur-sm shadow-sm hover:bg-white">
+                        {player.position}
+                      </Badge>
+                    </div>
+                  </div>
+                  
+                  <CardContent className="p-6 flex-1 flex flex-col">
+                    <div className="mb-4">
+                      <h2 className="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">
+                        {player.name}
+                      </h2>
+                      <p className="text-sm font-medium text-gray-500 flex items-center mt-1">
+                        <Shield className="w-3 h-3 mr-1" />
+                        {player.club?.name || "Tanpa Klub"}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+                      <div className="text-center">
+                        <p className="text-xs text-gray-500 uppercase tracking-wider">Tinggi</p>
+                        <p className="font-bold text-gray-900">{player.height} <span className="text-xs font-normal text-gray-500">cm</span></p>
+                      </div>
+                      <div className="text-center border-l border-gray-200">
+                        <p className="text-xs text-gray-500 uppercase tracking-wider">Berat</p>
+                        <p className="font-bold text-gray-900">{player.weight} <span className="text-xs font-normal text-gray-500">kg</span></p>
+                      </div>
+                    </div>
+
+                    <div className="mt-auto">
+                      <Link href={`/pemain/${player.id}`} passHref>
+                        <Button className="w-full bg-gray-900 hover:bg-orange-600 text-white transition-colors rounded-xl h-11 font-medium">
+                          Lihat Profil Lengkap
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
 
+      {/* Statistics Section */}
       {allPlayers.length > 0 && (
-        <div className="mt-12 bg-white rounded-lg shadow-sm border p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Statistik Database</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-orange-600">{allPlayers.length}</div>
-              <div className="text-sm text-gray-600">Total Pemain</div>
+        <div className="mt-20">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+              <div className="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
+                <Users className="w-48 h-48" />
+              </div>
+              <div className="relative z-10">
+                <p className="text-orange-100 font-medium mb-1">Total Pemain</p>
+                <h3 className="text-4xl font-bold">{allPlayers.length}</h3>
+                <p className="text-sm text-orange-100 mt-4 opacity-80">Terdaftar dalam database</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">{positions.length}</div>
-              <div className="text-sm text-gray-600">Posisi</div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
+              <div className="absolute right-0 top-0 opacity-5 transform translate-x-1/4 -translate-y-1/4">
+                <Trophy className="w-48 h-48 text-gray-900" />
+              </div>
+              <div className="relative z-10">
+                <p className="text-gray-500 font-medium mb-1">Posisi Berbeda</p>
+                <h3 className="text-4xl font-bold text-gray-900">{positions.length}</h3>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {positions.slice(0, 3).map(pos => (
+                    <Badge key={pos} variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
+                      {pos}
+                    </Badge>
+                  ))}
+                  {positions.length > 3 && (
+                    <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs">
+                      +{positions.length - 3}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 relative overflow-hidden">
+              <div className="absolute right-0 top-0 opacity-5 transform translate-x-1/4 -translate-y-1/4">
+                <Shield className="w-48 h-48 text-gray-900" />
+              </div>
+              <div className="relative z-10">
+                <p className="text-gray-500 font-medium mb-1">Klub Terdaftar</p>
+                <h3 className="text-4xl font-bold text-gray-900">{clubNames.length}</h3>
+                <p className="text-sm text-gray-500 mt-4">
+                  Dari berbagai daerah di Sulawesi Utara
+                </p>
+              </div>
             </div>
           </div>
         </div>

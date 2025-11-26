@@ -1,27 +1,28 @@
 
 import pool from './mysql';
 import { RowDataPacket } from 'mysql2';
+import { Player as FrontendPlayer } from './types'; // Import the frontend type
 
-export interface Player extends RowDataPacket {
+// Extend the frontend type but allow for nulls where DB might return nulls if strictness varies
+// Or just use the frontend type structure for the return value.
+// Let's define the DB row structure.
+export interface PlayerRow extends RowDataPacket {
   id: string;
   name: string;
   position: string | null;
-  image_url: string | null; // This maps to photo_url in frontend type, but let's keep it consistent with DB for now, or alias it if needed. Frontend uses photo_url.
-  // Actually, frontend type uses photo_url. Let's check the DB schema. 
-  // Based on previous file content, DB has image_url. 
-  // Frontend type has photo_url.
-  // Let's alias image_url as photo_url in queries.
+  image_url: string | null;
   club_id: string | null;
   club_name: string | null;
-  club?: { name: string | null }; // Added nested club object
   birth_date: string | null;
-  height: number | null; // Changed from height_cm
-  weight: number | null; // Changed from weight_kg
+  height_cm: number | null;
+  weight_kg: number | null;
   country: string | null;
   achievements: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
-export async function getPlayers(): Promise<{ players: Player[] | null; error: string | null }> {
+export async function getPlayers(): Promise<{ players: FrontendPlayer[] | null; error: string | null }> {
   try {
     const sql = `
       SELECT 
@@ -44,16 +45,23 @@ export async function getPlayers(): Promise<{ players: Player[] | null; error: s
 
     const players = (rows as any[]).map(row => ({
       ...row,
-      club: row.club_id ? { name: row.club_name } : null
+      // Ensure types match FrontendPlayer
+      position: row.position || "",
+      club: row.club_id ? { name: row.club_name } : undefined,
+      // Handle other potential nulls if necessary for strict frontend types
+      photo_url: row.photo_url || null,
+      achievements: row.achievements || null,
+      created_at: new Date().toISOString(), // Default value since DB column is missing
+      updated_at: new Date().toISOString(), // Default value since DB column is missing
     }));
 
-    return { players: players as Player[], error: null };
+    return { players: players as FrontendPlayer[], error: null };
   } catch (error: any) {
     return { players: null, error: error.message };
   }
 }
 
-export async function getPlayerById(id: string): Promise<Player | null> {
+export async function getPlayerById(id: string): Promise<FrontendPlayer | null> {
   const sql = `
     SELECT 
       p.id, 
@@ -73,10 +81,22 @@ export async function getPlayerById(id: string): Promise<Player | null> {
     WHERE p.id = ?
   `;
   const [rows] = await pool.query(sql, [id]);
-  return (rows as Player[])[0] || null;
+  const row = (rows as any[])[0];
+
+  if (!row) return null;
+
+  return {
+    ...row,
+    position: row.position || "",
+    club: row.club_id ? { name: row.club_name } : undefined,
+    photo_url: row.photo_url || null,
+    achievements: row.achievements || null,
+    created_at: new Date().toISOString(), // Default value
+    updated_at: new Date().toISOString(), // Default value
+  } as FrontendPlayer;
 }
 
-export async function createPlayer(player: Omit<Player, 'id' | 'club_name'>): Promise<{ id: string }> {
+export async function createPlayer(player: Omit<FrontendPlayer, 'id' | 'club_name' | 'created_at' | 'updated_at' | 'club'>): Promise<{ id: string }> {
   const { name, position, club_id, photo_url, birth_date, height, weight, country, achievements } = player as any; // Cast to any to handle property mapping
   const id = crypto.randomUUID();
   const sql = `
@@ -87,7 +107,7 @@ export async function createPlayer(player: Omit<Player, 'id' | 'club_name'>): Pr
   return { id };
 }
 
-export async function updatePlayer(id: string, player: Partial<Omit<Player, 'id' | 'club_name'>>): Promise<void> {
+export async function updatePlayer(id: string, player: Partial<Omit<FrontendPlayer, 'id' | 'club_name' | 'created_at' | 'updated_at' | 'club'>>): Promise<void> {
   // Build the update query dynamically
   const fields = [];
   const values = [];
