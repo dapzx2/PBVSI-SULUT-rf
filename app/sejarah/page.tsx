@@ -137,7 +137,7 @@ export default function SejarahPage() {
                   <div
                     className={`ml-20 md:ml-0 md:w-5/12 ${index % 2 === 0 ? "md:mr-auto md:pr-8" : "md:ml-auto md:pl-8"}`}
                   >
-                    <Card className="hover:shadow-lg transition-all duration-300">
+                    <Card className="bg-white hover:shadow-lg transition-all duration-300">
                       <CardHeader>
                         <div className="flex items-center justify-between mb-2">
                           <Badge variant="secondary" className="bg-gradient-to-r from-orange-500 to-red-500 text-white">
@@ -182,7 +182,7 @@ export default function SejarahPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="text-center hover:shadow-lg transition-all duration-300">
+                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300">
                   <CardContent className="p-6">
                     <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <achievement.icon className="w-8 h-8 text-white" />
@@ -213,7 +213,7 @@ export default function SejarahPage() {
               </p>
             </motion.div>
 
-            <Card className="hover:shadow-lg transition-all duration-300">
+            <Card className="bg-white hover:shadow-lg transition-all duration-300">
               <CardContent className="p-8">
                 <div className="grid gap-6">
                   {legacyPoints.map((point, index) => (
