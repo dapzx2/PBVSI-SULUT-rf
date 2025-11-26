@@ -82,7 +82,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
           <div className="flex gap-4 w-full lg:w-auto">
             <div className="w-full lg:w-48">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="bg-white/50 border-gray-200">
+                <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                   <Filter className="h-4 w-4 mr-2 text-gray-500" />
                   <SelectValue placeholder="Kategori" />
                 </SelectTrigger>
@@ -99,7 +99,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
 
             <div className="w-full lg:w-32">
               <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="bg-white/50 border-gray-200">
+                <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                   <Calendar className="h-4 w-4 mr-2 text-gray-500" />
                   <SelectValue placeholder="Tahun" />
                 </SelectTrigger>

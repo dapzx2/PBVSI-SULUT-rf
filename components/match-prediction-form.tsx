@@ -16,7 +16,7 @@ import { CheckCircle, XCircle, Loader2 } from "lucide-react"
 // The action now only needs the formData
 async function submitPrediction(formData: FormData): Promise<{ success: boolean; message: string }> {
   // This is a placeholder. Replace with your actual server action logic.
-  console.log("Server action placeholder received:", formData);
+  // console.log("Server action placeholder received:", formData);
   // Simulate API call
   await new Promise(resolve => setTimeout(resolve, 1000));
   return { success: true, message: "Prediction submitted successfully (simulated)." };

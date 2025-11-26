@@ -23,7 +23,7 @@ export default function PertandinganPageLoading() {
             {/* Featured Match */}
             <div className="mb-8">
               <Skeleton className="h-8 w-48 mb-4" />
-              <Card>
+              <Card className="bg-white">
                 <CardContent className="p-4">
                   <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
                   <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
@@ -43,7 +43,7 @@ export default function PertandinganPageLoading() {
               <div className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {[...Array(6)].map((_, i) => (
-                    <Card key={i}>
+                    <Card key={i} className="bg-white">
                       <CardContent className="p-4">
                         <div className="h-4 bg-gray-200 rounded w-1/4 mb-2"></div>
                         <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
@@ -60,7 +60,7 @@ export default function PertandinganPageLoading() {
           {/* Sidebar */}
           <aside className="lg:col-span-3 mt-8 lg:mt-0">
             <div className="sticky top-24 space-y-6">
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle><Skeleton className="h-6 w-24" /></CardTitle>
                 </CardHeader>
@@ -68,7 +68,7 @@ export default function PertandinganPageLoading() {
                   <Skeleton className="h-10 w-full" />
                 </CardContent>
               </Card>
-              <Card>
+              <Card className="bg-white">
                 <CardHeader>
                   <CardTitle><Skeleton className="h-6 w-16" /></CardTitle>
                 </CardHeader>

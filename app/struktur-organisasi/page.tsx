@@ -269,7 +269,7 @@ export default function StrukturOrganisasiPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
               >
-                <Card className="bg-white hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <Card className="bg-white hover:shadow-lg transition-all duration-300 overflow-hidden border-gray-200">
                   <CardContent className="p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
                     <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-2 border-orange-300">
                       <Image
@@ -319,7 +319,7 @@ export default function StrukturOrganisasiPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
               >
-                <Card className="bg-white hover:shadow-lg transition-all duration-300 overflow-hidden">
+                <Card className="bg-white hover:shadow-lg transition-all duration-300 overflow-hidden border-gray-200">
                   <CardContent className="p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
                     <div className="relative w-32 h-32 rounded-full overflow-hidden flex-shrink-0 border-2 border-orange-300">
                       <Image
@@ -368,7 +368,7 @@ export default function StrukturOrganisasiPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full">
+                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full border-gray-200">
                   <CardContent className="p-6">
                     <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <wakil.icon className="w-8 h-8 text-white" />
@@ -393,7 +393,7 @@ export default function StrukturOrganisasiPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Pelindung</h3>
               <div className="space-y-4">
                 {pelindung.map((item) => (
-                  <Card key={item.name} className="bg-white hover:shadow-lg transition-all duration-300">
+                  <Card key={item.name} className="bg-white hover:shadow-lg transition-all duration-300 border-gray-200">
                     <CardContent className="p-6 text-center">
                       <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                         <item.icon className="w-8 h-8 text-white" />
@@ -414,7 +414,7 @@ export default function StrukturOrganisasiPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">Penasehat</h3>
               <div className="space-y-4">
                 {penasehat.map((item) => (
-                  <Card key={item.name} className="bg-white hover:shadow-lg transition-all duration-300">
+                  <Card key={item.name} className="bg-white hover:shadow-lg transition-all duration-300 border-gray-200">
                     <CardContent className="p-6 text-center">
                       <div className="w-12 h-12 bg-gray-500 rounded-full flex items-center justify-center mx-auto mb-4">
                         <item.icon className="w-6 h-6 text-white" />
@@ -450,7 +450,7 @@ export default function StrukturOrganisasiPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full">
+                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full border-gray-200">
                   <CardContent className="p-6">
                     <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <item.icon className="w-8 h-8 text-white" />
@@ -488,7 +488,7 @@ export default function StrukturOrganisasiPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="bg-white hover:shadow-lg transition-all duration-300 h-full">
+                <Card className="bg-white hover:shadow-lg transition-all duration-300 h-full border-gray-200">
                   <CardHeader>
                     <div className="flex items-center mb-4">
                       <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-4">
@@ -528,7 +528,7 @@ export default function StrukturOrganisasiPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <Card className="bg-white max-w-3xl mx-auto hover:shadow-lg transition-all duration-300">
+            <Card className="bg-white max-w-3xl mx-auto hover:shadow-lg transition-all duration-300 border-gray-200">
               <CardHeader>
                 <CardTitle className="text-xl text-gray-900">{sistemKepengurusan.title}</CardTitle>
               </CardHeader>
@@ -560,7 +560,7 @@ export default function StrukturOrganisasiPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
               >
-                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full">
+                <Card className="bg-white text-center hover:shadow-lg transition-all duration-300 h-full border-gray-200">
                   <CardContent className="p-6">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
                     <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>

@@ -20,7 +20,7 @@ export default function Loading() {
             <Skeleton className="h-8 w-[200px] mx-auto mb-8" />
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {Array.from({ length: 8 }).map((_, index) => (
-                <div key={index} className="flex flex-col items-center text-center p-4 border rounded-lg shadow-sm">
+                <div key={index} className="flex flex-col items-center text-center p-4 border rounded-lg shadow-sm bg-white">
                   <Skeleton className="h-24 w-24 rounded-full mb-4" />
                   <Skeleton className="h-6 w-3/4 mb-2" />
                   <Skeleton className="h-4 w-1/2 mb-4" />

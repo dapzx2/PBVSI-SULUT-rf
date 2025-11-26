@@ -48,7 +48,7 @@ export default function ContactPage() {
     // Simulate form submission
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
-    console.log(values)
+    // console.log(values)
     setIsSubmitting(false)
     setIsSubmitted(true)
     form.reset()
@@ -112,7 +112,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="shadow-lg">
+            <Card className="shadow-lg bg-white">
               <CardHeader>
                 <CardTitle className="text-2xl text-gray-900">Kirim Pesan</CardTitle>
                 <CardDescription>Isi formulir di bawah ini dan kami akan merespons secepat mungkin</CardDescription>
@@ -230,7 +230,7 @@ export default function ContactPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
                   >
-                    <Card className="hover:shadow-md transition-shadow">
+                    <Card className="hover:shadow-md transition-shadow bg-white">
                       <CardContent className="p-6">
                         <div className="flex items-start space-x-4">
                           <div className="bg-orange-100 p-3 rounded-lg">
@@ -249,11 +249,11 @@ export default function ContactPage() {
               })}
             </div>
 
-            
+
           </motion.div>
         </div>
 
-        
+
       </div>
     </div>
   )

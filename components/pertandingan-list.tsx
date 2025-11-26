@@ -173,7 +173,7 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
             {/* League Filter */}
             <div className="w-full lg:w-64">
               <Select value={selectedLeague} onValueChange={setSelectedLeague}>
-                <SelectTrigger className="bg-white/50 border-gray-200">
+                <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                   <Filter className="h-4 w-4 mr-2 text-gray-500" />
                   <SelectValue placeholder="Pilih Liga" />
                 </SelectTrigger>

@@ -10,7 +10,7 @@ export function PertandinganWidget() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
@@ -33,7 +33,7 @@ export function PertandinganWidget() {
 
   if (error) {
     return (
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
           <CardTitle>Skor Langsung</CardTitle>
         </CardHeader>
@@ -46,7 +46,7 @@ export function PertandinganWidget() {
 
   if (matches.length === 0) {
     return (
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
           <CardTitle>Skor Langsung</CardTitle>
         </CardHeader>
@@ -58,7 +58,7 @@ export function PertandinganWidget() {
   }
 
   return (
-    <Card>
+    <Card className="bg-white">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
@@ -68,7 +68,7 @@ export function PertandinganWidget() {
       <CardContent>
         <div className="space-y-4">
           {matches.map((match) => (
-            <div key={match.id} className="border rounded-lg p-3">
+            <div key={match.id} className="border border-gray-200 rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
                 <Badge variant="outline" className="bg-red-50 text-red-600 border-red-200">
                   LIVE
@@ -95,9 +95,9 @@ export function PertandinganWidget() {
                 </div>
               </div>
 
-                <div className="mt-2 text-xs text-gray-500 text-center">
-                  Set {Array.isArray(match.score_home_points) && Array.isArray(match.score_away_points) ? (match.score_home_points.length + 1) : 'N/A'} • {match.league}
-                </div>
+              <div className="mt-2 text-xs text-gray-500 text-center">
+                Set {Array.isArray(match.score_home_points) && Array.isArray(match.score_away_points) ? (match.score_home_points.length + 1) : 'N/A'} • {match.league}
+              </div>
             </div>
           ))}
         </div>

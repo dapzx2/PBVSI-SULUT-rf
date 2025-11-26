@@ -24,7 +24,7 @@ export default function DatabasePageLoading() {
           {/* Player Card Grid Skeleton */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
-              <div key={i} className="rounded-lg border bg-card text-card-foreground shadow-sm">
+              <div key={i} className="rounded-lg border bg-white text-card-foreground shadow-sm">
                 <Skeleton className="h-48 w-full" />
                 <div className="p-4">
                   <Skeleton className="h-6 w-3/4 mb-2" />

@@ -80,7 +80,7 @@ export function ClubList({ initialClubs }: ClubListProps) {
           {/* City Filter for clubs */}
           <div className="w-full lg:w-48">
             <Select value={selectedCity} onValueChange={setSelectedCity}>
-              <SelectTrigger className="bg-white/50 border-gray-200">
+              <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                 <Filter className="h-4 w-4 mr-2 text-gray-500" />
                 <SelectValue placeholder="Kota" />
               </SelectTrigger>
@@ -154,7 +154,7 @@ export function ClubList({ initialClubs }: ClubListProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
-                <Card className="h-full overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border-gray-100 group">
+                <Card className="h-full overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border-gray-100 group bg-white">
                   <div className="relative h-48 bg-gray-50 p-6 flex items-center justify-center overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     {club.logo_url ? (

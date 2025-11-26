@@ -3,7 +3,7 @@ import { deleteSession, logActivity, verifyToken } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
-    console.log("=== LOGOUT API CALLED ===")
+    // console.log("=== LOGOUT API CALLED ===")
 
     const token = request.cookies.get("admin_token")?.value;
     let userId: string | undefined;
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log("✅ Session cookies cleared")
+    // console.log("✅ Session cookies cleared")
     return response
   } catch (error) {
     console.error("💥 Logout API error:", error)

@@ -36,7 +36,7 @@ export default function ContactLoading() {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form Skeleton */}
           <div>
-            <Card className="shadow-lg">
+            <Card className="shadow-lg bg-white">
               <CardHeader>
                 <Skeleton className="h-8 w-48 mb-2" />
                 <Skeleton className="h-4 w-80" />
@@ -75,7 +75,7 @@ export default function ContactLoading() {
 
             <div className="grid gap-6">
               {[1, 2, 3, 4].map((i) => (
-                <Card key={i}>
+                <Card key={i} className="bg-white">
                   <CardContent className="p-6">
                     <div className="flex items-start space-x-4">
                       <Skeleton className="h-12 w-12 rounded-lg" />
@@ -91,7 +91,7 @@ export default function ContactLoading() {
             </div>
 
             {/* Additional Information Skeleton */}
-            <Card>
+            <Card className="bg-white">
               <CardContent className="p-6">
                 <Skeleton className="h-6 w-40 mb-3" />
                 <div className="space-y-2">
@@ -107,7 +107,7 @@ export default function ContactLoading() {
 
         {/* Map Section Skeleton */}
         <div className="mt-16">
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden bg-white">
             <CardHeader>
               <Skeleton className="h-8 w-32 mb-2" />
               <Skeleton className="h-4 w-64" />

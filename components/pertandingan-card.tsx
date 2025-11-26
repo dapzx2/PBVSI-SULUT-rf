@@ -69,7 +69,7 @@ export function PertandinganCard({ match }: PertandinganCardProps) {
 
   return (
     <Link href={`/pertandingan/${match.id}`} className="block group">
-      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-2 hover:border-orange-300 group-hover:scale-[1.02]">
+      <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-2 border-gray-200 hover:border-orange-300 group-hover:scale-[1.02] bg-white">
         <CardContent className="p-0">
           {/* Header with Gradient */}
           <div className="bg-gradient-to-r from-orange-50 to-red-50 p-4 border-b border-orange-100">
