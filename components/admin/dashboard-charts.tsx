@@ -46,7 +46,7 @@ export function DashboardCharts() {
     }, [])
 
     return (
-        <Card className="col-span-4">
+        <Card className="bg-white col-span-4">
             <CardHeader>
                 <CardTitle>Distribusi Pemain per Klub</CardTitle>
                 <CardDescription>

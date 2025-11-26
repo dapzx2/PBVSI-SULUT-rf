@@ -31,7 +31,7 @@ export function DashboardRecentActivity({ activities }: DashboardRecentActivityP
     }
 
     return (
-        <Card className="col-span-3">
+        <Card className="bg-white col-span-3">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Clock className="h-5 w-5 text-orange-600" />

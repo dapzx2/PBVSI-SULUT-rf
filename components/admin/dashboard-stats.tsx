@@ -86,7 +86,7 @@ export function DashboardStats({ stats, loading }: DashboardStatsProps) {
             {statItems.map((item, index) => (
                 <Card
                     key={index}
-                    className="relative overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 group"
+                    className="bg-white relative overflow-hidden border-none shadow-md hover:shadow-xl transition-all duration-300 group"
                 >
                     <div className={`absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 rounded-full opacity-10 bg-gradient-to-br ${item.gradient} blur-2xl group-hover:opacity-20 transition-opacity`} />
 

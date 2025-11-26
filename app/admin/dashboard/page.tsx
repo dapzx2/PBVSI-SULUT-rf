@@ -93,7 +93,7 @@ export default function AdminDashboard() {
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Card className="w-full max-w-md border-none shadow-lg">
+        <Card className="bg-white w-full max-w-md border-none shadow-lg">
           <CardContent className="flex flex-col items-center justify-center p-8">
             <Loader2 className="h-10 w-10 animate-spin text-orange-600 mb-4" />
             <p className="text-gray-600 font-medium">Memuat dashboard...</p>

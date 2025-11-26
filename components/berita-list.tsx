@@ -207,7 +207,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
               >
-                <Card className="h-full overflow-hidden hover:shadow-xl transition-all duration-300 group border-gray-100 flex flex-col">
+                <Card className="bg-white h-full overflow-hidden hover:shadow-xl transition-all duration-300 group border-gray-100 flex flex-col">
                   <Link href={`/berita/${article.slug}`} className="block relative aspect-video overflow-hidden">
                     <Image
                       src={article.image_url || "/placeholder.svg?height=400&width=600&query=article image"}
