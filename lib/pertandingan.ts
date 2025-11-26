@@ -16,7 +16,43 @@ export async function getPertandinganLangsung(): Promise<{ matches: Match[] | nu
       WHERE m.status = 'live'
       ORDER BY m.match_date DESC`
     );
-    return { matches: rows as Match[], error: null };
+
+    // Transform the flat data into proper Match objects
+    const matches = (rows as any[]).map(rawMatch => ({
+      ...rawMatch,
+      home_team: rawMatch.home_team_name ? {
+        id: rawMatch.home_team_id,
+        name: rawMatch.home_team_name,
+        logo_url: rawMatch.home_team_logo_url,
+        slug: '',
+        city: '',
+        established_year: 0,
+        coach_name: null,
+        home_arena: null,
+        description: null,
+        achievements: null,
+        created_at: '',
+        updated_at: ''
+      } : undefined,
+      away_team: rawMatch.away_team_name ? {
+        id: rawMatch.away_team_id,
+        name: rawMatch.away_team_name,
+        logo_url: rawMatch.away_team_logo_url,
+        slug: '',
+        city: '',
+        established_year: 0,
+        coach_name: null,
+        home_arena: null,
+        description: null,
+        achievements: null,
+        created_at: '',
+        updated_at: ''
+      } : undefined,
+      score_home_points: rawMatch.score_home_points ? JSON.parse(rawMatch.score_home_points) : null,
+      score_away_points: rawMatch.score_away_points ? JSON.parse(rawMatch.score_away_points) : null,
+    }));
+
+    return { matches: matches as Match[], error: null };
   } catch (error: any) {
     return { matches: null, error: error.message };
   }

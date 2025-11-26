@@ -76,7 +76,7 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
                         </Button>
                     </Link>
 
-                    <Card className="overflow-hidden border-orange-200 shadow-lg">
+                    <Card className="overflow-hidden border-orange-200 shadow-lg bg-white">
                         {/* Header */}
                         <div className="bg-gradient-to-r from-orange-600 to-red-600 p-6 text-white">
                             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
