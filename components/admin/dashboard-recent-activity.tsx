@@ -54,7 +54,10 @@ export function DashboardRecentActivity({ activities }: DashboardRecentActivityP
                                     <div className="flex items-center space-x-2 mt-1">
                                         <p className="text-xs text-gray-500 font-medium">{activity.username || "Unknown User"}</p>
                                         <span className="text-xs text-gray-300">•</span>
-                                        <p className="text-xs text-gray-400">{new Date(activity.timestamp).toLocaleString()}</p>
+                                        <p className="text-xs text-gray-400">{new Date(activity.timestamp).toLocaleString("id-ID", {
+                                            dateStyle: "medium",
+                                            timeStyle: "short"
+                                        })}</p>
                                     </div>
                                 </div>
                             </div>

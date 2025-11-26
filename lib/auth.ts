@@ -97,9 +97,14 @@ export async function logActivity(
 ): Promise<void> {
   try {
     const logId = uuidv4();
+    // Get current time in WITA timezone (UTC+8)
+    const now = new Date();
+    const witaTime = new Date(now.getTime() + (8 * 60 * 60 * 1000)); // Add 8 hours for WITA
+    const timestamp = witaTime.toISOString().slice(0, 19).replace('T', ' ');
+
     await pool.query(
-      'INSERT INTO admin_activity_logs (id, admin_user_id, action, resource_type, resource_id, details, ip_address, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-      [logId, adminUserId, action, resourceType, resourceId, JSON.stringify(details), ipAddress, userAgent]
+      'INSERT INTO admin_activity_logs (id, admin_user_id, action, resource_type, resource_id, details, ip_address, user_agent, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [logId, adminUserId, action, resourceType, resourceId, JSON.stringify(details), ipAddress, userAgent, timestamp]
     );
   } catch (error) {
     console.error("Activity logging error:", error);

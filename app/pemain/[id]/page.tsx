@@ -304,7 +304,7 @@ export default function PlayerPage({ params }: PlayerPageProps) {
               <motion.div className="relative" variants={floatingVariants} animate="animate">
                 <motion.div whileHover={{ scale: 1.05, rotate: 2 }} transition={{ duration: 0.3 }}>
                   <Image
-                    src={player.image_url || "/placeholder.svg"}
+                    src={player.photo_url || "/placeholder.svg"}
                     alt={player.name}
                     width={250}
                     height={250}
@@ -493,8 +493,8 @@ export default function PlayerPage({ params }: PlayerPageProps) {
                       </div>
                       <div className="space-y-4">
                         {[
-                          { icon: TrendingUp, label: "Tinggi Badan", value: player.height_cm ? `${player.height_cm} cm` : 'N/A' },
-                          { icon: Target, label: "Berat Badan", value: player.weight_kg ? `${player.weight_kg} kg` : 'N/A' },
+                          { icon: TrendingUp, label: "Tinggi Badan", value: player.height ? `${player.height} cm` : 'N/A' },
+                          { icon: Target, label: "Berat Badan", value: player.weight ? `${player.weight} kg` : 'N/A' },
                           { icon: Users, label: "Tim Saat Ini", value: player.club?.name || 'N/A' },
                         ].map((item, index) => (
                           <motion.div

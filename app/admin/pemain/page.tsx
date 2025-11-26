@@ -72,7 +72,7 @@ export default function PlayersPage() {
       const filtered = players.filter(player =>
         player.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (player.position && player.position.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        ((player as any).club_name && (player as any).club_name.toLowerCase().includes(searchQuery.toLowerCase()))
+        (player.club?.name && player.club.name.toLowerCase().includes(searchQuery.toLowerCase()))
       );
       setFilteredPlayers(filtered);
     } else {
@@ -229,7 +229,7 @@ export default function PlayersPage() {
                             : '-'}
                         </TableCell>
                         <TableCell className="hidden lg:table-cell text-sm">
-                          {(player as any).club_name || <span className="text-muted-foreground">Tanpa Klub</span>}
+                          {player.club?.name || <span className="text-muted-foreground">Tanpa Klub</span>}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-1">

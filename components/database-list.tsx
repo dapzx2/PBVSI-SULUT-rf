@@ -26,7 +26,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
       const matchesSearch = player.name?.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesPosition = selectedPosition === "all" || player.position === selectedPosition
       const matchesClub = selectedClub === "all" || player.club?.name === selectedClub
-      
+
       return matchesSearch && matchesPosition && matchesClub
     })
   }, [allPlayers, searchTerm, selectedPosition, selectedClub])
@@ -36,7 +36,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
   }, [allPlayers])
 
   const clubNames = useMemo(() => {
-    return [...new Set(allPlayers.map(player => player.club?.name))].filter(Boolean)
+    return [...new Set(allPlayers.map(player => player.club?.name))].filter((name): name is string => !!name)
   }, [allPlayers])
 
   const resetFilters = () => {
@@ -147,9 +147,9 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredPlayers.map((player) => (
               <Card key={player.id} className="overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                {player.image_url && (
+                {player.photo_url && (
                   <Image
-                    src={player.image_url || "/placeholder.svg?height=200&width=300&query=player photo"}
+                    src={player.photo_url || "/placeholder.svg?height=200&width=300&query=player photo"}
                     alt={player.name}
                     width={300}
                     height={200}
@@ -160,8 +160,8 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
                   <h2 className="text-lg font-semibold line-clamp-1">{player.name}</h2>
                   <p className="text-sm text-gray-600 mt-1">Posisi: {player.position}</p>
                   <p className="text-sm text-gray-600">Klub: {player.club?.name || "N/A"}</p>
-                  <p className="text-sm text-gray-600">Tinggi: {player.height_cm} cm</p>
-                  <p className="text-sm text-gray-600">Berat: {player.weight_kg} kg</p>
+                  <p className="text-sm text-gray-600">Tinggi: {player.height} cm</p>
+                  <p className="text-sm text-gray-600">Berat: {player.weight} kg</p>
                   <Link href={`/pemain/${player.id}`} passHref>
                     <Button variant="outline" className="w-full mt-4 bg-transparent">
                       Lihat Detail

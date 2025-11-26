@@ -1,5 +1,0 @@
-DROP TABLE IF EXISTS `predictions`;
-DROP TABLE IF EXISTS `match_events`;
-DROP TABLE IF EXISTS `matches`;
-DROP TABLE IF EXISTS `players`;
-DROP TABLE IF EXISTS `clubs`;
