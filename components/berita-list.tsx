@@ -103,14 +103,14 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
               placeholder="Cari berita..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/50 border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-all"
+              className="pl-10 bg-white/50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all"
             />
           </div>
 
           <div className="flex gap-4 w-full lg:w-auto">
             <div className="w-full lg:w-48">
               <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="bg-white/50 border-gray-200">
+                <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                   <Filter className="h-4 w-4 mr-2 text-gray-500" />
                   <SelectValue placeholder="Kategori" />
                 </SelectTrigger>
@@ -127,7 +127,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
 
             <div className="w-full lg:w-48">
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="bg-white/50 border-gray-200">
+                <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                   <SelectValue placeholder="Urutkan" />
                 </SelectTrigger>
                 <SelectContent>

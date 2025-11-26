@@ -96,13 +96,13 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
               placeholder="Cari nama pemain..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 bg-white/50 border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-all"
+              className="pl-10 bg-white/50 border-gray-200 text-gray-900 placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 transition-all"
             />
           </div>
 
           <div className="w-full lg:w-56">
             <Select value={selectedPosition} onValueChange={setSelectedPosition}>
-              <SelectTrigger className="bg-white/50 border-gray-200">
+              <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                 <div className="flex items-center text-gray-600">
                   <User className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Posisi" />
@@ -121,7 +121,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
 
           <div className="w-full lg:w-56">
             <Select value={selectedClub} onValueChange={setSelectedClub}>
-              <SelectTrigger className="bg-white/50 border-gray-200">
+              <SelectTrigger className="bg-white/50 border-gray-200 text-gray-900">
                 <div className="flex items-center text-gray-600">
                   <Shield className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Klub" />
