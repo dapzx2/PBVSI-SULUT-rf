@@ -335,6 +335,7 @@ export function ClubForm({ initialData, onSuccess, onClose }: ClubFormProps) {
                       rows={3}
                       className="resize-none"
                       {...field}
+                      value={field.value ?? ""}
                     />
                   </FormControl>
                   <FormMessage />

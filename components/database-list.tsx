@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Search, Filter, Users, Trophy, User, Shield } from 'lucide-react'
+import { Search, Filter, Users, Trophy, User, Shield, X, Tag } from 'lucide-react'
 import type { Player } from "@/lib/types"
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 
 interface DatabaseListProps {
   initialPlayers: Player[];
@@ -64,34 +64,45 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
   return (
     <div className="container mx-auto px-4 py-8 pt-24 min-h-screen">
       {/* Header Section */}
-      <div className="text-center mb-16 relative">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center mb-16 relative"
+      >
         <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-50 to-orange-100 opacity-50 blur-3xl rounded-full transform -translate-y-1/2" />
-        <h1 className="text-5xl font-extrabold text-gray-900 mb-6 tracking-tight">
+        <Badge variant="outline" className="px-4 py-1 border-orange-200 text-orange-700 bg-orange-50 mb-4">
+          Database Atlet
+        </Badge>
+        <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
           Database <span className="text-orange-600">Pemain</span>
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Temukan talenta terbaik bola voli Sulawesi Utara. Jelajahi profil, statistik, dan prestasi para atlet kebanggaan daerah.
         </p>
-      </div>
+      </motion.div>
 
       {/* Filter Section */}
-      <div className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-gray-100 p-6 mb-12 sticky top-20 z-30">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative group">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 group-hover:text-orange-500 transition-colors h-5 w-5" />
-              <Input
-                placeholder="Cari nama pemain..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-12 bg-gray-50 border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-all"
-              />
-            </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+        className="sticky top-24 z-30 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
+      >
+        <div className="flex flex-col lg:flex-row gap-4 items-center">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <Input
+              placeholder="Cari nama pemain..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 bg-white/50 border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-all"
+            />
           </div>
 
           <div className="w-full lg:w-56">
             <Select value={selectedPosition} onValueChange={setSelectedPosition}>
-              <SelectTrigger className="h-12 bg-gray-50 border-gray-200 focus:border-orange-500 focus:ring-orange-500">
+              <SelectTrigger className="bg-white/50 border-gray-200">
                 <div className="flex items-center text-gray-600">
                   <User className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Posisi" />
@@ -110,7 +121,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
 
           <div className="w-full lg:w-56">
             <Select value={selectedClub} onValueChange={setSelectedClub}>
-              <SelectTrigger className="h-12 bg-gray-50 border-gray-200 focus:border-orange-500 focus:ring-orange-500">
+              <SelectTrigger className="bg-white/50 border-gray-200">
                 <div className="flex items-center text-gray-600">
                   <Shield className="h-4 w-4 mr-2" />
                   <SelectValue placeholder="Klub" />
@@ -128,43 +139,49 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
           </div>
         </div>
 
-        {(searchTerm || selectedPosition !== "all" || selectedClub !== "all") && (
-          <div className="flex flex-wrap items-center gap-3 mt-6 pt-4 border-t border-gray-100">
-            <span className="text-sm font-medium text-gray-500 flex items-center">
-              <Filter className="w-4 h-4 mr-2" />
-              Filter aktif:
-            </span>
-            {searchTerm && (
-              <Badge variant="secondary" className="px-3 py-1 bg-orange-50 text-orange-700 hover:bg-orange-100 border-orange-200 cursor-pointer transition-colors" onClick={() => setSearchTerm("")}>
-                Pencarian: &quot;{searchTerm}&quot; ×
-              </Badge>
-            )}
-            {selectedPosition !== "all" && (
-              <Badge variant="secondary" className="px-3 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 border-blue-200 cursor-pointer transition-colors" onClick={() => setSelectedPosition("all")}>
-                Posisi: {selectedPosition} ×
-              </Badge>
-            )}
-            {selectedClub !== "all" && (
-              <Badge variant="secondary" className="px-3 py-1 bg-green-50 text-green-700 hover:bg-green-100 border-green-200 cursor-pointer transition-colors" onClick={() => setSelectedClub("all")}>
-                Klub: {selectedClub} ×
-              </Badge>
-            )}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={resetFilters} 
-              className="ml-auto text-xs text-gray-500 hover:text-red-600 hover:bg-red-50"
+        {/* Active Filters */}
+        <AnimatePresence>
+          {(searchTerm || selectedPosition !== "all" || selectedClub !== "all") && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-gray-100"
             >
-              Hapus Semua
-            </Button>
-          </div>
-        )}
-      </div>
+              <span className="text-sm text-gray-500 flex items-center gap-2">
+                <Tag className="w-3 h-3" /> Filter aktif:
+              </span>
+              {searchTerm && (
+                <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSearchTerm("")}>
+                  "{searchTerm}" <X className="w-3 h-3 ml-1" />
+                </Badge>
+              )}
+              {selectedPosition !== "all" && (
+                <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSelectedPosition("all")}>
+                  Posisi: {selectedPosition} <X className="w-3 h-3 ml-1" />
+                </Badge>
+              )}
+              {selectedClub !== "all" && (
+                <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSelectedClub("all")}>
+                  Klub: {selectedClub} <X className="w-3 h-3 ml-1" />
+                </Badge>
+              )}
+              <Button variant="ghost" size="sm" onClick={resetFilters} className="h-6 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50">
+                Reset Filter
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       {/* Players Grid */}
       <div>
         {filteredPlayers.length === 0 ? (
-          <div className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200"
+          >
             <div className="max-w-md mx-auto">
               <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
                 <Users className="w-12 h-12 text-gray-300" />
@@ -177,9 +194,9 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
                 Reset Filter
               </Button>
             </div>
-          </div>
+          </motion.div>
         ) : (
-          <motion.div 
+          <motion.div
             variants={container}
             initial="hidden"
             animate="show"
@@ -203,7 +220,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <CardContent className="p-6 flex-1 flex flex-col">
                     <div className="mb-4">
                       <h2 className="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">
@@ -243,7 +260,12 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
 
       {/* Statistics Section */}
       {allPlayers.length > 0 && (
-        <div className="mt-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-20"
+        >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
               <div className="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
@@ -291,9 +313,8 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   )
 }
-

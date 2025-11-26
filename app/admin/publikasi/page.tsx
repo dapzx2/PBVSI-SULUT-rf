@@ -3,21 +3,21 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
 } from "@/components/ui/table"
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogFooter 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
 } from "@/components/ui/dialog"
 import { Loader2, PlusCircle, Edit, Trash2 } from "lucide-react"
 import { Article } from "@/lib/types"
@@ -70,7 +70,7 @@ export default function AdminArticlesPage() {
     setIsDeleteDialogOpen(true)
   }
 
-  const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at'> & { imageFile?: File | null }) => {
+  const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at' | 'image_url' | 'updated_at' | 'slug' | 'excerpt'> & { imageFile?: File | null }) => {
     setIsSubmitting(true)
     try {
       let finalImageUrl = currentArticle?.image_url || null;

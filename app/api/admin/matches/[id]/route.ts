@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/mysql';
+import { ResultSetHeader } from 'mysql2';
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -11,7 +12,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       [home_team_id ?? null, away_team_id ?? null, match_date ?? null, score_home_sets ?? null, score_away_sets ?? null, status ?? null, league ?? null, venue ?? null, id]
     );
 
-    if (result.affectedRows === 0) {
+    const header = result as ResultSetHeader;
+    if (header.affectedRows === 0) {
       return NextResponse.json({ message: 'Match not found' }, { status: 404 });
     }
 
@@ -31,7 +33,8 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       [id]
     );
 
-    if (result.affectedRows === 0) {
+    const header = result as ResultSetHeader;
+    if (header.affectedRows === 0) {
       return NextResponse.json({ message: 'Match not found' }, { status: 404 });
     }
 

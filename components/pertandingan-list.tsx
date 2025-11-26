@@ -1,15 +1,15 @@
 "use client"
 
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { motion } from "framer-motion"
-import { Search, RefreshCw, Calendar, Trophy, Clock, CheckCircle2 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Search, RefreshCw, Calendar, Trophy, Clock, CheckCircle2, Filter, X, Tag } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { PertandinganCard } from "@/components/pertandingan-card"
 import type { Match } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface PertandinganListProps {
   initialMatches: Match[];
@@ -109,8 +109,9 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 mt-16">
-        <div className="container mx-auto px-4">
+      <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 mt-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10"></div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -118,25 +119,28 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
               transition={{ duration: 0.6 }}
             >
               <div className="flex items-center justify-center gap-3 mb-6">
-                <Trophy className="w-12 h-12" />
-                <h1 className="text-4xl md:text-6xl font-bold">Pertandingan Bola Voli</h1>
+                <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-sm">
+                  <Trophy className="w-10 h-10" />
+                </div>
+                <h1 className="text-4xl md:text-6xl font-bold tracking-tight">Pertandingan Bola Voli</h1>
               </div>
-              <p className="text-xl md:text-2xl text-orange-100 leading-relaxed mb-6">
+              <p className="text-xl md:text-2xl text-orange-100 leading-relaxed mb-8 font-light">
                 Ikuti semua pertandingan bola voli Sulawesi Utara secara real-time
               </p>
-              <div className="flex items-center justify-center gap-4 text-orange-100">
+              <div className="flex items-center justify-center gap-4 text-orange-100 bg-white/10 backdrop-blur-md py-2 px-6 rounded-full inline-flex mx-auto">
                 <div className="flex items-center gap-2">
                   <Clock className="w-4 h-4" />
-                  <span className="text-sm">Terakhir diperbarui: {formattedLastUpdate}</span>
+                  <span className="text-sm font-medium">Terakhir diperbarui: {formattedLastUpdate}</span>
                 </div>
+                <div className="h-4 w-px bg-white/20"></div>
                 <Button
                   onClick={handleRefresh}
                   disabled={isLoading}
-                  variant="secondary"
+                  variant="ghost"
                   size="sm"
-                  className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                  className="text-white hover:bg-white/20 h-auto py-1 px-2"
                 >
-                  <RefreshCw className={cn("h-4 w-4 mr-2", isLoading && "animate-spin")} />
+                  <RefreshCw className={cn("h-3.5 w-3.5 mr-1.5", isLoading && "animate-spin")} />
                   Perbarui
                 </Button>
               </div>
@@ -146,119 +150,132 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
       </section>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-        {/* Filters */}
+      <div className="container mx-auto px-4 py-12 -mt-8 relative z-20">
+        {/* Sticky Filter Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-8"
+          className="sticky top-24 z-30 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-8"
         >
-          <Card className="border-orange-200">
-            <CardContent className="p-6">
-              <div className="flex flex-col md:flex-row gap-4">
-                {/* Search */}
-                <div className="flex-1">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-                    <Input
-                      placeholder="Cari tim atau liga..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="pl-10 border-gray-300 focus:border-orange-500 focus:ring-orange-500"
-                    />
-                  </div>
-                </div>
+          <div className="flex flex-col lg:flex-row gap-4 items-center">
+            {/* Search */}
+            <div className="relative flex-1 w-full">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Cari tim atau liga..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-white/50 border-gray-200 focus:border-orange-500 focus:ring-orange-500 transition-all"
+              />
+            </div>
 
-                {/* League Filter */}
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    variant={selectedLeague === "all" ? "default" : "outline"}
-                    onClick={() => setSelectedLeague("all")}
-                    className={cn(
-                      selectedLeague === "all"
-                        ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-                        : "hover:bg-orange-50 hover:border-orange-300"
-                    )}
-                  >
-                    Semua Liga
-                  </Button>
+            {/* League Filter */}
+            <div className="w-full lg:w-64">
+              <Select value={selectedLeague} onValueChange={setSelectedLeague}>
+                <SelectTrigger className="bg-white/50 border-gray-200">
+                  <Filter className="h-4 w-4 mr-2 text-gray-500" />
+                  <SelectValue placeholder="Pilih Liga" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Semua Liga</SelectItem>
                   {leagues.map((league) => (
-                    <Button
-                      key={league}
-                      variant={selectedLeague === league ? "default" : "outline"}
-                      onClick={() => setSelectedLeague(league)}
-                      className={cn(
-                        selectedLeague === league
-                          ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-                          : "hover:bg-orange-50 hover:border-orange-300"
-                      )}
-                    >
+                    <SelectItem key={league} value={league}>
                       {league}
-                    </Button>
+                    </SelectItem>
                   ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-        {/* Tabs */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-8"
-        >
-          <div className="flex flex-wrap gap-3">
-            <Button
-              variant={activeTab === "live" ? "default" : "outline"}
-              onClick={() => setActiveTab("live")}
-              className={cn(
-                "flex items-center gap-2",
-                activeTab === "live"
-                  ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-                  : "hover:bg-orange-50 hover:border-orange-300"
+          {/* Active Filters & Tabs */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-4 pt-4 border-t border-gray-100 gap-4">
+            {/* Tabs */}
+            <div className="flex p-1 bg-gray-100/50 rounded-xl">
+              <button
+                onClick={() => setActiveTab("live")}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  activeTab === "live"
+                    ? "bg-white text-orange-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-200/50"
+                )}
+              >
+                <div className={cn("w-2 h-2 rounded-full", activeTab === "live" ? "bg-orange-600 animate-pulse" : "bg-gray-400")} />
+                Langsung
+                <span className={cn("ml-1.5 text-xs py-0.5 px-1.5 rounded-md", activeTab === "live" ? "bg-orange-100 text-orange-700" : "bg-gray-200 text-gray-600")}>
+                  {liveMatches.length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab("upcoming")}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  activeTab === "upcoming"
+                    ? "bg-white text-blue-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-200/50"
+                )}
+              >
+                <Clock className="w-3.5 h-3.5" />
+                Akan Datang
+                <span className={cn("ml-1.5 text-xs py-0.5 px-1.5 rounded-md", activeTab === "upcoming" ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-600")}>
+                  {upcomingMatches.length}
+                </span>
+              </button>
+              <button
+                onClick={() => setActiveTab("finished")}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  activeTab === "finished"
+                    ? "bg-white text-green-600 shadow-sm"
+                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-200/50"
+                )}
+              >
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                Selesai
+                <span className={cn("ml-1.5 text-xs py-0.5 px-1.5 rounded-md", activeTab === "finished" ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600")}>
+                  {finishedMatches.length}
+                </span>
+              </button>
+            </div>
+
+            {/* Active Filter Badges */}
+            <AnimatePresence>
+              {(searchQuery || selectedLeague !== "all") && (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="flex flex-wrap gap-2 items-center"
+                >
+                  <span className="text-xs text-gray-500 flex items-center gap-1">
+                    <Tag className="w-3 h-3" /> Filter:
+                  </span>
+                  {searchQuery && (
+                    <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSearchQuery("")}>
+                      "{searchQuery}" <X className="w-3 h-3 ml-1" />
+                    </Badge>
+                  )}
+                  {selectedLeague !== "all" && (
+                    <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSelectedLeague("all")}>
+                      {selectedLeague} <X className="w-3 h-3 ml-1" />
+                    </Badge>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSearchQuery("")
+                      setSelectedLeague("all")
+                    }}
+                    className="h-6 px-2 text-xs text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    Reset
+                  </Button>
+                </motion.div>
               )}
-            >
-              <div className={cn("w-2 h-2 rounded-full", activeTab === "live" ? "bg-white animate-pulse" : "bg-orange-600")} />
-              Langsung
-              <Badge variant="secondary" className={cn(activeTab === "live" ? "bg-white/20 text-white" : "bg-orange-100 text-orange-700")}>
-                {liveMatches.length}
-              </Badge>
-            </Button>
-            <Button
-              variant={activeTab === "upcoming" ? "default" : "outline"}
-              onClick={() => setActiveTab("upcoming")}
-              className={cn(
-                "flex items-center gap-2",
-                activeTab === "upcoming"
-                  ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-                  : "hover:bg-orange-50 hover:border-orange-300"
-              )}
-            >
-              <Clock className="w-4 h-4" />
-              Akan Datang
-              <Badge variant="secondary" className={cn(activeTab === "upcoming" ? "bg-white/20 text-white" : "bg-orange-100 text-orange-700")}>
-                {upcomingMatches.length}
-              </Badge>
-            </Button>
-            <Button
-              variant={activeTab === "finished" ? "default" : "outline"}
-              onClick={() => setActiveTab("finished")}
-              className={cn(
-                "flex items-center gap-2",
-                activeTab === "finished"
-                  ? "bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700"
-                  : "hover:bg-orange-50 hover:border-orange-300"
-              )}
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Selesai
-              <Badge variant="secondary" className={cn(activeTab === "finished" ? "bg-white/20 text-white" : "bg-orange-100 text-orange-700")}>
-                {finishedMatches.length}
-              </Badge>
-            </Button>
+            </AnimatePresence>
           </div>
         </motion.div>
 
@@ -266,14 +283,15 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
         {isLoading && currentMatches.length === 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-6">
-                  <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
-                  <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                </CardContent>
-              </Card>
+              <div key={i} className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 animate-pulse">
+                <div className="h-4 bg-gray-200 rounded w-1/3 mb-6 mx-auto"></div>
+                <div className="flex justify-between items-center mb-6">
+                  <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+                  <div className="h-8 w-16 bg-gray-200 rounded"></div>
+                  <div className="h-12 w-12 bg-gray-200 rounded-full"></div>
+                </div>
+                <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
+              </div>
             ))}
           </div>
         ) : currentMatches.length === 0 ? (

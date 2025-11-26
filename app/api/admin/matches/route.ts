@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/mysql';
 import { v4 as uuidv4 } from 'uuid';
+import { RowDataPacket } from 'mysql2';
 
 export async function GET() {
   try {
@@ -20,7 +21,7 @@ export async function GET() {
         created_at
       FROM matches
     `);
-    console.log('API GET - Raw match_date from DB:', matches.map((m: any) => m.match_date));
+    console.log('API GET - Raw match_date from DB:', (matches as RowDataPacket[]).map((m: any) => m.match_date));
     return NextResponse.json(matches);
   } catch (error: any) {
     console.error("Error in GET /api/admin/matches:", error);
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
   try {
     const { home_team_id, away_team_id, match_date, score_home_sets, score_away_sets, status, league, venue } = await request.json();
     console.log('API POST - Received match_date:', match_date);
-        const id = uuidv4();
+    const id = uuidv4();
 
     // Ensure all values are not undefined, convert to null if they are
     const params = [

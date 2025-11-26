@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils"
 
 interface ArticleFormProps {
   initialData?: Article | null;
-  onSubmit: (data: Omit<Article, 'id' | 'created_at' | 'published_at' | 'image_url'> & { imageFile?: File | null }) => void;
+  onSubmit: (data: Omit<Article, 'id' | 'created_at' | 'published_at' | 'image_url' | 'updated_at' | 'slug' | 'excerpt'> & { imageFile?: File | null }) => void;
   onCancel: () => void;
   isLoading?: boolean;
 }

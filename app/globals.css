@@ -80,16 +80,21 @@
 }
 
 @layer base {
+
+
+
+
   * {
     @apply border-border;
   }
 
-  html {
-    overflow-y: scroll;
-  }
-
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Compensate for Radix UI scroll lock on fixed header using Radix's variable */
+  body[data-scroll-locked] header {
+    padding-right: var(--removed-body-scroll-bar-size) !important;
   }
 }
 

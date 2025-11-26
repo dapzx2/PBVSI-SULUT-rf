@@ -11,6 +11,9 @@ export interface Player {
   created_at: string
   updated_at: string
   club?: Club // Joined club data
+  country?: string | null
+  club_name?: string
+  club_city?: string
 }
 
 export interface Club {
@@ -20,12 +23,21 @@ export interface Club {
   city: string
   established_year: number
   coach_name: string | null
+  coach?: string | null // Alias for coach_name in some contexts
   home_arena: string | null
   logo_url: string | null
   description: string | null
   achievements: string | null
   created_at: string
   updated_at: string
+}
+
+export interface Prediction {
+  id: string
+  match_id: string
+  user_name: string
+  predicted_winner_id: string
+  created_at: string
 }
 
 export interface Article {

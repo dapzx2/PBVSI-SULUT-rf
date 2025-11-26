@@ -30,15 +30,7 @@ const ClubForm = dynamic(() => import('@/components/admin/club-form').then(mod =
   loading: () => <div className="flex justify-center items-center h-40"><Loader2 className="h-8 w-8 animate-spin" /></div>
 })
 
-interface Club {
-  id: string
-  name: string
-  city: string
-  established_year: number
-  coach_name: string
-  home_arena: string
-  logo_url: string | null
-}
+import { Club } from "@/lib/types"
 
 export default function AdminClubsPage() {
   const [clubs, setClubs] = useState<Club[]>([])

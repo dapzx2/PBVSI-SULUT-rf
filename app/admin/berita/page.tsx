@@ -89,7 +89,7 @@ export default function AdminArticlesPage() {
     setIsDeleteDialogOpen(true)
   }
 
-  const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at' | 'image_url'> & { imageFile?: File | null }) => {
+  const handleFormSubmit = async (data: Omit<Article, 'id' | 'created_at' | 'published_at' | 'image_url' | 'updated_at' | 'slug' | 'excerpt'> & { imageFile?: File | null }) => {
     setIsSubmitting(true)
     try {
       let finalImageUrl = currentArticle?.image_url || null;

@@ -43,7 +43,7 @@ export async function createArticle(articleData: Omit<Article, 'id' | 'created_a
 }
 
 export async function updateArticle(id: string, articleData: Partial<Omit<Article, 'id' | 'created_at' | 'updated_at' | 'slug'>>): Promise<{ article: Article | null; error: string | null }> {
-  const dataToUpdate = { ...articleData };
+  const dataToUpdate: any = { ...articleData };
 
   if (dataToUpdate.title) { // If title is updated, generate new slug
     dataToUpdate.slug = generateSlug(dataToUpdate.title);
