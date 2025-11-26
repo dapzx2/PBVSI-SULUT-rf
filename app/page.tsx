@@ -226,7 +226,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <Button variant="outline" className="group bg-white border-orange-200 hover:border-orange-600 hover:bg-orange-50 text-orange-700" asChild>
+                <Button variant="outline" className="group bg-white border-orange-200 hover:border-orange-600 hover:bg-orange-50 text-orange-700 hover:text-orange-700" asChild>
                   <Link href="/berita" className="flex items-center gap-2">
                     Lihat Semua Berita
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
