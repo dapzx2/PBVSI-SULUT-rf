@@ -75,7 +75,7 @@ export default function TentangPage() {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Visi & Misi</h2>
               <p className="text-gray-600 mt-2">Panduan kami dalam memajukan bola voli di Sulawesi Utara.</p>
             </div>
-            <Card>
+            <Card className="bg-white">
               <CardContent className="p-8">
                 <div className="mb-8">
                   <h3 className="text-2xl font-bold text-orange-600 mb-3">Visi</h3>
@@ -116,46 +116,46 @@ export default function TentangPage() {
           </div>
         </div>
       </section>
-      
+
       {/* Program & Prestasi Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-            <div className="max-w-5xl mx-auto">
-              <div className="text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Program & Prestasi</h2>
-                <p className="text-gray-600 mt-2">Aksi dan pencapaian kami dalam beberapa tahun terakhir.</p>
-              </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Program Kegiatan */}
-                <Card>
-                    <CardHeader>
-                      <CardTitle className="text-2xl text-gray-800">Program Unggulan</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <ul className="space-y-4 text-gray-700">
-                            <li>✓ Pembinaan Atlet Muda (U-12 hingga U-19)</li>
-                            <li>✓ Kejuaraan Bola Voli Sulut Tahunan</li>
-                            <li>✓ Pelatihan Pelatih & Wasit Bersertifikat</li>
-                            <li>✓ Kemitraan dengan Sekolah & Universitas</li>
-                            <li>✓ Pengembangan Infrastruktur Olahraga</li>
-                        </ul>
-                    </CardContent>
-                </Card>
-
-                {/* Prestasi Terbaru */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-2xl text-gray-800">Prestasi Terbaru</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                      <div>
-                          <h4 className="font-semibold text-gray-800">Kejurnas U-19 2025 (Putra)</h4>
-                          <p className="text-gray-600">Bright Jos Elektrik Sulut - Peserta</p>
-                      </div>
-                  </CardContent>
-                </Card>
-              </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Program & Prestasi</h2>
+              <p className="text-gray-600 mt-2">Aksi dan pencapaian kami dalam beberapa tahun terakhir.</p>
             </div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Program Kegiatan */}
+              <Card className="bg-white">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-gray-800">Program Unggulan</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-4 text-gray-700">
+                    <li>✓ Pembinaan Atlet Muda (U-12 hingga U-19)</li>
+                    <li>✓ Kejuaraan Bola Voli Sulut Tahunan</li>
+                    <li>✓ Pelatihan Pelatih & Wasit Bersertifikat</li>
+                    <li>✓ Kemitraan dengan Sekolah & Universitas</li>
+                    <li>✓ Pengembangan Infrastruktur Olahraga</li>
+                  </ul>
+                </CardContent>
+              </Card>
+
+              {/* Prestasi Terbaru */}
+              <Card className="bg-white">
+                <CardHeader>
+                  <CardTitle className="text-2xl text-gray-800">Prestasi Terbaru</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-800">Kejurnas U-19 2025 (Putra)</h4>
+                    <p className="text-gray-600">Bright Jos Elektrik Sulut - Peserta</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -169,15 +169,15 @@ export default function TentangPage() {
             <div className="grid md:grid-cols-2 gap-8">
               {quickLinks.map((link) => (
                 <Link href={link.href} key={link.title} className="group">
-                    <Card className="h-full hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-transparent group-hover:border-orange-500">
-                      <CardContent className="p-6 flex items-center justify-between">
-                        <div>
-                          <h3 className="text-xl font-bold text-gray-800 transition-colors">{link.title}</h3>
-                          <p className="text-gray-600 mt-1">{link.description}</p>
-                        </div>
-                        <ArrowRight className="w-6 h-6 text-gray-400 group-hover:text-orange-600 group-hover:translate-x-1 transition-all" />
-                      </CardContent>
-                    </Card>
+                  <Card className="h-full bg-white hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-transparent group-hover:border-orange-500">
+                    <CardContent className="p-6 flex items-center justify-between">
+                      <div>
+                        <h3 className="text-xl font-bold text-gray-800 transition-colors">{link.title}</h3>
+                        <p className="text-gray-600 mt-1">{link.description}</p>
+                      </div>
+                      <ArrowRight className="w-6 h-6 text-gray-400 group-hover:text-orange-600 group-hover:translate-x-1 transition-all" />
+                    </CardContent>
+                  </Card>
                 </Link>
               ))}
             </div>
