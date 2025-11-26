@@ -90,7 +90,9 @@
 
   html,
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-foreground;
+    background-color: white !important;
+    min-height: 100%;
   }
 
   /* Compensate for Radix UI scroll lock on fixed header using Radix's variable */
