@@ -79,7 +79,7 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
               >
-                <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50 px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto">
+                <Button size="lg" className="bg-white text-orange-700 hover:bg-orange-50 px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all w-full sm:w-auto" asChild>
                   <Link href="/berita" className="flex items-center gap-2">
                     Berita Terbaru
                     <ArrowRight className="w-5 h-5" />
@@ -89,6 +89,7 @@ export default function HomePage() {
                   size="lg"
                   variant="outline"
                   className="bg-transparent border-white/40 text-white hover:bg-white/10 hover:text-white px-8 py-6 text-lg font-semibold backdrop-blur-sm w-full sm:w-auto"
+                  asChild
                 >
                   <Link href="/database" className="flex items-center gap-2">
                     Database Pemain
@@ -225,7 +226,7 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <Button variant="outline" className="group border-orange-200 hover:border-orange-600 hover:bg-orange-50 text-orange-700">
+                <Button variant="outline" className="group bg-white border-orange-200 hover:border-orange-600 hover:bg-orange-50 text-orange-700" asChild>
                   <Link href="/berita" className="flex items-center gap-2">
                     Lihat Semua Berita
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
