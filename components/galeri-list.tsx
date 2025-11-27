@@ -42,21 +42,21 @@ export function GaleriList({ initialItems }: GaleriListProps) {
   }, [allItems])
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-24 min-h-screen">
+    <div className="container mx-auto px-4 py-8 pt-24 md:pt-32 min-h-screen">
       {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-16 space-y-4"
+        className="text-center mb-8 md:mb-16 space-y-4"
       >
         <Badge variant="outline" className="px-4 py-1 border-orange-200 text-orange-700 bg-orange-50 mb-4">
           Dokumentasi & Momen
         </Badge>
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
           Galeri <span className="text-orange-600">PBVSI</span> Sulut
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Koleksi foto dan video eksklusif dari berbagai turnamen, kegiatan, dan sejarah perjalanan voli di Sulawesi Utara.
         </p>
       </motion.div>
@@ -66,7 +66,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className="sticky top-24 z-30 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
+        className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
       >
         <div className="flex flex-col lg:flex-row gap-4 items-center">
           <div className="relative flex-1 w-full">
@@ -130,7 +130,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
               </span>
               {searchTerm && (
                 <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSearchTerm("")}>
-                  "{searchTerm}" <X className="w-3 h-3 ml-1" />
+                  &quot;{searchTerm}&quot; <X className="w-3 h-3 ml-1" />
                 </Badge>
               )}
               {selectedCategory !== "all" && (
@@ -176,7 +176,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
           </p>
         </motion.div>
       ) : (
-        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 space-y-6">
+        <div className="columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
           <AnimatePresence>
             {filteredItems.map((item, index) => (
               <motion.div

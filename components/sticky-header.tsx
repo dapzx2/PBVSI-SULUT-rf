@@ -84,6 +84,7 @@ export function StickyHeader({ currentPage: _currentPage }: StickyHeaderProps) {
               alt="PBVSI Logo"
               fill
               className="object-contain drop-shadow-sm"
+              priority
             />
           </div>
           <div className="flex flex-col">
@@ -196,15 +197,23 @@ export function StickyHeader({ currentPage: _currentPage }: StickyHeaderProps) {
                       item.dropdown ? (
                         <Accordion type="single" collapsible key={item.name} className="border-none">
                           <AccordionItem value={item.name} className="border-none">
-                            <AccordionTrigger className={cn(
-                              "flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-50 text-gray-700 hover:text-orange-600 hover:no-underline transition-all",
-                              isActive(item.href) && "bg-orange-50 text-orange-600 font-semibold"
+                            <div className={cn(
+                              "flex items-center rounded-xl transition-all pr-2",
+                              isActive(item.href) ? "bg-orange-50" : "hover:bg-gray-50"
                             )}>
-                              <div className="flex items-center gap-3">
+                              <Link
+                                href={item.href}
+                                onClick={() => setIsOpen(false)}
+                                className={cn(
+                                  "flex flex-1 items-center gap-3 px-4 py-3 text-gray-700 hover:text-orange-600 transition-colors",
+                                  isActive(item.href) && "text-orange-600 font-semibold"
+                                )}
+                              >
                                 <item.icon className="w-5 h-5" />
                                 <span>{item.name}</span>
-                              </div>
-                            </AccordionTrigger>
+                              </Link>
+                              <AccordionTrigger className="py-2 px-2 hover:no-underline hover:bg-orange-100 rounded-lg text-orange-600 w-10 h-10 flex items-center justify-center flex-none" />
+                            </div>
                             <AccordionContent className="pb-0 pt-1">
                               <div className="pl-12 pr-2 space-y-1">
                                 {item.dropdown.map((subItem) => (

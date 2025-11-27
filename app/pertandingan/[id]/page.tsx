@@ -66,7 +66,7 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="min-h-screen bg-gray-50 pt-24 md:pt-32">
             {/* <PageTransition> */}
             <div className="container mx-auto px-4 py-8">
                 <Link href="/pertandingan">
@@ -78,32 +78,32 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
 
                 <Card className="overflow-hidden border-orange-200 shadow-lg bg-white">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-orange-600 to-red-600 p-6 text-white">
+                    <div className="bg-gradient-to-r from-orange-600 to-red-600 p-4 md:p-6 text-white">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                             <div className="flex items-center gap-3">
-                                <Badge className="bg-white/20 text-white hover:bg-white/30 border-none text-lg px-4 py-1">
+                                <Badge className="bg-white/20 text-white hover:bg-white/30 border-none text-sm md:text-lg px-3 md:px-4 py-1">
                                     {match.league}
                                 </Badge>
                                 {match.status.toLowerCase() === "live" && (
-                                    <Badge className="bg-red-500 text-white animate-pulse border-none text-lg px-4 py-1">
+                                    <Badge className="bg-red-500 text-white animate-pulse border-none text-sm md:text-lg px-3 md:px-4 py-1">
                                         LIVE
                                     </Badge>
                                 )}
                             </div>
-                            <div className="flex items-center gap-2 text-orange-100 bg-white/10 px-4 py-2 rounded-full">
-                                <Calendar className="h-5 w-5" />
+                            <div className="flex items-center gap-2 text-orange-100 bg-white/10 px-3 md:px-4 py-1.5 md:py-2 rounded-full text-sm md:text-base">
+                                <Calendar className="h-4 w-4 md:h-5 md:w-5" />
                                 <span className="font-medium">{formatDate(match.match_date)}</span>
                             </div>
                         </div>
                     </div>
 
-                    <CardContent className="p-8">
+                    <CardContent className="p-4 md:p-8">
                         {/* Score Board */}
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-12">
+                        <div className="grid grid-cols-3 md:flex md:flex-row items-center justify-between gap-2 md:gap-8 mb-6 md:mb-12">
                             {/* Home Team */}
-                            <div className="flex flex-col items-center flex-1">
+                            <div className="flex flex-col items-center justify-start h-full">
                                 {match.home_team?.logo_url ? (
-                                    <div className="w-32 h-32 mb-4 bg-white rounded-full p-4 shadow-lg border-4 border-orange-100">
+                                    <div className="w-16 h-16 md:w-32 md:h-32 mb-2 md:mb-4 bg-white rounded-full p-2 md:p-4 shadow-lg border-2 md:border-4 border-orange-100">
                                         <Image
                                             src={match.home_team.logo_url}
                                             alt={match.home_team?.name || "Home Team"}
@@ -113,41 +113,41 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
                                         />
                                     </div>
                                 ) : (
-                                    <div className="w-32 h-32 mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                        <span className="text-4xl font-bold text-gray-400">H</span>
+                                    <div className="w-16 h-16 md:w-32 md:h-32 mb-2 md:mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                                        <span className="text-xl md:text-4xl font-bold text-gray-400">H</span>
                                     </div>
                                 )}
                                 <h2 className={cn(
-                                    "text-2xl md:text-3xl font-bold text-center mb-2",
+                                    "text-sm md:text-3xl font-bold text-center mb-1 md:mb-2 leading-tight",
                                     getScoreClass("home", homeSets, awaySets)
                                 )}>
                                     {match.home_team?.name}
                                 </h2>
-                                <p className="text-gray-500 font-medium">Tim Tuan Rumah</p>
+                                <p className="hidden md:block text-gray-500 font-medium">Tim Tuan Rumah</p>
                             </div>
 
                             {/* VS / Score */}
-                            <div className="flex flex-col items-center px-4">
+                            <div className="flex flex-col items-center justify-center h-full">
                                 {match.status.toLowerCase() === "scheduled" || match.status.toLowerCase() === "upcoming" ? (
-                                    <div className="text-6xl font-black text-gray-200">VS</div>
+                                    <div className="text-2xl md:text-6xl font-black text-gray-200">VS</div>
                                 ) : (
                                     <>
-                                        <div className="flex items-center gap-6 mb-4">
+                                        <div className="flex items-center gap-2 md:gap-6 mb-1 md:mb-4">
                                             <span className={cn(
-                                                "text-7xl md:text-8xl font-black",
+                                                "text-3xl md:text-8xl font-black",
                                                 getScoreClass("home", homeSets, awaySets)
                                             )}>
                                                 {homeSets}
                                             </span>
-                                            <span className="text-4xl text-gray-300 font-light">-</span>
+                                            <span className="text-xl md:text-4xl text-gray-300 font-light">-</span>
                                             <span className={cn(
-                                                "text-7xl md:text-8xl font-black",
+                                                "text-3xl md:text-8xl font-black",
                                                 getScoreClass("away", homeSets, awaySets)
                                             )}>
                                                 {awaySets}
                                             </span>
                                         </div>
-                                        <Badge variant="outline" className="text-gray-500 border-gray-300 px-4 py-1">
+                                        <Badge variant="outline" className="text-gray-500 border-gray-300 px-2 py-0.5 md:px-4 md:py-1 text-[10px] md:text-sm whitespace-nowrap">
                                             Total Set
                                         </Badge>
                                     </>
@@ -155,9 +155,9 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
                             </div>
 
                             {/* Away Team */}
-                            <div className="flex flex-col items-center flex-1">
+                            <div className="flex flex-col items-center justify-start h-full">
                                 {match.away_team?.logo_url ? (
-                                    <div className="w-32 h-32 mb-4 bg-white rounded-full p-4 shadow-lg border-4 border-red-100">
+                                    <div className="w-16 h-16 md:w-32 md:h-32 mb-2 md:mb-4 bg-white rounded-full p-2 md:p-4 shadow-lg border-2 md:border-4 border-red-100">
                                         <Image
                                             src={match.away_team.logo_url}
                                             alt={match.away_team?.name || "Away Team"}
@@ -167,26 +167,26 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
                                         />
                                     </div>
                                 ) : (
-                                    <div className="w-32 h-32 mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                                        <span className="text-4xl font-bold text-gray-400">A</span>
+                                    <div className="w-16 h-16 md:w-32 md:h-32 mb-2 md:mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                                        <span className="text-xl md:text-4xl font-bold text-gray-400">A</span>
                                     </div>
                                 )}
                                 <h2 className={cn(
-                                    "text-2xl md:text-3xl font-bold text-center mb-2",
+                                    "text-sm md:text-3xl font-bold text-center mb-1 md:mb-2 leading-tight",
                                     getScoreClass("away", homeSets, awaySets)
                                 )}>
                                     {match.away_team?.name}
                                 </h2>
-                                <p className="text-gray-500 font-medium">Tim Tamu</p>
+                                <p className="hidden md:block text-gray-500 font-medium">Tim Tamu</p>
                             </div>
                         </div>
 
                         {/* Set Details */}
                         {(match.status.toLowerCase() !== "scheduled" && match.status.toLowerCase() !== "upcoming") && (
-                            <div className="max-w-3xl mx-auto mb-12">
-                                <div className="bg-gray-50 rounded-2xl p-6">
-                                    <h3 className="text-lg font-semibold text-center mb-6 text-gray-700">Detail Perolehan Poin per Set</h3>
-                                    <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            <div className="max-w-3xl mx-auto mb-8 md:mb-12">
+                                <div className="bg-gray-50 rounded-2xl p-4 md:p-6">
+                                    <h3 className="text-base md:text-lg font-semibold text-center mb-4 md:mb-6 text-gray-700">Detail Perolehan Poin per Set</h3>
+                                    <div className="grid grid-cols-5 gap-2 md:gap-4">
                                         {Array.isArray(match.score_home_points) && Array.isArray(match.score_away_points) ? (
                                             match.score_home_points.map((homeScore, index) => {
                                                 const awayScore = match.score_away_points![index]
@@ -195,18 +195,18 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
 
                                                 return (
                                                     <div key={index} className="flex flex-col items-center">
-                                                        <div className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Set {index + 1}</div>
+                                                        <div className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 md:mb-2">Set {index + 1}</div>
                                                         <div className={cn(
-                                                            "flex flex-col items-center justify-center w-full aspect-square rounded-xl border-2 transition-all",
+                                                            "flex flex-col items-center justify-center w-full aspect-square rounded-lg md:rounded-xl border-2 transition-all p-1",
                                                             homeWon && "bg-orange-50 border-orange-200 shadow-sm",
                                                             awayWon && "bg-red-50 border-red-200 shadow-sm",
                                                             !homeWon && !awayWon && "bg-white border-gray-100"
                                                         )}>
-                                                            <span className={cn("text-xl font-bold", homeWon ? "text-orange-600" : "text-gray-400")}>
+                                                            <span className={cn("text-sm md:text-xl font-bold", homeWon ? "text-orange-600" : "text-gray-400")}>
                                                                 {homeScore}
                                                             </span>
-                                                            <div className="w-8 h-px bg-gray-200 my-1"></div>
-                                                            <span className={cn("text-xl font-bold", awayWon ? "text-red-600" : "text-gray-400")}>
+                                                            <div className="w-4 md:w-8 h-px bg-gray-200 my-0.5 md:my-1"></div>
+                                                            <span className={cn("text-sm md:text-xl font-bold", awayWon ? "text-red-600" : "text-gray-400")}>
                                                                 {awayScore}
                                                             </span>
                                                         </div>
@@ -224,24 +224,24 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
                         )}
 
                         {/* Match Info */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-                            <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl border border-blue-100">
-                                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
-                                    <MapPin className="h-6 w-6" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
+                            <div className="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-blue-50 rounded-xl border border-blue-100">
+                                <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                                    <MapPin className="h-5 w-5 md:h-6 md:w-6" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-blue-600 font-medium mb-1">Lokasi Pertandingan</p>
-                                    <p className="text-gray-900 font-semibold">{match.venue}</p>
+                                    <p className="text-xs md:text-sm text-blue-600 font-medium mb-0.5 md:mb-1">Lokasi Pertandingan</p>
+                                    <p className="text-sm md:text-base text-gray-900 font-semibold">{match.venue}</p>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-4 p-4 bg-purple-50 rounded-xl border border-purple-100">
-                                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
-                                    <Trophy className="h-6 w-6" />
+                            <div className="flex items-center gap-3 md:gap-4 p-3 md:p-4 bg-purple-50 rounded-xl border border-purple-100">
+                                <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
+                                    <Trophy className="h-5 w-5 md:h-6 md:w-6" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-purple-600 font-medium mb-1">Status Pertandingan</p>
-                                    <p className="text-gray-900 font-semibold capitalize">{match.status}</p>
+                                    <p className="text-xs md:text-sm text-purple-600 font-medium mb-0.5 md:mb-1">Status Pertandingan</p>
+                                    <p className="text-sm md:text-base text-gray-900 font-semibold capitalize">{match.status}</p>
                                 </div>
                             </div>
                         </div>

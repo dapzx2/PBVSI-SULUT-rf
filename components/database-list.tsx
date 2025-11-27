@@ -62,7 +62,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-24 min-h-screen">
+    <div className="container mx-auto px-4 py-8 pt-24 md:pt-32 min-h-screen">
       {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -87,7 +87,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className="sticky top-24 z-30 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
+        className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
       >
         <div className="flex flex-col lg:flex-row gap-4 items-center">
           <div className="relative flex-1 w-full">
@@ -153,7 +153,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
               </span>
               {searchTerm && (
                 <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSearchTerm("")}>
-                  "{searchTerm}" <X className="w-3 h-3 ml-1" />
+                  &quot;{searchTerm}&quot; <X className="w-3 h-3 ml-1" />
                 </Badge>
               )}
               {selectedPosition !== "all" && (
@@ -204,8 +204,8 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
           >
             {filteredPlayers.map((player) => (
               <motion.div key={player.id} variants={item}>
-                <Card className="group overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 rounded-2xl h-full flex flex-col">
-                  <div className="relative h-64 overflow-hidden bg-gray-100">
+                <Card className="group overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 rounded-xl md:rounded-2xl h-full flex flex-col">
+                  <div className="relative h-48 md:h-64 overflow-hidden bg-gray-100">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     <Image
                       src={player.photo_url || "/placeholder.svg?height=400&width=300&query=player"}
@@ -214,38 +214,38 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
                       height={400}
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                     />
-                    <div className="absolute top-4 right-4 z-20">
-                      <Badge className="bg-white/90 text-gray-900 backdrop-blur-sm shadow-sm hover:bg-white">
+                    <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20">
+                      <Badge className="bg-white/90 text-gray-900 backdrop-blur-sm shadow-sm hover:bg-white text-xs md:text-sm px-2 py-0.5 md:px-2.5 md:py-0.5">
                         {player.position}
                       </Badge>
                     </div>
                   </div>
 
-                  <CardContent className="p-6 flex-1 flex flex-col">
-                    <div className="mb-4">
-                      <h2 className="text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">
+                  <CardContent className="p-4 md:p-6 flex-1 flex flex-col">
+                    <div className="mb-3 md:mb-4">
+                      <h2 className="text-lg md:text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">
                         {player.name}
                       </h2>
-                      <p className="text-sm font-medium text-gray-500 flex items-center mt-1">
+                      <p className="text-xs md:text-sm font-medium text-gray-500 flex items-center mt-1">
                         <Shield className="w-3 h-3 mr-1" />
                         {player.club?.name || "Tanpa Klub"}
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-6 p-4 bg-gray-50 rounded-xl">
+                    <div className="grid grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 rounded-lg md:rounded-xl">
                       <div className="text-center">
-                        <p className="text-xs text-gray-500 uppercase tracking-wider">Tinggi</p>
-                        <p className="font-bold text-gray-900">{player.height} <span className="text-xs font-normal text-gray-500">cm</span></p>
+                        <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Tinggi</p>
+                        <p className="font-bold text-sm md:text-base text-gray-900">{player.height} <span className="text-[10px] md:text-xs font-normal text-gray-500">cm</span></p>
                       </div>
                       <div className="text-center border-l border-gray-200">
-                        <p className="text-xs text-gray-500 uppercase tracking-wider">Berat</p>
-                        <p className="font-bold text-gray-900">{player.weight} <span className="text-xs font-normal text-gray-500">kg</span></p>
+                        <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Berat</p>
+                        <p className="font-bold text-sm md:text-base text-gray-900">{player.weight} <span className="text-[10px] md:text-xs font-normal text-gray-500">kg</span></p>
                       </div>
                     </div>
 
                     <div className="mt-auto">
                       <Link href={`/pemain/${player.id}`} passHref>
-                        <Button className="w-full bg-gray-900 hover:bg-orange-600 text-white transition-colors rounded-xl h-11 font-medium">
+                        <Button className="w-full bg-gray-900 hover:bg-orange-600 text-white transition-colors rounded-lg md:rounded-xl h-9 md:h-11 text-sm md:text-base font-medium">
                           Lihat Profil Lengkap
                         </Button>
                       </Link>

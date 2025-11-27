@@ -88,7 +88,7 @@ export default function SejarahPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 mt-16">
+      <section className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-20 mt-24 md:mt-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>

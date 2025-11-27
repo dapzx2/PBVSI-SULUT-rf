@@ -122,18 +122,18 @@ export default function ArticleDetailPage() {
 
             {/* Metadata: Author and Date */}
             <div className="flex items-center justify-center space-x-4 text-sm text-gray-500 mb-8 border-y py-4">
-                <div className="flex items-center gap-2">
-                    <User aria-label={article.author} className="h-8 w-8 text-gray-400 rounded-full bg-gray-100 p-1" />
-                    <span className="font-medium text-gray-800">{article.author}</span>
-                </div>
-                <span className="text-gray-300">•</span>
-                <time dateTime={article.published_at}>
-                  {new Date(article.published_at).toLocaleDateString("id-ID", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </time>
+              <div className="flex items-center gap-2">
+                <User aria-label={article.author} className="h-8 w-8 text-gray-400 rounded-full bg-gray-100 p-1" />
+                <span className="font-medium text-gray-800">{article.author}</span>
+              </div>
+              <span className="text-gray-300">•</span>
+              <time dateTime={article.published_at}>
+                {new Date(article.published_at).toLocaleDateString("id-ID", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </time>
             </div>
 
 
@@ -150,9 +150,9 @@ export default function ArticleDetailPage() {
             )}
 
             {/* Article Content */}
-            <div 
-                className="prose prose-lg max-w-none text-gray-800 mx-auto" 
-                dangerouslySetInnerHTML={{ __html: article.content }} 
+            <div
+              className="prose prose-lg max-w-none text-gray-800 mx-auto"
+              dangerouslySetInnerHTML={{ __html: article.content }}
             />
 
           </article>

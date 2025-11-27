@@ -1,3 +1,4 @@
+import 'server-only';
 import { createPool, Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
 const globalForMysql = globalThis as typeof globalThis & { mysqlPool?: Pool };
@@ -8,7 +9,7 @@ const getPool = (): Pool => {
   if (globalForMysql.mysqlPool) {
     return globalForMysql.mysqlPool!;
   }
-  
+
   // Otherwise, create a new pool
   const pool = createPool({
     host: process.env.MYSQL_HOST || 'localhost',
@@ -23,7 +24,7 @@ const getPool = (): Pool => {
 
   // Cache the pool in the global object for subsequent requests
   globalForMysql.mysqlPool = pool;
-  
+
   return pool;
 };
 

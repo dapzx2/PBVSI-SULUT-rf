@@ -18,12 +18,32 @@ interface ArticleFormProps {
   isLoading?: boolean;
 }
 
+const formatTags = (tags: string | string[] | null | undefined): string => {
+  if (!tags) return "";
+  if (Array.isArray(tags)) return tags.join(", ");
+  if (typeof tags === 'string') {
+    try {
+      // Check if it looks like a JSON array
+      if (tags.trim().startsWith('[') && tags.trim().endsWith(']')) {
+        const parsed = JSON.parse(tags);
+        if (Array.isArray(parsed)) {
+          return parsed.join(", ");
+        }
+      }
+    } catch (e) {
+      // Not a JSON string or parse error, return as is
+    }
+    return tags;
+  }
+  return "";
+};
+
 export function ArticleForm({ initialData, onSubmit, onCancel, isLoading }: ArticleFormProps) {
   const [title, setTitle] = useState(initialData?.title || "");
   const [content, setContent] = useState(initialData?.content || "");
   const [author, setAuthor] = useState(initialData?.author || "");
   const [category, setCategory] = useState(initialData?.category || "");
-  const [tags, setTags] = useState(initialData?.tags ? (Array.isArray(initialData.tags) ? initialData.tags.join(", ") : initialData.tags) : "");
+  const [tags, setTags] = useState(formatTags(initialData?.tags));
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(initialData?.image_url || null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -34,7 +54,7 @@ export function ArticleForm({ initialData, onSubmit, onCancel, isLoading }: Arti
       setContent(initialData.content || "");
       setAuthor(initialData.author || "");
       setCategory(initialData.category || "");
-      setTags(initialData.tags ? (Array.isArray(initialData.tags) ? initialData.tags.join(", ") : initialData.tags) : "");
+      setTags(formatTags(initialData.tags));
       setImageFile(null);
       setPreviewUrl(initialData.image_url || null);
     }

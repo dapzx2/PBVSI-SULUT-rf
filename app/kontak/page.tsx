@@ -92,7 +92,7 @@ export default function ContactPage() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-16 mt-16"
+        className="bg-gradient-to-r from-orange-600 to-orange-800 text-white py-16 mt-24 md:mt-32"
       >
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">

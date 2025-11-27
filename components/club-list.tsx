@@ -43,21 +43,21 @@ export function ClubList({ initialClubs }: ClubListProps) {
       {/* Decorative Background */}
       <div className="absolute inset-0 -z-10 h-[500px] w-full bg-gradient-to-b from-orange-50/50 to-transparent" />
 
-      <div className="container mx-auto px-4 pt-24">
+      <div className="container mx-auto px-4 pt-24 md:pt-32">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 space-y-4"
+          className="text-center mb-8 md:mb-16 space-y-4"
         >
           <Badge variant="outline" className="px-4 py-1 border-orange-200 text-orange-700 bg-orange-50 mb-4">
             Tim & Klub
           </Badge>
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
             Daftar Klub <span className="text-orange-600">PBVSI</span> Sulut
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
             Jelajahi profil lengkap klub-klub bola voli terkemuka di Sulawesi Utara.
           </p>
         </motion.div>
@@ -67,7 +67,7 @@ export function ClubList({ initialClubs }: ClubListProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="sticky top-24 z-30 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
+          className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
         >
           <div className="flex flex-col lg:flex-row gap-4 items-center">
             {/* Search */}
@@ -114,7 +114,7 @@ export function ClubList({ initialClubs }: ClubListProps) {
                 </span>
                 {searchTerm && (
                   <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSearchTerm("")}>
-                    "{searchTerm}" <X className="w-3 h-3 ml-1" />
+                    &quot;{searchTerm}&quot; <X className="w-3 h-3 ml-1" />
                   </Badge>
                 )}
                 {selectedCity !== "all" && (
@@ -204,22 +204,22 @@ export function ClubList({ initialClubs }: ClubListProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-20 bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-xl p-8 md:p-12 text-white relative overflow-hidden"
+            className="mt-12 md:mt-20 bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-xl p-6 md:p-12 text-white relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-              <div>
-                <h3 className="text-2xl font-bold mb-2">Statistik Ekosistem</h3>
-                <p className="text-gray-400">Gambaran umum klub bola voli di Sulawesi Utara</p>
+              <div className="text-center md:text-left">
+                <h3 className="text-xl md:text-2xl font-bold mb-2">Statistik Ekosistem</h3>
+                <p className="text-sm md:text-base text-gray-400">Gambaran umum klub bola voli di Sulawesi Utara</p>
               </div>
-              <div className="flex gap-12">
+              <div className="flex gap-8 md:gap-12">
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-orange-500 mb-1">{allClubs.length}</div>
-                  <div className="text-sm text-gray-400 uppercase tracking-wider">Total Klub</div>
+                  <div className="text-3xl md:text-4xl font-bold text-orange-500 mb-1">{allClubs.length}</div>
+                  <div className="text-xs md:text-sm text-gray-400 uppercase tracking-wider">Total Klub</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-blue-500 mb-1">{cities.length}</div>
-                  <div className="text-sm text-gray-400 uppercase tracking-wider">Kota/Kab</div>
+                  <div className="text-3xl md:text-4xl font-bold text-blue-500 mb-1">{cities.length}</div>
+                  <div className="text-xs md:text-sm text-gray-400 uppercase tracking-wider">Kota/Kab</div>
                 </div>
               </div>
             </div>

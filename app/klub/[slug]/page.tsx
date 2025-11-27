@@ -80,7 +80,7 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
         {/* Decorative Background */}
         <div className="absolute inset-0 -z-10 h-[500px] w-full bg-gradient-to-b from-orange-50/50 to-transparent" />
 
-        <div className="container mx-auto px-4 pt-24">
+        <div className="container mx-auto px-4 pt-24 md:pt-32">
           {/* Back Button */}
           <Link href="/klub" className="inline-flex items-center text-gray-500 hover:text-orange-600 transition-colors mb-8 group">
             <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center mr-3 group-hover:border-orange-200 group-hover:bg-orange-50 transition-all">
@@ -93,9 +93,9 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
             {/* Left Column: Logo & Key Stats */}
             <div className="lg:col-span-4 space-y-6">
               <div
-                className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-center"
+                className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-center"
               >
-                <div className="relative w-48 h-48">
+                <div className="relative w-32 h-32 md:w-48 md:h-48">
                   <Image
                     src={club.logo_url || "/placeholder.svg?height=192&width=192&query=club logo"}
                     alt={`${club.name} logo`}
@@ -143,7 +143,7 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
             {/* Right Column: Info & Details */}
             <div className="lg:col-span-8 space-y-8">
               <div>
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{club.name}</h1>
+                <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">{club.name}</h1>
 
                 {club.achievements && (
                   <div className="flex flex-wrap gap-3 mb-6">

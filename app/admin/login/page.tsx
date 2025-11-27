@@ -113,6 +113,7 @@ export default function AdminLogin() {
                 width={64}
                 height={64}
                 className="w-16 h-16"
+                priority
               />
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">

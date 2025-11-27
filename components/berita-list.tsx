@@ -70,21 +70,21 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 pt-24 min-h-screen">
+    <div className="container mx-auto px-4 py-8 pt-24 md:pt-32 min-h-screen">
       {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-16 space-y-4"
+        className="text-center mb-8 md:mb-16 space-y-4"
       >
         <Badge variant="outline" className="px-4 py-1 border-orange-200 text-orange-700 bg-orange-50 mb-4">
           Informasi Terkini
         </Badge>
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 tracking-tight">
+        <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-gray-900 tracking-tight">
           Berita <span className="text-orange-600">PBVSI</span> Sulut
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base md:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
           Dapatkan berita terbaru, pengumuman, dan liputan eksklusif seputar dunia voli Sulawesi Utara.
         </p>
       </motion.div>
@@ -94,7 +94,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.6 }}
-        className="sticky top-24 z-30 bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
+        className="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 p-4 mb-12"
       >
         <div className="flex flex-col lg:flex-row gap-4 items-center">
           <div className="relative flex-1 w-full">
@@ -155,7 +155,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
               </span>
               {searchQuery && (
                 <Badge variant="secondary" className="cursor-pointer hover:bg-red-100 hover:text-red-700 transition-colors" onClick={() => setSearchQuery("")}>
-                  "{searchQuery}" <X className="w-3 h-3 ml-1" />
+                  &quot;{searchQuery}&quot; <X className="w-3 h-3 ml-1" />
                 </Badge>
               )}
               {selectedCategory !== "all" && (
@@ -198,7 +198,7 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
           )}
         </motion.div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           <AnimatePresence>
             {filteredNews.map((article, index) => (
               <motion.div
@@ -206,27 +206,28 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="h-full"
               >
-                <Card className="bg-white h-full overflow-hidden hover:shadow-xl transition-all duration-300 group border-gray-100 flex flex-col">
-                  <Link href={`/berita/${article.slug}`} className="block relative aspect-video overflow-hidden">
+                <Card className="flex flex-col h-full bg-white overflow-hidden hover:shadow-xl transition-all duration-300 group border-gray-100">
+                  <Link href={`/berita/${article.slug}`} className="block relative aspect-video w-full overflow-hidden">
                     <Image
                       src={article.image_url || "/placeholder.svg?height=400&width=600&query=article image"}
                       alt={article.title}
                       fill
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     {article.category && (
-                      <Badge className="absolute top-4 left-4 bg-orange-600 text-white border-none shadow-lg">
+                      <Badge className="absolute top-4 left-4 z-20 bg-orange-600 text-white border-none shadow-lg">
                         {article.category}
                       </Badge>
                     )}
                   </Link>
-                  <CardContent className="p-6 flex flex-col flex-grow">
+                  <CardContent className="flex flex-col flex-1 p-6">
                     <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
-                        {format(new Date(article.published_at), 'dd MMM yyyy', { locale: id })}
+                        {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: id })}
                       </span>
                       {article.author && (
                         <span className="flex items-center gap-1">
@@ -240,12 +241,10 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
                         {article.title}
                       </h3>
                     </Link>
-                    {article.excerpt && (
-                      <p className="text-gray-600 line-clamp-3 mb-4 text-sm leading-relaxed flex-grow">
-                        {article.excerpt}
-                      </p>
-                    )}
-                    <div className="mt-auto pt-4 border-t border-gray-100">
+                    <p className="text-gray-600 line-clamp-3 mb-4 text-sm leading-relaxed flex-1">
+                      {article.excerpt || article.content.replace(/<[^>]*>?/gm, '').slice(0, 150) + (article.content.length > 150 ? '...' : '')}
+                    </p>
+                    <div className="pt-4 border-t border-gray-100">
                       <Link
                         href={`/berita/${article.slug}`}
                         className="inline-flex items-center text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
@@ -263,4 +262,3 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
     </div>
   )
 }
-
