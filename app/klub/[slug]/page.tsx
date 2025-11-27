@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { WifiOff, MapPin, Calendar, Trophy, User } from 'lucide-react'
+import { WifiOff, MapPin, Calendar, Trophy, User, ArrowLeft } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -76,45 +76,127 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
 
   return (
     <PageTransition>
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
-        {/* Club Header Section */}
-        <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 border-b border-orange-200 shadow-md pt-24 pb-12 md:pt-32 md:pb-16">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-10">
-              <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-6 border-white shadow-xl bg-gray-100 flex items-center justify-center p-2">
-                <Image
-                  src={club.logo_url || "/placeholder.svg?height=192&width=192&query=club logo"}
-                  alt={`${club.name} logo`}
-                  width={224}
-                  height={224}
-                  className="object-contain"
-                />
-              </div>
-              <div className="text-center md:text-left flex-1">
-                <h1 className="text-4xl md:text-6xl font-extrabold text-orange-900 mb-3 leading-tight">{club.name}</h1>
-                <div className="flex flex-wrap justify-center md:justify-start items-center gap-x-8 gap-y-3 text-orange-800 text-lg mb-5">
-                  <span className="flex items-center font-medium">
-                    <MapPin className="w-5 h-5 mr-2 text-orange-600" />
-                    {club.city}
-                  </span>
-                  <span className="flex items-center font-medium">
-                    <Calendar className="w-5 h-5 mr-2 text-orange-600" />
-                    Berdiri: {club.established_year}
-                  </span>
-                  {club.coach && (
-                    <span className="flex items-center font-medium">
-                      <User className="w-5 h-5 mr-2 text-orange-600" />
-                      Pelatih: {club.coach}
-                    </span>
-                  )}
+      <div className="min-h-screen bg-[#FDFDFD] pb-20">
+        {/* Decorative Background */}
+        <div className="absolute inset-0 -z-10 h-[500px] w-full bg-gradient-to-b from-orange-50/50 to-transparent" />
+
+        <div className="container mx-auto px-4 pt-24">
+          {/* Back Button */}
+          <Link href="/klub" className="inline-flex items-center text-gray-500 hover:text-orange-600 transition-colors mb-8 group">
+            <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center mr-3 group-hover:border-orange-200 group-hover:bg-orange-50 transition-all">
+              <ArrowLeft className="w-4 h-4" />
+            </div>
+            <span className="font-medium">Kembali ke Daftar Klub</span>
+          </Link>
+
+          <div className="grid lg:grid-cols-12 gap-8 items-start">
+            {/* Left Column: Logo & Key Stats */}
+            <div className="lg:col-span-4 space-y-6">
+              <div
+                className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex items-center justify-center"
+              >
+                <div className="relative w-48 h-48">
+                  <Image
+                    src={club.logo_url || "/placeholder.svg?height=192&width=192&query=club logo"}
+                    alt={`${club.name} logo`}
+                    fill
+                    className="object-contain"
+                  />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4">
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                  <div className="w-10 h-10 bg-orange-50 rounded-full flex items-center justify-center flex-shrink-0">
+                    <MapPin className="w-5 h-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">Kota Asal</p>
+                    <p className="text-lg font-bold text-gray-900">{club.city}</p>
+                  </div>
+                </div>
+
+                <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                  <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Calendar className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-500 uppercase tracking-wide">Tahun Berdiri</p>
+                    <p className="text-lg font-bold text-gray-900">{club.established_year || '-'}</p>
+                  </div>
+                </div>
+
+                {club.coach && (
+                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 flex items-center gap-4">
+                    <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500 uppercase tracking-wide">Pelatih</p>
+                      <p className="text-lg font-bold text-gray-900">{club.coach}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Column: Info & Details */}
+            <div className="lg:col-span-8 space-y-8">
+              <div>
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{club.name}</h1>
+
                 {club.achievements && (
-                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mt-6">
-                    <Trophy className="w-6 h-6 text-yellow-600" />
+                  <div className="flex flex-wrap gap-3 mb-6">
                     {club.achievements.split(',').map((achievement, index) => (
-                      <Badge key={index} variant="secondary" className="bg-orange-200 text-orange-800 text-base px-4 py-1.5 rounded-full font-semibold shadow-sm">
+                      <Badge key={index} variant="secondary" className="bg-yellow-50 text-yellow-700 border-yellow-200 px-3 py-1 text-sm flex items-center gap-1">
+                        <Trophy className="w-3 h-3" />
                         {achievement.trim()}
                       </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {club.description && (
+                <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="p-6 md:p-8">
+                    <h2 className="text-xl font-bold text-gray-900 mb-4">Tentang Klub</h2>
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-line">{club.description}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Players Section */}
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">Daftar Pemain</h2>
+                {players.length === 0 ? (
+                  <div className="text-center text-gray-600 text-lg p-8 bg-white rounded-3xl shadow-sm border border-gray-100">
+                    <p>Belum ada data pemain untuk klub ini.</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {players.map((player) => (
+                      <Link href={`/pemain/${player.id}`} key={player.id} className="group">
+                        <Card className="overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border-gray-100 h-full">
+                          <div className="relative w-full h-48 bg-gray-50 flex items-center justify-center overflow-hidden">
+                            <Image
+                              src={player.photo_url || "/placeholder.svg?height=200&width=300&query=player photo"}
+                              alt={player.name}
+                              width={300}
+                              height={200}
+                              className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
+                            />
+                          </div>
+                          <CardContent className="p-4">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-1 group-hover:text-orange-600 transition-colors">{player.name}</h3>
+                            <p className="text-sm text-gray-500 mb-3">{player.position}</p>
+                            <div className="flex items-center justify-between text-xs text-gray-400">
+                              <span>{player.height} cm</span>
+                              <span>{player.weight} kg</span>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
                     ))}
                   </div>
                 )}
@@ -122,62 +204,6 @@ export default async function ClubDetailPage({ params }: { params: { slug: strin
             </div>
           </div>
         </div>
-
-        {/* Club Description */}
-        {club.description && (
-          <div className="container mx-auto px-4 py-8">
-            <Card className="shadow-lg border-0">
-              <CardContent className="p-6">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">Tentang {club.name}</h2>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">{club.description}</p>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-
-        {/* Players Section */}
-        <div className="container mx-auto px-4 py-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Pemain {club.name}</h2>
-          {players.length === 0 ? (
-            <div className="text-center text-gray-600 text-lg mt-10 p-8 bg-white rounded-lg shadow-sm">
-              <p>Belum ada data pemain untuk klub ini.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {players.map((player) => (
-                <Card
-                  key={player.id}
-                  className="overflow-hidden shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1 flex flex-col"
-                >
-                  {player.photo_url && (
-                    <div className="relative w-full h-48 bg-gray-100 flex items-center justify-center">
-                      <Image
-                        src={player.photo_url || "/placeholder.svg?height=200&width=300&query=player photo"}
-                        alt={player.name}
-                        width={300}
-                        height={200}
-                        className="object-cover w-full h-full"
-                      />
-                    </div>
-                  )}
-                  <CardContent className="p-4 flex-grow flex flex-col">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{player.name}</h3>
-                    <p className="text-sm text-gray-700 mb-1">Posisi: <span className="font-semibold">{player.position}</span></p>
-                    <p className="text-sm text-gray-700 mb-1">Tinggi: <span className="font-semibold">{player.height} cm</span></p>
-                    <p className="text-sm text-gray-700 mb-3">Berat: <span className="font-semibold">{player.weight} kg</span></p>
-                    <Link href={`/pemain/${player.id}`} className="mt-auto">
-                      <Button variant="outline" className="w-full bg-orange-50 text-orange-600 border-orange-300 hover:bg-orange-100">
-                        Lihat Detail
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-
-        
       </div>
     </PageTransition>
   )

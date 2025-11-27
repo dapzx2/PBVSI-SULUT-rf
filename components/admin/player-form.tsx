@@ -14,9 +14,17 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Player } from '@/lib/types';
 import Image from 'next/image';
-import { Loader2, Upload, X, User, MapPin, Calendar, Ruler, Weight, Flag, Trophy, Shield } from 'lucide-react';
+import { Loader2, Upload, X, User, MapPin, Calendar as CalendarIcon, Ruler, Weight, Flag, Trophy, Shield } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { format } from 'date-fns';
+import { id as idLocale } from 'date-fns/locale';
 
 interface Club {
   id: string;
@@ -246,11 +254,51 @@ const PlayerForm: React.FC<PlayerFormProps> = ({ initialData, onSuccess, onClose
             </Select>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 flex flex-col">
             <Label htmlFor="birth_date" className="flex items-center gap-2 text-primary">
-              <Calendar className="h-4 w-4" /> Tanggal Lahir
+              <CalendarIcon className="h-4 w-4" /> Tanggal Lahir
             </Label>
-            <Input id="birth_date" type="date" value={formData.birth_date} onChange={handleChange} />
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-full pl-3 text-left font-normal",
+                    !formData.birth_date && "text-muted-foreground"
+                  )}
+                >
+                  {formData.birth_date ? (
+                    format(new Date(formData.birth_date), "dd MMMM yyyy", { locale: idLocale })
+                  ) : (
+                    <span>Pilih tanggal lahir</span>
+                  )}
+                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="single"
+                  selected={formData.birth_date ? new Date(formData.birth_date) : undefined}
+                  onSelect={(date) => {
+                    if (date) {
+                      // Adjust for timezone offset to prevent off-by-one error when converting to string
+                      const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+                      setFormData(prev => ({ ...prev, birth_date: offsetDate.toISOString().split('T')[0] }));
+                    }
+                  }}
+                  disabled={(date) =>
+                    date > new Date() || date < new Date("1900-01-01")
+                  }
+                  initialFocus
+                  captionLayout="dropdown"
+                  fromYear={1940}
+                  toYear={new Date().getFullYear() + 5}
+                  classNames={{
+                    caption_label: "hidden",
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">

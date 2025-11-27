@@ -230,7 +230,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/20 backdrop-blur-lg"
             onClick={() => setSelectedImage(null)}
           >
             <motion.div
@@ -241,7 +241,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="absolute top-4 right-4 z-20 text-white hover:bg-black/20 rounded-full"
+                className="absolute top-4 right-4 z-20 text-gray-900 hover:bg-gray-100 rounded-full"
                 onClick={() => setSelectedImage(null)}
               >
                 <X className="w-6 h-6" />

@@ -21,7 +21,7 @@ export default async function KlubPage() {
 
     return (
       <PageTransition>
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+        <div className="min-h-screen bg-[#FDFDFD]">
           <Suspense fallback={<KlubPageLoading />}>
             <ClubList initialClubs={initialClubs} />
           </Suspense>
