@@ -1,7 +1,8 @@
 
 import pool from './mysql';
 import { RowDataPacket } from 'mysql2';
-import { Player as FrontendPlayer } from './types'; // Import the frontend type
+import { Player as FrontendPlayer } from './types';
+import { generatePlayerSlug } from './slug-utils';
 
 // Extend the frontend type but allow for nulls where DB might return nulls if strictness varies
 // Or just use the frontend type structure for the return value.
@@ -27,6 +28,7 @@ export async function getPlayers(): Promise<{ players: FrontendPlayer[] | null; 
     const sql = `
       SELECT 
         p.id, 
+        p.slug,
         p.name, 
         p.position, 
         p.image_url as photo_url, 
@@ -65,6 +67,7 @@ export async function getPlayerById(id: string): Promise<FrontendPlayer | null> 
   const sql = `
     SELECT 
       p.id, 
+      p.slug,
       p.name, 
       p.position, 
       p.image_url as photo_url,
@@ -88,23 +91,61 @@ export async function getPlayerById(id: string): Promise<FrontendPlayer | null> 
   return {
     ...row,
     position: row.position || "",
-    club: row.club_id ? { name: row.club_name } : undefined,
+    club: row.club_id ? { name: row.club_name, city: row.club_city } : undefined,
     photo_url: row.photo_url || null,
     achievements: row.achievements || null,
-    created_at: new Date().toISOString(), // Default value
-    updated_at: new Date().toISOString(), // Default value
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   } as FrontendPlayer;
 }
 
-export async function createPlayer(player: Omit<FrontendPlayer, 'id' | 'club_name' | 'created_at' | 'updated_at' | 'club'>): Promise<{ id: string }> {
-  const { name, position, club_id, photo_url, birth_date, height, weight, country, achievements } = player as any; // Cast to any to handle property mapping
-  const id = crypto.randomUUID();
+export async function getPlayerBySlug(slugOrId: string): Promise<FrontendPlayer | null> {
+  // Try to find by slug first, then fallback to id
   const sql = `
-    INSERT INTO players (id, name, position, club_id, image_url, birth_date, height_cm, weight_kg, country, achievements)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    SELECT 
+      p.id, 
+      p.slug,
+      p.name, 
+      p.position, 
+      p.image_url as photo_url,
+      p.club_id,
+      c.name as club_name,
+      c.city as club_city,
+      p.birth_date,
+      p.height_cm as height,
+      p.weight_kg as weight,
+      p.country,
+      p.achievements
+    FROM players p
+    LEFT JOIN clubs c ON p.club_id = c.id
+    WHERE p.slug = ? OR p.id = ?
   `;
-  await pool.execute(sql, [id, name, position, club_id, photo_url, birth_date, height, weight, country, achievements]);
-  return { id };
+  const [rows] = await pool.query(sql, [slugOrId, slugOrId]);
+  const row = (rows as any[])[0];
+
+  if (!row) return null;
+
+  return {
+    ...row,
+    position: row.position || "",
+    club: row.club_id ? { name: row.club_name, city: row.club_city } : undefined,
+    photo_url: row.photo_url || null,
+    achievements: row.achievements || null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  } as FrontendPlayer;
+}
+
+export async function createPlayer(player: Omit<FrontendPlayer, 'id' | 'club_name' | 'created_at' | 'updated_at' | 'club'>): Promise<{ id: string; slug: string }> {
+  const { name, position, club_id, photo_url, birth_date, height, weight, country, achievements } = player as any;
+  const id = crypto.randomUUID();
+  const slug = generatePlayerSlug(name);
+  const sql = `
+    INSERT INTO players (id, slug, name, position, club_id, image_url, birth_date, height_cm, weight_kg, country, achievements)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  await pool.execute(sql, [id, slug, name, position, club_id, photo_url, birth_date, height, weight, country, achievements]);
+  return { id, slug };
 }
 
 export async function updatePlayer(id: string, player: Partial<Omit<FrontendPlayer, 'id' | 'club_name' | 'created_at' | 'updated_at' | 'club'>>): Promise<void> {

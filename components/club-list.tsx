@@ -135,21 +135,23 @@ export function ClubList({ initialClubs }: ClubListProps) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-center py-24"
+            className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200"
           >
-            <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
-              <Building2 className="w-10 h-10 text-gray-300" />
+            <div className="max-w-md mx-auto">
+              <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
+                <Building2 className="w-12 h-12 text-gray-300" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Klub Tidak Ditemukan</h3>
+              <p className="text-gray-500 mb-8">
+                Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan klub yang Anda cari.
+              </p>
+              <Button onClick={resetFilters} variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50 hover:text-orange-700">
+                Reset Filter
+              </Button>
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Klub Tidak Ditemukan</h3>
-            <p className="text-gray-500 mb-6">
-              Tidak ada klub yang cocok dengan kriteria filter Anda.
-            </p>
-            <Button onClick={resetFilters} variant="outline">
-              Hapus Semua Filter
-            </Button>
           </motion.div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <AnimatePresence>
               {filteredClubs.map((club, index) => (
                 <motion.div
@@ -158,38 +160,60 @@ export function ClubList({ initialClubs }: ClubListProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                 >
-                  <Card className="h-full overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border-gray-100 group bg-white">
-                    <div className="relative h-48 bg-gray-50 p-6 flex items-center justify-center overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-br from-orange-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  <Card className="group overflow-hidden bg-white border-0 shadow-sm hover:shadow-xl transition-all duration-300 rounded-xl md:rounded-2xl h-full flex flex-col">
+                    <div className="relative h-48 md:h-64 overflow-hidden bg-gray-100">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       {club.logo_url ? (
                         <Image
                           src={club.logo_url}
                           alt={club.name}
-                          width={300}
-                          height={200}
-                          className="w-full h-full object-contain transform group-hover:scale-110 transition-transform duration-500"
+                          width={400}
+                          height={400}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                         />
                       ) : (
-                        <Building2 className="w-16 h-16 text-gray-300" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
+                          <Building2 className="w-20 h-20 text-gray-300" />
+                        </div>
+                      )}
+                      {club.established_year && (
+                        <div className="absolute top-3 right-3 md:top-4 md:right-4 z-20">
+                          <Badge className="bg-white/90 text-gray-900 backdrop-blur-sm shadow-sm hover:bg-white text-xs md:text-sm px-2 py-0.5 md:px-2.5 md:py-0.5">
+                            Est. {club.established_year}
+                          </Badge>
+                        </div>
                       )}
                     </div>
-                    <CardContent className="p-6">
-                      <div className="mb-4">
-                        <h2 className="text-lg font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">{club.name}</h2>
-                        <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-                          <Badge variant="secondary" className="bg-gray-100 text-gray-600 font-normal">
-                            {club.city}
-                          </Badge>
-                          {club.established_year && (
-                            <span className="text-xs text-gray-400">• Est. {club.established_year}</span>
-                          )}
+
+                    <CardContent className="p-4 md:p-6 flex-1 flex flex-col">
+                      <div className="mb-3 md:mb-4">
+                        <h2 className="text-lg md:text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">
+                          {club.name}
+                        </h2>
+                        <p className="text-xs md:text-sm font-medium text-gray-500 flex items-center mt-1">
+                          <Building2 className="w-3 h-3 mr-1" />
+                          {club.city || "Sulawesi Utara"}
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-3 md:gap-4 mb-4 md:mb-6 p-3 md:p-4 bg-gray-50 rounded-lg md:rounded-xl">
+                        <div className="text-center">
+                          <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Kota</p>
+                          <p className="font-bold text-sm md:text-base text-gray-900">{club.city || "-"}</p>
+                        </div>
+                        <div className="text-center border-l border-gray-200">
+                          <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-wider">Berdiri</p>
+                          <p className="font-bold text-sm md:text-base text-gray-900">{club.established_year || "-"}</p>
                         </div>
                       </div>
-                      <Link href={`/klub/${club.slug}`} passHref>
-                        <Button className="w-full bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-orange-700 hover:border-orange-200 transition-all">
-                          Lihat Profil
-                        </Button>
-                      </Link>
+
+                      <div className="mt-auto">
+                        <Link href={`/klub/${club.slug}`} passHref>
+                          <Button className="w-full bg-gray-900 hover:bg-orange-600 text-white transition-colors rounded-lg md:rounded-xl h-9 md:h-11 text-sm md:text-base font-medium">
+                            Lihat Profil Lengkap
+                          </Button>
+                        </Link>
+                      </div>
                     </CardContent>
                   </Card>
                 </motion.div>

@@ -133,3 +133,69 @@ export async function getMatchDetails(id: string): Promise<{ match: Match | null
     return { match: null, error: error.message };
   }
 }
+
+export async function getMatchDetailsBySlug(slugOrId: string): Promise<{ match: Match | null; error: string | null }> {
+  try {
+
+    // Try to find by slug first, then fallback to id
+    const [rows] = await pool.query(
+      `SELECT
+        m.*,
+        ht.name as home_team_name,
+        ht.logo_url as home_team_logo_url,
+        at.name as away_team_name,
+        at.logo_url as away_team_logo_url
+      FROM matches m
+      LEFT JOIN clubs ht ON m.home_team_id = ht.id
+      LEFT JOIN clubs at ON m.away_team_id = at.id
+      WHERE m.slug = ? OR m.id = ?`,
+      [slugOrId, slugOrId]
+    );
+    const matches = rows as any[];
+
+    if (matches.length === 0) {
+      return { match: null, error: 'Match not found' };
+    }
+
+    const rawMatch = matches[0];
+
+    const match: Match = {
+      ...rawMatch,
+      home_team: rawMatch.home_team_name ? {
+        id: rawMatch.home_team_id,
+        name: rawMatch.home_team_name,
+        logo_url: rawMatch.home_team_logo_url,
+        slug: '',
+        city: '',
+        established_year: 0,
+        coach_name: null,
+        home_arena: null,
+        description: null,
+        achievements: null,
+        created_at: '',
+        updated_at: ''
+      } : undefined,
+      away_team: rawMatch.away_team_name ? {
+        id: rawMatch.away_team_id,
+        name: rawMatch.away_team_name,
+        logo_url: rawMatch.away_team_logo_url,
+        slug: '',
+        city: '',
+        established_year: 0,
+        coach_name: null,
+        home_arena: null,
+        description: null,
+        achievements: null,
+        created_at: '',
+        updated_at: ''
+      } : undefined,
+      score_home_points: rawMatch.score_home_points ? JSON.parse(rawMatch.score_home_points) : null,
+      score_away_points: rawMatch.score_away_points ? JSON.parse(rawMatch.score_away_points) : null,
+    };
+
+    return { match, error: null };
+  } catch (error: any) {
+    return { match: null, error: error.message };
+  }
+}
+

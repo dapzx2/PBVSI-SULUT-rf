@@ -1,23 +1,23 @@
-import { getMatchDetails } from "@/lib/matches"
+import { getMatchDetailsBySlug } from "@/lib/matches"
 import { notFound } from "next/navigation"
 import { Metadata } from "next"
-// import { PageTransition } from "@/components/page-transition"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Calendar, MapPin, Trophy, Clock, ArrowLeft } from "lucide-react"
+import { Calendar, MapPin, Trophy, ArrowLeft } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
 interface MatchDetailPageProps {
-    params: {
-        id: string
-    }
+    params: Promise<{
+        slug: string
+    }>
 }
 
 export async function generateMetadata({ params }: MatchDetailPageProps): Promise<Metadata> {
-    const { match } = await getMatchDetails(params.id)
+    const { slug } = await params
+    const { match } = await getMatchDetailsBySlug(slug)
 
     if (!match) {
         return {
@@ -32,7 +32,8 @@ export async function generateMetadata({ params }: MatchDetailPageProps): Promis
 }
 
 export default async function MatchDetailPage({ params }: MatchDetailPageProps) {
-    const { match, error } = await getMatchDetails(params.id)
+    const { slug } = await params
+    const { match, error } = await getMatchDetailsBySlug(slug)
 
     if (error || !match) {
         notFound()
@@ -69,8 +70,7 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-24 md:pt-32">
-            {/* <PageTransition> */}
+        <div className="min-h-screen bg-gray-50 pt-16 md:pt-20">
             <div className="container mx-auto px-4 py-8">
                 <Link href="/pertandingan">
                     <Button variant="ghost" className="mb-6 hover:bg-orange-50 hover:text-orange-600">
@@ -251,7 +251,6 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
                     </CardContent>
                 </Card>
             </div>
-            {/* </PageTransition> */}
         </div>
     )
 }

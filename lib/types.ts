@@ -1,5 +1,6 @@
 export interface Player {
   id: string
+  slug?: string
   name: string
   position: string
   club_id: string | null
@@ -69,6 +70,7 @@ export interface GalleryItem {
 
 export interface Match {
   id: string
+  slug?: string
   home_team_id: string
   away_team_id: string
   match_date: string // ISO string or similar

@@ -244,7 +244,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
                     </div>
 
                     <div className="mt-auto">
-                      <Link href={`/pemain/${player.id}`} passHref>
+                      <Link href={`/pemain/${player.slug || player.id}`} passHref>
                         <Button className="w-full bg-gray-900 hover:bg-orange-600 text-white transition-colors rounded-lg md:rounded-xl h-9 md:h-11 text-sm md:text-base font-medium">
                           Lihat Profil Lengkap
                         </Button>

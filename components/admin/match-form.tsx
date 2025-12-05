@@ -144,7 +144,7 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
 
           <div className="space-y-2">
             <Label htmlFor="match_date" className="flex items-center gap-2 text-primary">
-              <Calendar className="h-4 w-4" /> Tanggal & Waktu
+              <Calendar className="h-4 w-4" /> Tanggal & Waktu <span className="text-xs text-muted-foreground">(WITA)</span>
             </Label>
             <Input
               id="match_date"
@@ -153,6 +153,7 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
               onChange={handleChange}
               required
             />
+            <p className="text-xs text-muted-foreground">Waktu Indonesia Tengah (WITA/UTC+8)</p>
           </div>
 
           <div className="space-y-2">

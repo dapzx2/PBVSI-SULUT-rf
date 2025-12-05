@@ -70,7 +70,7 @@ export function PertandinganCard({ match }: PertandinganCardProps) {
   const awaySets = match.score_away_sets || 0;
 
   return (
-    <Link href={`/pertandingan/${match.id}`} className="block group">
+    <Link href={`/pertandingan/${match.slug || match.id}`} className="block group">
       <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 border-2 border-gray-200 hover:border-orange-300 group-hover:scale-[1.02] bg-white">
         <CardContent className="p-0">
           {/* Header with Gradient */}
