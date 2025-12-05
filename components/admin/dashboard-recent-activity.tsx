@@ -14,6 +14,70 @@ import {
 import { AdminActivityLog } from "@/lib/admin"
 import { useRouter } from "next/navigation"
 
+// Kamus terjemahan aksi ke Bahasa Indonesia yang ramah pengguna
+const actionTranslations: Record<string, string> = {
+    "create": "Tambah",
+    "update": "Ubah",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "add": "Tambah",
+    "remove": "Hapus",
+    "player": "Pemain",
+    "pemain": "Pemain",
+    "match": "Pertandingan",
+    "pertandingan": "Pertandingan",
+    "article": "Berita",
+    "berita": "Berita",
+    "news": "Berita",
+    "gallery": "Galeri",
+    "galeri": "Galeri",
+    "club": "Klub",
+    "klub": "Klub",
+    "team": "Tim",
+    "tim": "Tim",
+    "user": "Pengguna",
+    "admin": "Admin",
+    "public": "Publik",
+    "information": "Informasi",
+    "informasi": "Informasi",
+    "image": "Gambar",
+    "login": "Masuk",
+    "logout": "Keluar",
+    "success": "Berhasil",
+    "failed": "Gagal",
+}
+
+// Fungsi untuk menerjemahkan aksi ke Bahasa Indonesia yang ramah pengguna
+const translateAction = (action: string): string => {
+    const words = action
+        .replace(/([a-z])([A-Z])/g, '$1_$2')
+        .toLowerCase()
+        .split('_')
+        .filter(word => word.length > 0)
+
+    const translatedWords = words.map(word => {
+        const translation = actionTranslations[word]
+        if (translation) return translation
+        return word.charAt(0).toUpperCase() + word.slice(1)
+    })
+
+    return translatedWords.join(' ')
+}
+
+// Fungsi untuk memformat waktu ke format "5 Des 10:01:03 WITA"
+const formatTimestamp = (timestamp: string | Date): string => {
+    const date = new Date(timestamp)
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
+
+    const day = date.getDate()
+    const month = months[date.getMonth()]
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+
+    return `${day} ${month} ${hours}:${minutes}:${seconds} WITA`
+}
+
 interface DashboardRecentActivityProps {
     activities: AdminActivityLog[]
 }
@@ -50,14 +114,11 @@ export function DashboardRecentActivity({ activities }: DashboardRecentActivityP
                                     {getActivityIcon(activity.action)}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-900">{activity.action}</p>
+                                    <p className="text-sm font-medium text-gray-900">{translateAction(activity.action)}</p>
                                     <div className="flex items-center space-x-2 mt-1">
                                         <p className="text-xs text-gray-500 font-medium">{activity.username || "Unknown User"}</p>
                                         <span className="text-xs text-gray-300">•</span>
-                                        <p className="text-xs text-gray-400">{new Date(activity.timestamp).toLocaleString("id-ID", {
-                                            dateStyle: "medium",
-                                            timeStyle: "short"
-                                        })}</p>
+                                        <p className="text-xs text-gray-400">{formatTimestamp(activity.timestamp)}</p>
                                     </div>
                                 </div>
                             </div>

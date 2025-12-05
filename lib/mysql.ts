@@ -1,13 +1,13 @@
 import 'server-only';
 import { createPool, Pool, PoolConnection, ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 
-const globalForMysql = globalThis as typeof globalThis & { mysqlPool?: Pool };
+const globalForMysql = globalThis as typeof globalThis & { mysqlPool_v2?: Pool };
 
 // A function to lazily create and cache the connection pool
 const getPool = (): Pool => {
   // If the pool is already cached in the global object, return it
-  if (globalForMysql.mysqlPool) {
-    return globalForMysql.mysqlPool!;
+  if (globalForMysql.mysqlPool_v2) {
+    return globalForMysql.mysqlPool_v2!;
   }
 
   // Otherwise, create a new pool
@@ -19,11 +19,11 @@ const getPool = (): Pool => {
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
-    timezone: 'Z'
+    timezone: '+08:00'
   });
 
   // Cache the pool in the global object for subsequent requests
-  globalForMysql.mysqlPool = pool;
+  globalForMysql.mysqlPool_v2 = pool;
 
   return pool;
 };

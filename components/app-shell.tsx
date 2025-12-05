@@ -16,10 +16,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return (
         <NextThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <AppThemeProvider>
-                <div className="min-h-screen flex flex-col">
+                <div className="min-h-screen flex flex-col relative">
                     {!isAdminRoute && <StickyHeader />}
-                    <PageTransition>
-                        <main className="flex-1">{children}</main>
+                    <PageTransition className="flex-1 flex flex-col w-full">
+                        <main className="flex-1 flex flex-col w-full">{children}</main>
                     </PageTransition>
                     {!isAdminRoute && <Footer />}
                 </div>

@@ -10,6 +10,7 @@ import { Search, Filter, ImageIcon, X, Calendar, Tag } from 'lucide-react'
 import type { GalleryItem } from "@/lib/types"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
+import { formatDateLong } from "@/lib/date-utils"
 
 interface GaleriListProps {
   initialItems: GalleryItem[];
@@ -276,11 +277,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
                     </Badge>
                     <span className="text-sm text-gray-500 flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
-                      {new Date(selectedImage.created_at).toLocaleDateString('id-ID', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      })}
+                      {formatDateLong(selectedImage.created_at)}
                     </span>
                   </div>
 

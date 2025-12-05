@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 import type { Article } from "@/lib/types"
+import { formatDateLong } from "@/lib/date-utils"
 
 export default function ArticleDetailPage() {
   const params = useParams()
@@ -128,11 +129,7 @@ export default function ArticleDetailPage() {
               </div>
               <span className="text-gray-300">•</span>
               <time dateTime={article.published_at}>
-                {new Date(article.published_at).toLocaleDateString("id-ID", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+                {formatDateLong(article.published_at)}
               </time>
             </div>
 

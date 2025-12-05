@@ -55,14 +55,17 @@ export default async function MatchDetailPage({ params }: MatchDetailPageProps) 
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString)
-        return date.toLocaleDateString("id-ID", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-        })
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu']
+        const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+
+        const dayName = days[date.getDay()]
+        const day = date.getDate()
+        const month = months[date.getMonth()]
+        const year = date.getFullYear()
+        const hours = date.getHours().toString().padStart(2, '0')
+        const minutes = date.getMinutes().toString().padStart(2, '0')
+
+        return `${dayName}, ${day} ${month} ${year} pukul ${hours}:${minutes} WITA`
     }
 
     return (

@@ -26,6 +26,7 @@ import { Article } from "@/lib/types"
 import { ArticleForm } from "@/components/admin/article-form"
 import { toast } from "sonner"
 import Image from "next/image"
+import { formatDateShort } from "@/lib/date-utils"
 
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
@@ -268,11 +269,7 @@ export default function AdminArticlesPage() {
                       </TableCell>
                       <TableCell className="text-sm">{article.author || "-"}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">
-                        {new Date(article.published_at).toLocaleDateString("id-ID", {
-                          day: 'numeric',
-                          month: 'short',
-                          year: 'numeric'
-                        })}
+                        {formatDateShort(article.published_at)}
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-1">

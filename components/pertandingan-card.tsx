@@ -43,13 +43,15 @@ export function PertandinganCard({ match }: PertandinganCardProps) {
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString)
-    return date.toLocaleDateString("id-ID", {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-      hour: "2-digit",
-      minute: "2-digit",
-    })
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des']
+
+    const day = date.getDate()
+    const month = months[date.getMonth()]
+    const hours = date.getHours().toString().padStart(2, '0')
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+
+    return `${day} ${month} ${hours}:${minutes}:${seconds} WITA`
   }
 
   const getScoreClass = (team: "home" | "away", homeSets: number, awaySets: number) => {

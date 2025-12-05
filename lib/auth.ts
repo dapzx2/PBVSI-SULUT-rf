@@ -98,9 +98,7 @@ export async function logActivity(
   try {
     const logId = uuidv4();
     // Get current time in WITA timezone (UTC+8)
-    const now = new Date();
-    const witaTime = new Date(now.getTime() + (8 * 60 * 60 * 1000)); // Add 8 hours for WITA
-    const timestamp = witaTime.toISOString().slice(0, 19).replace('T', ' ');
+    const timestamp = new Date();
 
     await pool.query(
       'INSERT INTO admin_activity_logs (id, admin_user_id, action, resource_type, resource_id, details, ip_address, user_agent, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',

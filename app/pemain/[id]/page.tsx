@@ -23,6 +23,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/page-transition"
 import type { Player } from "@/lib/types"
+import { formatDateLong } from "@/lib/date-utils"
 
 const calculateAge = (birthDateString: string | null) => {
   if (!birthDateString) return null;
@@ -40,8 +41,7 @@ const calculateAge = (birthDateString: string | null) => {
 
 const formatDate = (dateString: string | null) => {
   if (!dateString) return '-';
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-  return new Date(dateString).toLocaleDateString('id-ID', options);
+  return formatDateLong(dateString);
 };
 
 interface PlayerPageProps {

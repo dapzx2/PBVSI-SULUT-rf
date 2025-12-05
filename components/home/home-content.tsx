@@ -8,6 +8,7 @@ import { Users, ArrowRight, Activity, Calendar } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
 import type { Article } from "@/lib/types"
+import { formatDateLong } from "@/lib/date-utils"
 
 interface HomeContentProps {
     articles: Article[]
@@ -247,13 +248,7 @@ export function HomeContent({ articles }: HomeContentProps) {
                                                 <CardContent className="flex flex-col flex-1 p-6">
                                                     <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
                                                         <Calendar className="w-4 h-4 text-orange-500" />
-                                                        <span>
-                                                            {new Date(article.published_at).toLocaleDateString("id-ID", {
-                                                                day: "numeric",
-                                                                month: "long",
-                                                                year: "numeric",
-                                                            })}
-                                                        </span>
+                                                        <span>{formatDateLong(article.published_at)}</span>
                                                     </div>
                                                     <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
                                                         {article.title}

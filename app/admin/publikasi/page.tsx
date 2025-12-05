@@ -23,6 +23,7 @@ import { Loader2, PlusCircle, Edit, Trash2 } from "lucide-react"
 import { Article } from "@/lib/types"
 import { ArticleForm } from "@/components/admin/article-form"
 import { toast } from "sonner"
+import { formatDateShort } from "@/lib/date-utils"
 
 export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([])
@@ -202,7 +203,7 @@ export default function AdminArticlesPage() {
                       <TableCell className="font-medium">{article.title}</TableCell>
                       <TableCell>{article.author || "-"}</TableCell>
                       <TableCell>{article.category || "-"}</TableCell>
-                      <TableCell>{new Date(article.published_at).toLocaleDateString()}</TableCell>
+                      <TableCell>{formatDateShort(article.published_at)}</TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="ghost"

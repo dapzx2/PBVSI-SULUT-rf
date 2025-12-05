@@ -26,7 +26,10 @@ export function PertandinganList({ initialMatches }: PertandinganListProps) {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      setFormattedLastUpdate(lastUpdate.toLocaleTimeString("id-ID"))
+      const hours = lastUpdate.getHours().toString().padStart(2, '0')
+      const minutes = lastUpdate.getMinutes().toString().padStart(2, '0')
+      const seconds = lastUpdate.getSeconds().toString().padStart(2, '0')
+      setFormattedLastUpdate(`${hours}:${minutes}:${seconds} WITA`)
     }
   }, [lastUpdate])
 

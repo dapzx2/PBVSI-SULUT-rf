@@ -15,6 +15,95 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 
+// Kamus terjemahan aksi ke Bahasa Indonesia yang ramah pengguna
+const actionTranslations: Record<string, string> = {
+  // Aksi CRUD umum
+  "create": "Tambah",
+  "update": "Ubah",
+  "delete": "Hapus",
+  "edit": "Edit",
+  "add": "Tambah",
+  "remove": "Hapus",
+
+  // Entitas
+  "player": "Pemain",
+  "pemain": "Pemain",
+  "match": "Pertandingan",
+  "pertandingan": "Pertandingan",
+  "article": "Berita",
+  "berita": "Berita",
+  "news": "Berita",
+  "gallery": "Galeri",
+  "galeri": "Galeri",
+  "club": "Klub",
+  "klub": "Klub",
+  "team": "Tim",
+  "tim": "Tim",
+  "user": "Pengguna",
+  "admin": "Admin",
+  "public": "Publik",
+  "information": "Informasi",
+  "informasi": "Informasi",
+  "image": "Gambar",
+  "photo": "Foto",
+  "document": "Dokumen",
+  "file": "Berkas",
+  "login": "Masuk",
+  "logout": "Keluar",
+  "success": "Berhasil",
+  "failed": "Gagal",
+  "error": "Error",
+  "setting": "Pengaturan",
+  "settings": "Pengaturan",
+  "profile": "Profil",
+  "password": "Kata Sandi",
+  "schedule": "Jadwal",
+  "result": "Hasil",
+  "score": "Skor",
+  "event": "Acara",
+  "competition": "Kompetisi",
+  "tournament": "Turnamen",
+  "season": "Musim",
+}
+
+// Fungsi untuk menerjemahkan aksi ke Bahasa Indonesia yang ramah pengguna
+const translateAction = (action: string): string => {
+  // Pisahkan berdasarkan underscore atau camelCase
+  const words = action
+    .replace(/([a-z])([A-Z])/g, '$1_$2') // camelCase to snake_case
+    .toLowerCase()
+    .split('_')
+    .filter(word => word.length > 0)
+
+  // Terjemahkan setiap kata
+  const translatedWords = words.map(word => {
+    const translation = actionTranslations[word]
+    if (translation) return translation
+    // Jika tidak ada di kamus, kapitalisasi huruf pertama
+    return word.charAt(0).toUpperCase() + word.slice(1)
+  })
+
+  return translatedWords.join(' ')
+}
+
+// Fungsi untuk memformat waktu ke format "27 Nov 13:04:50 WITA"
+const formatTimestamp = (timestamp: string | Date): string => {
+  const date = new Date(timestamp)
+
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+    'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+  ]
+
+  const day = date.getDate()
+  const month = months[date.getMonth()]
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const seconds = date.getSeconds().toString().padStart(2, '0')
+
+  return `${day} ${month} ${hours}:${minutes}:${seconds} WITA`
+}
+
 export default function AdminActivityPage() {
   const [activities, setActivities] = useState<AdminActivityLog[]>([])
   const [loading, setLoading] = useState(true)
@@ -29,7 +118,7 @@ export default function AdminActivityPage() {
       try {
         const response = await fetch(`/api/admin/activity?page=${page}&limit=${limit}`)
         if (!response.ok) {
-          throw new Error("Failed to fetch activities")
+          throw new Error("Gagal memuat aktivitas")
         }
         const data = await response.json()
         setActivities(data.data?.logs || [])
@@ -38,7 +127,7 @@ export default function AdminActivityPage() {
         if (err instanceof Error) {
           setError(err.message);
         } else {
-          setError("An unknown error occurred");
+          setError("Terjadi kesalahan yang tidak diketahui");
         }
       } finally {
         setLoading(false)
@@ -57,12 +146,14 @@ export default function AdminActivityPage() {
   }
 
   const getActionBadge = (action: string) => {
+    const translatedAction = translateAction(action)
     let color = "bg-gray-100 text-gray-800"
-    if (action.includes("create") || action.includes("tambah")) color = "bg-green-100 text-green-800"
+    if (action.includes("create") || action.includes("tambah") || action.includes("add")) color = "bg-green-100 text-green-800"
     if (action.includes("update") || action.includes("edit") || action.includes("ubah")) color = "bg-blue-100 text-blue-800"
-    if (action.includes("delete") || action.includes("hapus")) color = "bg-red-100 text-red-800"
+    if (action.includes("delete") || action.includes("hapus") || action.includes("remove")) color = "bg-red-100 text-red-800"
+    if (action.includes("login") || action.includes("success")) color = "bg-emerald-100 text-emerald-800"
 
-    return <Badge variant="outline" className={`${color} border-none`}>{action}</Badge>
+    return <Badge variant="outline" className={`${color} border-none`}>{translatedAction}</Badge>
   }
 
   return (
@@ -118,10 +209,7 @@ export default function AdminActivityPage() {
                           </TableCell>
                           <TableCell>{activity.username || "Unknown"}</TableCell>
                           <TableCell className="text-muted-foreground text-sm">
-                            {new Date(activity.timestamp).toLocaleString("id-ID", {
-                              dateStyle: "medium",
-                              timeStyle: "short"
-                            })}
+                            {formatTimestamp(activity.timestamp)}
                           </TableCell>
                           <TableCell className="text-xs text-muted-foreground max-w-[300px]">
                             {activity.details && typeof activity.details === 'object' ? (
@@ -134,7 +222,7 @@ export default function AdminActivityPage() {
                                 ))}
                               </div>
                             ) : (
-                              <span className="italic">No details</span>
+                              <span className="italic">Tidak ada detail</span>
                             )}
                           </TableCell>
                         </TableRow>
@@ -153,10 +241,10 @@ export default function AdminActivityPage() {
                   disabled={page === 1}
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Previous
+                  Sebelumnya
                 </Button>
                 <div className="text-sm text-muted-foreground">
-                  Page {page} of {totalPages}
+                  Halaman {page} dari {totalPages}
                 </div>
                 <Button
                   variant="outline"
@@ -164,7 +252,7 @@ export default function AdminActivityPage() {
                   onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                   disabled={page === totalPages}
                 >
-                  Next
+                  Selanjutnya
                   <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>

@@ -70,7 +70,9 @@ export function MatchForm({ initialData, onSuccess, onClose, clubs }: MatchFormP
 
       const body = {
         ...formData,
-        match_date: new Date(formData.match_date).toISOString(),
+        // Simpan waktu sesuai input tanpa konversi UTC
+        // Karena user memasukkan waktu WITA, kita kirim langsung tanpa toISOString()
+        match_date: formData.match_date,
       };
 
       const response = await fetch(apiEndpoint, {

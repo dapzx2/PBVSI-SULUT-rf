@@ -5,9 +5,10 @@ import type { ReactNode } from "react"
 
 interface PageTransitionProps {
   children: ReactNode
+  className?: string
 }
 
-export function PageTransition({ children }: PageTransitionProps) {
+export function PageTransition({ children, className }: PageTransitionProps) {
   return (
     <motion.div
       animate={{ opacity: 1, y: 0 }}
@@ -16,7 +17,7 @@ export function PageTransition({ children }: PageTransitionProps) {
         duration: 0.3,
         ease: "easeInOut",
       }}
-      className="relative z-0 will-change-transform"
+      className={`relative z-0 will-change-transform ${className || ""}`}
     >
       {children}
     </motion.div>

@@ -25,6 +25,7 @@ import { Loader2, PlusCircle, Edit, Trash2, FileText, Search, RefreshCw, FolderO
 import { PublicInformation } from "@/lib/types"
 import { PublicInformationForm } from "@/components/admin/public-information-form"
 import { toast } from "sonner"
+import { formatDateShort } from "@/lib/date-utils"
 
 export default function AdminPublicInformationPage() {
     const [documents, setDocuments] = useState<PublicInformation[]>([])
@@ -276,11 +277,7 @@ export default function AdminPublicInformationPage() {
                                                 </a>
                                             </TableCell>
                                             <TableCell className="text-sm text-muted-foreground">
-                                                {new Date(doc.created_at).toLocaleDateString("id-ID", {
-                                                    day: 'numeric',
-                                                    month: 'short',
-                                                    year: 'numeric'
-                                                })}
+                                                {formatDateShort(doc.created_at)}
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 <div className="flex justify-end gap-1">

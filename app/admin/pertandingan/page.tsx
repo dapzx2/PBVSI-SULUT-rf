@@ -11,6 +11,7 @@ import { toast } from "sonner"
 import { Loader2, PlusCircle, Edit, Trash2, Search, RefreshCw, Trophy } from "lucide-react"
 import { MatchForm } from "@/components/admin/match-form"
 import type { Match, Club } from "@/lib/types"
+import { formatTime } from "@/lib/date-utils"
 
 export default function AdminPertandinganPage() {
   const [matches, setMatches] = useState<Match[]>([])
@@ -209,13 +210,7 @@ export default function AdminPertandinganPage() {
                       return (
                         <TableRow key={match.id} className="hover:bg-muted/5">
                           <TableCell className="text-sm">
-                            {match.match_date ? new Date(match.match_date).toLocaleDateString("id-ID", {
-                              day: 'numeric',
-                              month: 'short',
-                              year: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit'
-                            }) : "N/A"}
+                            {match.match_date ? formatTime(match.match_date) : "N/A"}
                           </TableCell>
                           <TableCell className="font-medium">
                             {clubs.find(c => c.id === match.home_team_id)?.name || "N/A"}

@@ -12,6 +12,7 @@ import { Loader2, PlusCircle, Edit, Trash2, Search, RefreshCw, Images, LayoutGri
 import { GalleryForm } from "@/components/admin/gallery-form"
 import type { GalleryItem } from "@/lib/types"
 import Image from "next/image"
+import { formatDateShort } from "@/lib/date-utils"
 
 export default function AdminGalleryPage() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([])
@@ -231,11 +232,7 @@ export default function AdminGalleryPage() {
                           </Badge>
                         </TableCell>
                         <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                          {new Date(item.created_at).toLocaleDateString("id-ID", {
-                            day: 'numeric',
-                            month: 'short',
-                            year: 'numeric'
-                          })}
+                          {formatDateShort(item.created_at)}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-1">
