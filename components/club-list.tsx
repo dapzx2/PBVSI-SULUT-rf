@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Search, Filter, Building2, X, Tag } from 'lucide-react'
+import { EmptyState } from "@/components/ui/empty-state"
 import type { Club } from "@/lib/types"
 import Image from "next/image"
 import Link from "next/link"
@@ -37,6 +38,8 @@ export function ClubList({ initialClubs }: ClubListProps) {
     setSearchTerm("")
     setSelectedCity("all")
   }
+
+  const hasActiveFilters = searchTerm !== "" || selectedCity !== "all"
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] pb-20 relative">
@@ -132,24 +135,17 @@ export function ClubList({ initialClubs }: ClubListProps) {
 
         {/* Clubs Grid */}
         {filteredClubs.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200"
-          >
-            <div className="max-w-md mx-auto">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
-                <Building2 className="w-12 h-12 text-gray-300" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Klub Tidak Ditemukan</h3>
-              <p className="text-gray-500 mb-8">
-                Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan klub yang Anda cari.
-              </p>
-              <Button onClick={resetFilters} variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50 hover:text-orange-700">
-                Reset Filter
-              </Button>
-            </div>
-          </motion.div>
+          <EmptyState
+            type={hasActiveFilters ? "search" : "klub"}
+            title={hasActiveFilters ? "Klub Tidak Ditemukan" : "Belum Ada Data Klub"}
+            description={hasActiveFilters
+              ? "Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan klub yang Anda cari."
+              : "Data klub belum tersedia saat ini."
+            }
+            actionLabel={hasActiveFilters ? "Reset Filter" : undefined}
+            onAction={hasActiveFilters ? resetFilters : undefined}
+            className="bg-white rounded-3xl border border-dashed border-gray-200"
+          />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <AnimatePresence>

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Search, Filter, Users, Trophy, User, Shield, X, Tag } from 'lucide-react'
+import { Search, Filter, Shield, X, Tag, User, Users, Trophy } from 'lucide-react'
+import { EmptyState } from "@/components/ui/empty-state"
 import type { Player } from "@/lib/types"
 import Image from "next/image"
 import Link from "next/link"
@@ -20,30 +21,51 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedPosition, setSelectedPosition] = useState<string>("all")
   const [selectedClub, setSelectedClub] = useState<string>("all")
+  const [selectedGender, setSelectedGender] = useState<'putra' | 'putri'>('putra')
   const [allPlayers] = useState<Player[]>(initialPlayers)
 
+  // Filter players by gender first
+  const playersByGender = useMemo(() => {
+    return allPlayers.filter(player => player.gender === selectedGender)
+  }, [allPlayers, selectedGender])
+
   const filteredPlayers = useMemo(() => {
-    return allPlayers.filter((player) => {
+    return playersByGender.filter((player) => {
       const matchesSearch = player.name?.toLowerCase().includes(searchTerm.toLowerCase())
       const matchesPosition = selectedPosition === "all" || player.position === selectedPosition
       const matchesClub = selectedClub === "all" || player.club?.name === selectedClub
 
       return matchesSearch && matchesPosition && matchesClub
     })
-  }, [allPlayers, searchTerm, selectedPosition, selectedClub])
+  }, [playersByGender, searchTerm, selectedPosition, selectedClub])
 
   const positions = useMemo(() => {
-    return [...new Set(allPlayers.map(player => player.position))].filter(Boolean)
-  }, [allPlayers])
+    return [...new Set(playersByGender.map(player => player.position))].filter(Boolean)
+  }, [playersByGender])
 
   const clubNames = useMemo(() => {
-    return [...new Set(allPlayers.map(player => player.club?.name))].filter((name): name is string => !!name)
-  }, [allPlayers])
+    return [...new Set(playersByGender.map(player => player.club?.name))].filter((name): name is string => !!name)
+  }, [playersByGender])
 
   const resetFilters = () => {
     setSearchTerm("")
     setSelectedPosition("all")
     setSelectedClub("all")
+  }
+
+  const hasActiveFilters = searchTerm !== "" || selectedPosition !== "all" || selectedClub !== "all"
+
+  // Theme colors based on gender - using full class names for Tailwind
+  const isPutri = selectedGender === 'putri'
+  const themeColors = {
+    badge: isPutri ? 'border-pink-200 text-pink-700 bg-pink-50' : 'border-orange-200 text-orange-700 bg-orange-50',
+    titleAccent: isPutri ? 'text-pink-600' : 'text-orange-600',
+    gradient: isPutri ? 'from-pink-50 to-pink-100' : 'from-orange-50 to-orange-100',
+    statsBg: isPutri ? 'from-pink-500 to-pink-600' : 'from-orange-500 to-orange-600',
+    statsAccent: isPutri ? 'text-pink-500' : 'text-orange-500',
+    statsLight: isPutri ? 'text-pink-100' : 'text-orange-100',
+    buttonPrimary: isPutri ? 'bg-pink-600 hover:bg-pink-700' : 'bg-gray-900 hover:bg-orange-600',
+    focusRing: isPutri ? 'focus:border-pink-500 focus:ring-pink-500' : 'focus:border-orange-500 focus:ring-orange-500',
   }
 
   const container = {
@@ -68,18 +90,42 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-center mb-16 relative"
+        className="text-center mb-8 relative"
       >
-        <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-50 to-orange-100 opacity-50 blur-3xl rounded-full transform -translate-y-1/2" />
-        <Badge variant="outline" className="px-4 py-1 border-orange-200 text-orange-700 bg-orange-50 mb-4">
+        <div className={`absolute inset-0 -z-10 bg-gradient-to-r ${themeColors.gradient} opacity-50 blur-3xl rounded-full transform -translate-y-1/2`} />
+        <Badge variant="outline" className={`px-4 py-1 ${themeColors.badge} mb-4`}>
           Database Atlet
         </Badge>
         <h1 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 tracking-tight">
-          Database <span className="text-orange-600">Pemain</span>
+          Database <span className={themeColors.titleAccent}>Pemain</span>
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed mb-8">
           Temukan talenta terbaik bola voli Sulawesi Utara. Jelajahi profil, statistik, dan prestasi para atlet kebanggaan daerah.
         </p>
+
+        {/* Gender Toggle */}
+        <div className="flex justify-center gap-2">
+          <Button
+            variant={selectedGender === 'putra' ? 'default' : 'outline'}
+            onClick={() => { setSelectedGender('putra'); resetFilters(); }}
+            className={selectedGender === 'putra'
+              ? 'bg-orange-600 hover:bg-orange-700 text-white'
+              : 'border-orange-200 text-orange-700 hover:bg-orange-50'}
+          >
+            <Users className="w-4 h-4 mr-2" />
+            Putra
+          </Button>
+          <Button
+            variant={selectedGender === 'putri' ? 'default' : 'outline'}
+            onClick={() => { setSelectedGender('putri'); resetFilters(); }}
+            className={selectedGender === 'putri'
+              ? 'bg-pink-600 hover:bg-pink-700 text-white'
+              : 'border-pink-200 text-pink-700 hover:bg-pink-50'}
+          >
+            <Users className="w-4 h-4 mr-2" />
+            Putri
+          </Button>
+        </div>
       </motion.div>
 
       {/* Filter Section */}
@@ -141,7 +187,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
 
         {/* Active Filters */}
         <AnimatePresence>
-          {(searchTerm || selectedPosition !== "all" || selectedClub !== "all") && (
+          {hasActiveFilters && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -177,24 +223,17 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
       {/* Players Grid */}
       <div>
         {filteredPlayers.length === 0 ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center py-24 bg-white rounded-3xl border border-dashed border-gray-200"
-          >
-            <div className="max-w-md mx-auto">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
-                <Users className="w-12 h-12 text-gray-300" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Tidak Ada Pemain Ditemukan</h3>
-              <p className="text-gray-500 mb-8">
-                Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan pemain yang Anda cari.
-              </p>
-              <Button onClick={resetFilters} variant="outline" className="border-orange-200 text-orange-600 hover:bg-orange-50 hover:text-orange-700">
-                Reset Filter
-              </Button>
-            </div>
-          </motion.div>
+          <EmptyState
+            type={hasActiveFilters ? "search" : "pemain"}
+            title={hasActiveFilters ? "Tidak Ada Pemain Ditemukan" : "Belum Ada Data Pemain"}
+            description={hasActiveFilters
+              ? "Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan pemain yang Anda cari."
+              : "Data pemain belum tersedia saat ini."
+            }
+            actionLabel={hasActiveFilters ? "Reset Filter" : undefined}
+            onAction={hasActiveFilters ? resetFilters : undefined}
+            className="bg-white rounded-3xl border border-dashed border-gray-200"
+          />
         ) : (
           <motion.div
             variants={container}
@@ -223,7 +262,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
 
                   <CardContent className="p-4 md:p-6 flex-1 flex flex-col">
                     <div className="mb-3 md:mb-4">
-                      <h2 className="text-lg md:text-xl font-bold text-gray-900 line-clamp-1 group-hover:text-orange-600 transition-colors">
+                      <h2 className={`text-lg md:text-xl font-bold text-gray-900 line-clamp-1 ${isPutri ? 'group-hover:text-pink-600' : 'group-hover:text-orange-600'} transition-colors`}>
                         {player.name}
                       </h2>
                       <p className="text-xs md:text-sm font-medium text-gray-500 flex items-center mt-1">
@@ -245,7 +284,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
 
                     <div className="mt-auto">
                       <Link href={`/pemain/${player.slug || player.id}`} passHref>
-                        <Button className="w-full bg-gray-900 hover:bg-orange-600 text-white transition-colors rounded-lg md:rounded-xl h-9 md:h-11 text-sm md:text-base font-medium">
+                        <Button className={`w-full ${themeColors.buttonPrimary} text-white transition-colors rounded-lg md:rounded-xl h-9 md:h-11 text-sm md:text-base font-medium`}>
                           Lihat Profil Lengkap
                         </Button>
                       </Link>
@@ -259,7 +298,7 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
       </div>
 
       {/* Statistics Section */}
-      {allPlayers.length > 0 && (
+      {playersByGender.length > 0 && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -267,14 +306,14 @@ export function DatabaseList({ initialPlayers }: DatabaseListProps) {
           className="mt-20"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+            <div className={`bg-gradient-to-br ${themeColors.statsBg} rounded-2xl p-6 text-white shadow-lg relative overflow-hidden`}>
               <div className="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4">
                 <Users className="w-48 h-48" />
               </div>
               <div className="relative z-10">
-                <p className="text-orange-100 font-medium mb-1">Total Pemain</p>
-                <h3 className="text-4xl font-bold">{allPlayers.length}</h3>
-                <p className="text-sm text-orange-100 mt-4 opacity-80">Terdaftar dalam database</p>
+                <p className={themeColors.statsLight + " font-medium mb-1"}>Total Pemain {selectedGender === 'putra' ? 'Putra' : 'Putri'}</p>
+                <h3 className="text-4xl font-bold">{playersByGender.length}</h3>
+                <p className={`text-sm ${themeColors.statsLight} mt-4 opacity-80`}>Terdaftar dalam database</p>
               </div>
             </div>
 

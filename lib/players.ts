@@ -30,7 +30,8 @@ export async function getPlayers(): Promise<{ players: FrontendPlayer[] | null; 
         p.id, 
         p.slug,
         p.name, 
-        p.position, 
+        p.position,
+        p.gender,
         p.image_url as photo_url, 
         p.club_id,
         c.name as club_name,
@@ -49,6 +50,7 @@ export async function getPlayers(): Promise<{ players: FrontendPlayer[] | null; 
       ...row,
       // Ensure types match FrontendPlayer
       position: row.position || "",
+      gender: row.gender || "putra",
       club: row.club_id ? { name: row.club_name } : undefined,
       // Handle other potential nulls if necessary for strict frontend types
       photo_url: row.photo_url || null,
@@ -91,6 +93,7 @@ export async function getPlayerById(id: string): Promise<FrontendPlayer | null> 
   return {
     ...row,
     position: row.position || "",
+    gender: row.gender || "putra",
     club: row.club_id ? { name: row.club_name, city: row.club_city } : undefined,
     photo_url: row.photo_url || null,
     achievements: row.achievements || null,
@@ -106,7 +109,8 @@ export async function getPlayerBySlug(slugOrId: string): Promise<FrontendPlayer 
       p.id, 
       p.slug,
       p.name, 
-      p.position, 
+      p.position,
+      p.gender,
       p.image_url as photo_url,
       p.club_id,
       c.name as club_name,
@@ -128,6 +132,7 @@ export async function getPlayerBySlug(slugOrId: string): Promise<FrontendPlayer 
   return {
     ...row,
     position: row.position || "",
+    gender: row.gender || "putra",
     club: row.club_id ? { name: row.club_name, city: row.club_city } : undefined,
     photo_url: row.photo_url || null,
     achievements: row.achievements || null,

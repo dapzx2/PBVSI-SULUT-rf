@@ -3,6 +3,7 @@ export interface Player {
   slug?: string
   name: string
   position: string
+  gender: 'putra' | 'putri'
   club_id: string | null
   birth_date: string // YYYY-MM-DD
   height: number // in cm
