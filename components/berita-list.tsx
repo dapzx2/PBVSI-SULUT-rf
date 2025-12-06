@@ -3,9 +3,8 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { format } from "date-fns"
-import { id } from "date-fns/locale"
-import { Search, Filter, ImageIcon, X, Tag, Calendar, User, ArrowRight } from 'lucide-react'
+import { Search, Filter, ImageIcon, X, Tag, Calendar, ArrowRight } from 'lucide-react'
+import { formatDateLong } from "@/lib/date-utils"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -208,52 +207,40 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
                 transition={{ duration: 0.4, delay: index * 0.05 }}
                 className="h-full"
               >
-                <Card className="flex flex-col h-full bg-white overflow-hidden hover:shadow-xl transition-all duration-300 group border-gray-100">
-                  <Link href={`/berita/${article.slug}`} className="block relative aspect-video w-full overflow-hidden">
-                    <Image
-                      src={article.image_url || "/placeholder.svg?height=400&width=600&query=article image"}
-                      alt={article.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    {article.category && (
-                      <Badge className="absolute top-4 left-4 z-20 bg-orange-600 text-white border-none shadow-lg">
-                        {article.category}
-                      </Badge>
-                    )}
-                  </Link>
-                  <CardContent className="flex flex-col flex-1 p-6">
-                    <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {format(new Date(article.published_at), 'dd MMMM yyyy', { locale: id })}
-                      </span>
-                      {article.author && (
-                        <span className="flex items-center gap-1">
-                          <User className="w-3 h-3" />
-                          {article.author}
-                        </span>
+                <Link href={`/berita/${article.slug}`} className="group h-full block">
+                  <Card className="flex flex-col h-full border-none shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden bg-white group-hover:-translate-y-2">
+                    <div className="relative aspect-video w-full overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 opacity-60 group-hover:opacity-40 transition-opacity" />
+                      <Image
+                        src={article.image_url || "/placeholder.svg?height=400&width=600&query=article image"}
+                        alt={article.title}
+                        fill
+                        className="object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      />
+                      {article.category && (
+                        <Badge className="absolute top-4 left-4 z-20 bg-orange-600 hover:bg-orange-700 text-white border-none shadow-lg">
+                          {article.category}
+                        </Badge>
                       )}
                     </div>
-                    <Link href={`/berita/${article.slug}`} className="block group-hover:text-orange-600 transition-colors">
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 leading-tight">
+                    <CardContent className="flex flex-col flex-1 p-6">
+                      <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                        <Calendar className="w-4 h-4 text-orange-500" />
+                        <span>{formatDateLong(article.published_at)}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
                         {article.title}
                       </h3>
-                    </Link>
-                    <p className="text-gray-600 line-clamp-3 mb-4 text-sm leading-relaxed flex-1">
-                      {article.excerpt || article.content.replace(/<[^>]*>?/gm, '').slice(0, 150) + (article.content.length > 150 ? '...' : '')}
-                    </p>
-                    <div className="pt-4 border-t border-gray-100">
-                      <Link
-                        href={`/berita/${article.slug}`}
-                        className="inline-flex items-center text-sm font-semibold text-orange-600 hover:text-orange-700 transition-colors"
-                      >
-                        Baca Selengkapnya <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
+                      <p className="text-gray-600 line-clamp-3 text-sm leading-relaxed mb-4 flex-1">
+                        {article.excerpt || article.content.replace(/<[^>]*>?/gm, '').slice(0, 150) + (article.content.length > 150 ? '...' : '')}
+                      </p>
+                      <div className="flex items-center text-orange-600 font-medium text-sm group-hover:underline">
+                        Baca Selengkapnya <ArrowRight className="w-4 h-4 ml-1" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </AnimatePresence>

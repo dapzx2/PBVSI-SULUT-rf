@@ -236,20 +236,11 @@ export function GaleriList({ initialItems }: GaleriListProps) {
           >
             <motion.div
               layoutId={`card-${selectedImage.id}`}
-              className="relative max-w-5xl w-full max-h-[90vh] bg-white rounded-3xl overflow-hidden shadow-2xl"
+              className="relative max-w-6xl w-full min-h-[70vh] max-h-[90vh] bg-white rounded-3xl overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <Button
-                variant="ghost"
-                size="icon"
-                className="absolute top-4 right-4 z-20 text-gray-900 hover:bg-gray-100 rounded-full"
-                onClick={() => setSelectedImage(null)}
-              >
-                <X className="w-6 h-6" />
-              </Button>
-
-              <div className="grid lg:grid-cols-3 h-full">
-                <div className="lg:col-span-2 bg-gray-100 flex items-center justify-center h-[50vh] lg:h-auto relative overflow-hidden">
+              <div className="grid lg:grid-cols-5 h-full min-h-[70vh]">
+                <div className="lg:col-span-3 bg-gray-100 flex items-center justify-center h-[50vh] lg:h-auto relative overflow-hidden">
                   {/* Blurred Background */}
                   <div className="absolute inset-0">
                     <Image
@@ -270,27 +261,30 @@ export function GaleriList({ initialItems }: GaleriListProps) {
                     />
                   </div>
                 </div>
-                <div className="p-8 lg:p-10 flex flex-col h-full overflow-y-auto bg-white relative z-10">
-                  <div className="flex items-center gap-3 mb-6">
+                <div className="lg:col-span-2 p-8 lg:p-10 flex flex-col h-full overflow-y-auto bg-white relative z-10">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-4 right-4 z-20 text-gray-500 hover:text-gray-900 hover:bg-gray-100 rounded-full"
+                    onClick={() => setSelectedImage(null)}
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+
+                  <div className="flex flex-wrap items-center gap-3 mb-6 pr-10">
                     <Badge variant="secondary" className="bg-orange-100 text-orange-700">
                       {selectedImage.category || 'Umum'}
                     </Badge>
                     <span className="text-sm text-gray-500 flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
+                      <Calendar className="w-3 h-3 flex-shrink-0" />
                       {formatDateLong(selectedImage.created_at)}
                     </span>
                   </div>
 
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">{selectedImage.title}</h2>
-                  <p className="text-gray-600 leading-relaxed text-lg mb-8">
-                    {selectedImage.description || 'Tidak ada deskripsi tersedia.'}
+                  <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{selectedImage.title}</h2>
+                  <p className="text-gray-600 leading-relaxed text-base lg:text-lg">
+                    {selectedImage.description || 'Deskripsi'}
                   </p>
-
-                  <div className="mt-auto pt-8 border-t border-gray-100">
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white py-6 text-lg rounded-xl">
-                      Unduh Foto
-                    </Button>
-                  </div>
                 </div>
               </div>
             </motion.div>

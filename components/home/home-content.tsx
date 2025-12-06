@@ -186,12 +186,7 @@ export function HomeContent({ articles }: HomeContentProps) {
                 </section>
 
                 {/* News Section */}
-                <section className="py-8 md:py-24 px-4 bg-gray-50 relative overflow-hidden">
-                    {/* Background Elements */}
-                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-orange-100/50 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-                        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-blue-100/50 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
-                    </div>
+                <section className="py-8 md:py-24 px-4 bg-gray-50">
 
                     <div className="container mx-auto relative z-10">
                         <div className="flex flex-col md:flex-row justify-between items-end mb-8 md:mb-12 gap-6">
