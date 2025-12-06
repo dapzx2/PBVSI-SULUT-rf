@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
-import { Search, Filter, ImageIcon, X, Calendar, Tag } from 'lucide-react'
+import { Search, Filter, X, Calendar, Tag } from 'lucide-react'
+import { EmptyState } from "@/components/ui/empty-state"
 import type { GalleryItem } from "@/lib/types"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
@@ -163,19 +164,7 @@ export function GaleriList({ initialItems }: GaleriListProps) {
 
       {/* Gallery Grid - Masonry Layout */}
       {filteredItems.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-24"
-        >
-          <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
-            <ImageIcon className="w-10 h-10 text-gray-300" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Tidak ada hasil ditemukan</h3>
-          <p className="text-gray-500">
-            Coba sesuaikan kata kunci atau filter pencarian Anda.
-          </p>
-        </motion.div>
+        <EmptyState type="galeri" />
       ) : (
         <div className="columns-2 lg:columns-3 xl:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
           <AnimatePresence>

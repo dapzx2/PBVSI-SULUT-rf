@@ -4,7 +4,8 @@ import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Users, ArrowRight, Activity, Calendar } from "lucide-react"
+import { Users, ArrowRight, Calendar } from "lucide-react"
+import { EmptyState } from "@/components/ui/empty-state"
 import Link from "next/link"
 import Image from "next/image"
 import type { Article } from "@/lib/types"
@@ -261,12 +262,8 @@ export function HomeContent({ articles }: HomeContentProps) {
                                 ))}
                             </motion.div>
                         ) : (
-                            <div className="text-center py-20 bg-white rounded-3xl shadow-sm border border-gray-100">
-                                <div className="bg-gray-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <Activity className="w-8 h-8 text-gray-400" />
-                                </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-2">Belum ada berita</h3>
-                                <p className="text-gray-500">Nantikan update terbaru dari kami.</p>
+                            <div className="bg-white rounded-3xl shadow-sm border border-gray-100">
+                                <EmptyState type="berita" size="md" />
                             </div>
                         )}
                     </div>

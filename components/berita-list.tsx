@@ -3,8 +3,9 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, Filter, ImageIcon, X, Tag, Calendar, ArrowRight } from 'lucide-react'
+import { Search, Filter, X, Tag, Calendar, ArrowRight } from 'lucide-react'
 import { formatDateLong } from "@/lib/date-utils"
+import { EmptyState } from "@/components/ui/empty-state"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -176,26 +177,13 @@ export function BeritaList({ initialArticles }: BeritaListProps) {
       </motion.div>
 
       {filteredNews.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="text-center py-24"
-        >
-          <div className="w-24 h-24 mx-auto mb-6 bg-gray-50 rounded-full flex items-center justify-center">
-            <ImageIcon className="w-10 h-10 text-gray-300" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Tidak ada berita ditemukan</h3>
-          <p className="text-gray-500 mb-6">
-            {hasActiveFilters
-              ? "Coba ubah kriteria pencarian atau filter Anda"
-              : "Belum ada data di dalam database."}
-          </p>
-          {hasActiveFilters && (
-            <Button onClick={clearFilters} variant="outline">
-              Hapus Filter
-            </Button>
-          )}
-        </motion.div>
+        <EmptyState
+          type={hasActiveFilters ? "search" : "berita"}
+          title={hasActiveFilters ? "Tidak ada berita ditemukan" : undefined}
+          description={hasActiveFilters ? "Coba ubah kriteria pencarian atau filter Anda" : "Belum ada data di dalam database."}
+          actionLabel={hasActiveFilters ? "Hapus Filter" : undefined}
+          onAction={hasActiveFilters ? clearFilters : undefined}
+        />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
           <AnimatePresence>
