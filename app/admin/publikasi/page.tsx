@@ -22,6 +22,7 @@ import {
 import { Loader2, PlusCircle, Edit, Trash2 } from "lucide-react"
 import { Article } from "@/lib/types"
 import { ArticleForm } from "@/components/admin/article-form"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { toast } from "sonner"
 import { formatDateShort } from "@/lib/date-utils"
 
@@ -158,11 +159,7 @@ export default function AdminArticlesPage() {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
-      </div>
-    )
+    return <LoadingSpinner message="Memuat daftar artikel..." />
   }
 
   if (error) {

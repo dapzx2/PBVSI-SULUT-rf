@@ -4,9 +4,10 @@ import { cn } from "@/lib/utils"
 interface LoadingSpinnerProps {
     size?: number
     className?: string
+    message?: string
 }
 
-export function LoadingSpinner({ size = 48, className }: LoadingSpinnerProps) {
+export function LoadingSpinner({ size = 48, className, message = "Sedang memuat..." }: LoadingSpinnerProps) {
     return (
         <div
             className={cn(
@@ -18,7 +19,7 @@ export function LoadingSpinner({ size = 48, className }: LoadingSpinnerProps) {
                 className="animate-spin text-orange-600"
                 size={size}
             />
-            <span className="sr-only">Loading...</span>
+            <p className="mt-4 text-gray-500 text-sm font-medium">{message}</p>
         </div>
     )
 }

@@ -8,6 +8,7 @@ import { Loader2, RefreshCw, User } from "lucide-react"
 import { PageTransition } from "@/components/page-transition"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import { useToast } from "@/components/ui/use-toast"
 import type { Article } from "@/lib/types"
 import { formatDateLong } from "@/lib/date-utils"
@@ -61,14 +62,7 @@ export default function ArticleDetailPage() {
   }, [slug, fetchArticle])
 
   if (loading) {
-    return (
-      <PageTransition>
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-50 to-white">
-          <Loader2 className="h-12 w-12 animate-spin text-orange-600" />
-          <p className="ml-2 text-xl text-gray-600 mt-4">Memuat berita...</p>
-        </div>
-      </PageTransition>
-    )
+    return <LoadingSpinner message="Memuat detail berita..." />
   }
 
   if (error) {

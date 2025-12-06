@@ -28,11 +28,12 @@ export async function GET(request: Request, { params }: Params) {
 export async function PUT(request: Request, { params }: Params) {
   try {
     const body = await request.json();
-    const { name, position, club_id, photo_url, birth_date, height, weight, country, achievements } = body;
+    const { name, position, gender, club_id, photo_url, birth_date, height, weight, country, achievements } = body;
 
     await updatePlayer(params.id, {
       name,
       position,
+      gender,
       club_id,
       photo_url,
       birth_date,

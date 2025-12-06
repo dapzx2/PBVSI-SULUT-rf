@@ -142,14 +142,14 @@ export async function getPlayerBySlug(slugOrId: string): Promise<FrontendPlayer 
 }
 
 export async function createPlayer(player: Omit<FrontendPlayer, 'id' | 'club_name' | 'created_at' | 'updated_at' | 'club'>): Promise<{ id: string; slug: string }> {
-  const { name, position, club_id, photo_url, birth_date, height, weight, country, achievements } = player as any;
+  const { name, position, gender, club_id, photo_url, birth_date, height, weight, country, achievements } = player as any;
   const id = crypto.randomUUID();
   const slug = generatePlayerSlug(name);
   const sql = `
-    INSERT INTO players (id, slug, name, position, club_id, image_url, birth_date, height_cm, weight_kg, country, achievements)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO players (id, slug, name, position, gender, club_id, image_url, birth_date, height_cm, weight_kg, country, achievements)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
-  await pool.execute(sql, [id, slug, name, position, club_id, photo_url, birth_date, height, weight, country, achievements]);
+  await pool.execute(sql, [id, slug, name, position, gender || 'putra', club_id, photo_url, birth_date, height, weight, country, achievements]);
   return { id, slug };
 }
 
@@ -166,6 +166,10 @@ export async function updatePlayer(id: string, player: Partial<Omit<FrontendPlay
   if (p.position !== undefined) {
     fields.push('position = ?');
     values.push(p.position);
+  }
+  if (p.gender !== undefined) {
+    fields.push('gender = ?');
+    values.push(p.gender);
   }
   if (p.club_id !== undefined) {
     fields.push('club_id = ?');

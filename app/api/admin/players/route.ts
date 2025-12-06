@@ -20,7 +20,7 @@ export const GET = requireAuth(async (request: Request) => {
 export const POST = requireAuth(async (request: Request) => {
   try {
     const body = await request.json();
-    const { name, position, club_id, photo_url, birth_date, height, weight, country, achievements } = body;
+    const { name, position, gender, club_id, photo_url, birth_date, height, weight, country, achievements } = body;
 
     if (!name) {
       return NextResponse.json({ message: 'Name is required' }, { status: 400 });
@@ -29,6 +29,7 @@ export const POST = requireAuth(async (request: Request) => {
     const newPlayer = await createPlayer({
       name,
       position: position || null,
+      gender: gender || 'putra',
       club_id: club_id || null,
       photo_url: photo_url || null,
       birth_date: birth_date || null,

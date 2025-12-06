@@ -7,6 +7,7 @@ import {
     MapPin,
     Calendar,
     User,
+    Users,
     Trophy,
     Ruler,
     Weight,
@@ -22,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge";
 import { PageTransition } from "@/components/page-transition"
+import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import type { Player } from "@/lib/types"
 import { formatDateLong } from "@/lib/date-utils"
 
@@ -76,11 +78,7 @@ export default function PlayerPage() {
     }, [fetchPlayer])
 
     if (loading) {
-        return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600"></div>
-            </div>
-        )
+        return <LoadingSpinner message="Memuat profil pemain..." />
     }
 
     if (error) {
@@ -229,9 +227,10 @@ export default function PlayerPage() {
                                         </div>
 
                                         <div className="space-y-1">
-                                            <p className="text-sm text-gray-500">Asal Daerah</p>
-                                            <div className="font-medium text-gray-900">
-                                                {player.club?.city || '-'}
+                                            <p className="text-sm text-gray-500">Jenis Kelamin</p>
+                                            <div className="flex items-center gap-2 font-medium text-gray-900">
+                                                <Users className="w-4 h-4 text-gray-400" />
+                                                {player.gender === 'putri' ? 'Putri' : 'Putra'}
                                             </div>
                                         </div>
                                     </div>

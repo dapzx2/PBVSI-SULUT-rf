@@ -14,7 +14,7 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { Player } from '@/lib/types';
 import Image from 'next/image';
-import { Loader2, Upload, X, User, MapPin, Calendar as CalendarIcon, Ruler, Weight, Flag, Trophy, Shield } from 'lucide-react';
+import { Loader2, Upload, X, User, MapPin, Calendar as CalendarIcon, Ruler, Weight, Flag, Trophy, Shield, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Label } from '@/components/ui/label';
 import { Calendar } from '@/components/ui/calendar';
@@ -41,6 +41,7 @@ const PlayerForm: React.FC<PlayerFormProps> = ({ initialData, onSuccess, onClose
   const [formData, setFormData] = useState({
     name: initialData?.name || '',
     position: initialData?.position || '',
+    gender: initialData?.gender || 'putra',
     club_id: initialData?.club_id || null,
     photo_url: initialData?.photo_url || null,
     birth_date: initialData?.birth_date || '',
@@ -83,6 +84,10 @@ const PlayerForm: React.FC<PlayerFormProps> = ({ initialData, onSuccess, onClose
 
   const handlePositionChange = (value: string) => {
     setFormData((prev) => ({ ...prev, position: value }));
+  };
+
+  const handleGenderChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, gender: value as 'putra' | 'putri' }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,6 +255,21 @@ const PlayerForm: React.FC<PlayerFormProps> = ({ initialData, onSuccess, onClose
                 <SelectItem value="Tosser">Tosser</SelectItem>
                 <SelectItem value="Blocker">Blocker</SelectItem>
                 <SelectItem value="Server">Server</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="gender" className="flex items-center gap-2 text-primary">
+              <Users className="h-4 w-4" /> Jenis Kelamin
+            </Label>
+            <Select onValueChange={handleGenderChange} value={formData.gender}>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih Jenis Kelamin" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="putra">Putra</SelectItem>
+                <SelectItem value="putri">Putri</SelectItem>
               </SelectContent>
             </Select>
           </div>

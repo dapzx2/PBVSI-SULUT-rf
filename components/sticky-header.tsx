@@ -62,7 +62,7 @@ export function StickyHeader({ currentPage: _currentPage }: StickyHeaderProps) {
       href: "/informasi-publik",
       icon: FileText,
       dropdown: [
-        { name: "Database", href: "/database", icon: Database, description: "Data atlet dan pelatih" },
+        { name: "Database", href: "/database", icon: Database, description: "Data atlet putra dan putri" },
         { name: "Klub", href: "/klub", icon: Shield, description: "Daftar klub terdaftar" },
         { name: "Kontak", href: "/kontak", icon: Phone, description: "Hubungi kami" },
       ],

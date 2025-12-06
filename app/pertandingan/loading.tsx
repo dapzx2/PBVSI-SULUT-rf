@@ -1,5 +1,5 @@
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 
 export default function PertandinganPageLoading() {
-  return <LoadingSpinner />
+  return <LoadingSpinner message="Memuat jadwal pertandingan..." />
 }
